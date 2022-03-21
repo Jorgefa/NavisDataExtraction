@@ -1,6 +1,6 @@
 ﻿using Autodesk.Navisworks.Api;
 using Autodesk.Navisworks.Api.Plugins;
-using Newtonsoft.Json;
+    
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -34,9 +34,12 @@ namespace NavisDataExtraction
 
             //File.WriteAllText(file, jsonString);
 
-            var dataTable = CreateDatatable(elements);
-            var navisDataTable = NavisDataItemTable.CreateNavisDataTable(elements, propertyList);
-            dataTable.ToCSV(csvFilePath);
+            //var dataTable = CreateDatatable(elements);
+           
+            var config = Config.FromFile();
+
+            var navisDataTable = NavisDataItemTable.CreateNavisDatatable(elements, config.PropertyList);
+            navisDataTable.ToCSV(csvFilePath);
 
             return 0;
         }       

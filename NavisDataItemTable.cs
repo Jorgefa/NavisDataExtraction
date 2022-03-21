@@ -8,10 +8,16 @@ using System.Threading.Tasks;
 
 namespace NavisDataExtraction
 {
-    class NavisDataItemTable
+    public class NavisDataItemTable
     {
-        public DataTable CreateNavisDatatable(List<ModelItem> elements, List<string> propertyList)
+        public static DataTable CreateNavisDatatable(List<ModelItem> elements, List<string> properties)
         {
+            var propertyList = new List<string>();
+            propertyList.Add("Guid");
+            propertyList.Add("Name");
+            propertyList.AddRange(properties);
+            propertyList.Distinct().ToList();
+
             var table = new DataTable();
             foreach (var property in propertyList)
             {
@@ -20,13 +26,20 @@ namespace NavisDataExtraction
 
             foreach (var element in elements)
             {
+                var dataRow = table.NewRow();
+
                 var guid = element.InstanceGuid.ToString();
                 var name = element.DisplayName.ToString();
-                var uniclassSs = element.GetParameterByName("UniclassSs");
-                //var moduleNumber = element.GetParameterByName("ModuleNumber");
-                //var lineNumber = element.GetParameterByName("LineNumber");
+                dataRow["Guid"] = guid;
+                dataRow["Name"] = name;
 
-                table.Rows.Add(guid, name, uniclassSs);
+                foreach (var property in propertyList)
+                {
+                    var propertyValue = element.GetParameterByName(property);
+                    dataRow[property] = propertyValue;
+                }
+
+                table.Rows.Add(dataRow);
             }
 
             return table;
