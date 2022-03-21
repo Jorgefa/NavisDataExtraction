@@ -11,7 +11,7 @@ namespace NavisDataExtraction
     {
         public NavisDataItem(ModelItem item)
         {
-            DataExport.count++;
+            NavisDataTool.count++;
             Guid = item.InstanceGuid.ToString();
             Name = item.DisplayName;
             Class = item.ClassDisplayName;

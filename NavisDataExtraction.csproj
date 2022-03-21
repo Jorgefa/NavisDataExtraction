@@ -51,10 +51,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="NavisDataItemTable.cs" />
+    <Compile Include="DataExportUtils.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="NavisDataItemJson.cs" />
-    <Compile Include="DataExport.cs" />
+    <Compile Include="NavisDataTool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

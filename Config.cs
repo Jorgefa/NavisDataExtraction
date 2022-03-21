@@ -14,16 +14,18 @@ namespace NavisDataExtraction
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "PM Group", "Navis Data Exporter", "appConfig.json");
 
-        public List<string> PropertyList { get; set; }
+        public string csvExportationFilePath = @"D:\02-GITHUB\NavisDataExtration\90-TEST\test.csv";
 
-        public Config(List<string> properties = null)
+        public List<string> CustomPropertyList { get; set; }
+
+        public Config(List<string> customProperties = null)
         {
-            if (properties == null)
+            if (customProperties == null)
             {
-                PropertyList = new List<string>() { "UniclassSs", "Zone", "ModuleNumber", "LineNumber" };
+                CustomPropertyList = new List<string>() { "UniclassSs", "Zone", "ModuleNumber", "LineNumber" };
             } else
             {
-                PropertyList = properties;
+                CustomPropertyList = customProperties;
             }
         }
 

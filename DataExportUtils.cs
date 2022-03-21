@@ -8,18 +8,15 @@ using System.Threading.Tasks;
 
 namespace NavisDataExtraction
 {
-    public class NavisDataItemTable
+    public class DataExportUtils
     {
-        public static DataTable CreateNavisDatatable(List<ModelItem> elements, List<string> properties)
+        public static DataTable CreateNavisDatatable(List<ModelItem> elements, List<string> customProperties)
         {
-            var propertyList = new List<string>();
-            propertyList.Add("Guid");
-            propertyList.Add("Name");
-            propertyList.AddRange(properties);
-            propertyList.Distinct().ToList();
 
             var table = new DataTable();
-            foreach (var property in propertyList)
+            table.Columns.Add("Guid", typeof(string));
+            table.Columns.Add("Name", typeof(string));
+            foreach (var property in customProperties)
             {
                 table.Columns.Add(property, typeof(string));
             }
@@ -33,7 +30,7 @@ namespace NavisDataExtraction
                 dataRow["Guid"] = guid;
                 dataRow["Name"] = name;
 
-                foreach (var property in propertyList)
+                foreach (var property in customProperties)
                 {
                     var propertyValue = element.GetParameterByName(property);
                     dataRow[property] = propertyValue;
