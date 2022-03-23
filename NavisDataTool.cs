@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using NavisDataExtraction.Wpf.Views;
 
 namespace NavisDataExtraction
 {
@@ -19,13 +20,16 @@ namespace NavisDataExtraction
         public override int Execute(params string[] parameters)
         {
            
-            var config = Config.FromFile();
+            // var config = Config.FromFile();
+            //
+            // var elements = ElementSelector.ElementGathering("Revit Type", "UniclassSs");
+            //
+            // var navisDataTable = DataExtraction.CreateNavisDatatable(elements, config.CustomPropertyList);
+            //
+            // navisDataTable.ToCSV(config.csvExportationFilePath);
 
-            var elements = ElementSelector.ElementGathering("Revit Type", "UniclassSs");
-
-            var navisDataTable = DataExtraction.CreateNavisDatatable(elements, config.CustomPropertyList);
-
-            navisDataTable.ToCSV(config.csvExportationFilePath);
+            var window = new MainWindow();
+            window.Show();
 
             return 0;
         }       
