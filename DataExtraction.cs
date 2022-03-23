@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NavisDataExtraction
 {
-    public class DataExportUtils
+    public class DataExtraction
     {
         public static DataTable CreateNavisDatatable(List<ModelItem> elements, List<string> customProperties)
         {

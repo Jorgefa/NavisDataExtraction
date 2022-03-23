@@ -18,17 +18,13 @@ namespace NavisDataExtraction
         public static int count = 0;
         public override int Execute(params string[] parameters)
         {
-            var search = new Search();
-            search.Selection.SelectAll();
-
-            var condition = SearchCondition.HasPropertyByDisplayName("Revit Type", "UniclassSs");
-            search.SearchConditions.Add(condition);
-
-            var elements = search.FindAll(Application.ActiveDocument, true).ToList();
            
             var config = Config.FromFile();
 
-            var navisDataTable = DataExportUtils.CreateNavisDatatable(elements, config.CustomPropertyList);
+            var elements = ElementSelector.ElementGathering("Revit Type", "UniclassSs");
+
+            var navisDataTable = DataExtraction.CreateNavisDatatable(elements, config.CustomPropertyList);
+
             navisDataTable.ToCSV(config.csvExportationFilePath);
 
             return 0;

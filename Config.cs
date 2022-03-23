@@ -14,7 +14,7 @@ namespace NavisDataExtraction
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "PM Group", "Navis Data Exporter", "appConfig.json");
 
-        public string csvExportationFilePath = @"D:\02-GITHUB\NavisDataExtration\90-TEST\test.csv";
+        public string csvExportationFilePath { get; set; } = @"D:\02-GITHUB\NavisDataExtration\90-TEST\test.csv";
 
         public List<string> CustomPropertyList { get; set; }
 

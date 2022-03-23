@@ -50,8 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ElementSelector.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="DataExportUtils.cs" />
+    <Compile Include="DataExtraction.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="NavisDataItemJson.cs" />
     <Compile Include="NavisDataTool.cs" />
