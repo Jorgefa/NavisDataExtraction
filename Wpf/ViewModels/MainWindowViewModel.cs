@@ -1,6 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using Autodesk.Navisworks.Api;
 using NavisDataExtraction.Annotations;
 
@@ -71,10 +73,31 @@ namespace NavisDataExtraction.Wpf.ViewModels
             return props;
         }
 
+        private string _categoryName;
+        public string CategoryName
+        {
+            get => _categoryName;
+            set
+            {
+                _categoryName = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _propertyName;
+        public string SearcherPropertyName
+        {
+            get => _categoryName;
+            set
+            {
+                _categoryName = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand ClickCommand { get; set; }
         private void Click()
         {
-            var elements = ElementSelector.ElementGathering("Revit Type", "Category");
+            var elements = NavisDataCollector.ElementCollector("Revit Type", "Category");
             ModelItems = new ObservableCollection<ModelItem>(elements);
         }
 

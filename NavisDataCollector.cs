@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace NavisDataExtraction
 {
-    public class ElementSelector
+    public class NavisDataCollector
     {
-        public static List<ModelItem> ElementGathering(string categoryName = null, string propertyName = null)
+        public static List<ModelItem> ElementCollector(string categoryName = null, string propertyName = null)
         {
             var search = new Search();
             search.Selection.SelectAll();

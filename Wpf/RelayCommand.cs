@@ -7,7 +7,7 @@ namespace NavisDataExtraction.Wpf
     {
         private readonly Action _execute;
 
-        public RelayCommand( Action execute)
+        public RelayCommand(Action execute)
         {
             _execute = execute;
         }

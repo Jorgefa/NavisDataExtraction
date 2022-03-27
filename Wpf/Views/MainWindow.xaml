@@ -16,12 +16,22 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Margin="5" Grid.Column="0" Grid.Row="1" Content="Get Elements"
+        <Button Margin="5" Grid.Column="0" Grid.Row="2" Content="Get Elements"
                 Command="{Binding ClickCommand}"/>
-        <ListView Grid.Column="0" Grid.Row="0" 
+        <StackPanel Grid.Column="0" Grid.Row="0">
+            <Label Grid.Row="0" FontWeight="Bold">Category name</Label>
+            <TextBox Grid.Row="0">Write the category name</TextBox>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <Label Grid.Row="0" FontWeight="Bold">Property name</Label>
+            <TextBox Grid.Row="0">Write the property name</TextBox>
+        </StackPanel>
+        <ListView Grid.Column="0" Grid.Row="3" 
                   ItemsSource="{Binding ModelItems}"
                   SelectedItem="{Binding SelectedItem}"
                   SelectionMode="Single">
@@ -31,7 +41,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView Grid.Column="1" Grid.Row="0" 
+        <ListView Grid.Column="1" Grid.Row="3" 
                   ItemsSource="{Binding Properties}"
                   SelectionMode="Single">
             <ListView.ItemTemplate>
