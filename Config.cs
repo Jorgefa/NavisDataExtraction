@@ -38,8 +38,10 @@ namespace NavisDataExtraction
                 ElementExportTypeB.AddDataExportType(RevitIfcDataZone);
                 ElementExportTypeB.AddDataExportType(RevitIfcDataModuleNumber);
 
-                elementExportTypes.Add(ElementExportTypeA);
-                elementExportTypes.Add(ElementExportTypeB);
+                CurrentElementExportTypes = new List<ElementExportType>();
+
+                CurrentElementExportTypes.Add(ElementExportTypeA);
+                CurrentElementExportTypes.Add(ElementExportTypeB);
             }
             else
             {

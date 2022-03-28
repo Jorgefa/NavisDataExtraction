@@ -100,7 +100,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void CollectElements()
         {
-            List<ElementExportType> elementExportTypes = ConfigFile.CurrentElementExportTypes;
+            List<ElementExportType> elementExportTypes = SelectedElementExportTypes;
             var elements = NavisDataCollector.ElementCollector(elementExportTypes);
             ModelItems = new ObservableCollection<ModelItem>(elements);
         }
