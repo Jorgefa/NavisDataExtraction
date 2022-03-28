@@ -8,11 +8,15 @@ namespace NavisDataExtraction.DataExport
 {
     public class ElementExportType
     {
-        public ElementExportType()
+        public ElementExportType(string name, DataExportType searcher)
         {
-            DataExportList = null;
+            Name = name;
+            Searcher = searcher;
+            DataExportList = new List<DataExportType>();
         }
+        public string Name { get; set; }
         public List<DataExportType> DataExportList { get; set; }
+        public DataExportType Searcher { get; set; }
 
         public void AddDataExportType(DataExportType dataExportType)
         {

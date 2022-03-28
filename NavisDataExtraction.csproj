@@ -53,13 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataExport\DataExportType.cs" />
-    <Compile Include="DataExport\ElementDataType.cs" />
-    <Compile Include="DataExport\NavisDataType.cs" />
-    <Compile Include="NavisDataCollector.cs" />
+    <Compile Include="DataExport\ElementExportType.cs" />
+    <Compile Include="DataCollector\NavisDataCollector.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="DataExtraction.cs" />
-    <Compile Include="Extension.cs" />
-    <Compile Include="NavisDataItemJson.cs" />
+    <Compile Include="DataExport\Extension.cs" />
     <Compile Include="NavisDataTool.cs" />
     <Compile Include="NavisworksProperty.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -80,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF EXIST "C:\Program Files\Autodesk\Navisworks Manage 2022\Plugins\$(TargetName)\" rmdir /S /Q "$(ProjectDir)..\..\..\..\..\Plugins\$(TargetName)\"

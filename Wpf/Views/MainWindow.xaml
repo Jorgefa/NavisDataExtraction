@@ -22,7 +22,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button Margin="5" Grid.Column="0" Grid.Row="2" Content="Get Elements"
-                Command="{Binding ClickCommand}"/>
+                Command="{Binding CollectElementsCommand}"/>
         <StackPanel Grid.Column="0" Grid.Row="0">
             <Label Grid.Row="0" FontWeight="Bold">Category name</Label>
             <TextBox Grid.Row="0">Write the category name</TextBox>
@@ -31,6 +31,18 @@
             <Label Grid.Row="0" FontWeight="Bold">Property name</Label>
             <TextBox Grid.Row="0">Write the property name</TextBox>
         </StackPanel>
+        <ListView Grid.Column="0" Grid.Row="1"
+                  x:Name="ElementExportTypesList"
+                  SelectionMode="Multiple"
+                  SelectionChanged="ListView_SelectionChanged"
+                  ItemsSource="{Binding ElementExportTypes}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            
+        </ListView>
         <ListView Grid.Column="0" Grid.Row="3" 
                   ItemsSource="{Binding ModelItems}"
                   SelectedItem="{Binding SelectedItem}"

@@ -7,6 +7,8 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using NavisDataExtraction.Wpf.Views;
+using NavisDataExtraction.Wpf.ViewModels;
+
 
 namespace NavisDataExtraction
 {
@@ -16,7 +18,6 @@ namespace NavisDataExtraction
         DisplayName ="Export")]
     public class NavisDataTool : AddInPlugin
     {
-        public static int count = 0;
         public override int Execute(params string[] parameters)
         {
            

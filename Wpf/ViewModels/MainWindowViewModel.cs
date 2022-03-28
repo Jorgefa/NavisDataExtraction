@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Autodesk.Navisworks.Api;
+using NavisDataExtraction.Annotations;
+using NavisDataExtraction.DataCollector;
+using NavisDataExtraction.DataExport;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
-using Autodesk.Navisworks.Api;
-using NavisDataExtraction.Annotations;
 
 namespace NavisDataExtraction.Wpf.ViewModels
 {
@@ -12,10 +13,18 @@ namespace NavisDataExtraction.Wpf.ViewModels
     {
         public MainWindowViewModel()
         {
-            ClickCommand = new RelayCommand(Click);
+            CollectElementsCommand = new RelayCommand(CollectElements);
             ModelItems = new ObservableCollection<ModelItem>();
             Properties = new ObservableCollection<NavisworksProperty>();
+            ConfigFile = Config.FromFile();
+            ElementExportTypes = new ObservableCollection<ElementExportType>();
+            foreach (var exportType in ConfigFile.CurrentElementExportTypes)
+            {
+                ElementExportTypes.Add(exportType);
+            }
         }
+
+        public Config ConfigFile { get; set; }
 
         private ObservableCollection<ModelItem> _modelItems;
 
@@ -28,7 +37,21 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
+        private ObservableCollection<ElementExportType> _elementExportTypes;
+
+        public ObservableCollection<ElementExportType> ElementExportTypes
+        {
+            get => _elementExportTypes;
+            set
+            {
+                _elementExportTypes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<ElementExportType> SelectedElementExportTypes;
+
         private ObservableCollection<NavisworksProperty> _properties;
 
         public ObservableCollection<NavisworksProperty> Properties
@@ -40,7 +63,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 OnPropertyChanged();
             }
         }
-        
+
         private ModelItem _selectedItem;
 
         public ModelItem SelectedItem
@@ -73,31 +96,12 @@ namespace NavisDataExtraction.Wpf.ViewModels
             return props;
         }
 
-        private string _categoryName;
-        public string CategoryName
-        {
-            get => _categoryName;
-            set
-            {
-                _categoryName = value;
-                OnPropertyChanged();
-            }
-        }
-        private string _propertyName;
-        public string SearcherPropertyName
-        {
-            get => _categoryName;
-            set
-            {
-                _categoryName = value;
-                OnPropertyChanged();
-            }
-        }
+        public RelayCommand CollectElementsCommand { get; set; }
 
-        public RelayCommand ClickCommand { get; set; }
-        private void Click()
+        private void CollectElements()
         {
-            var elements = NavisDataCollector.ElementCollector("Revit Type", "Category");
+            List<ElementExportType> elementExportTypes = ConfigFile.CurrentElementExportTypes;
+            var elements = NavisDataCollector.ElementCollector(elementExportTypes);
             ModelItems = new ObservableCollection<ModelItem>(elements);
         }
 
