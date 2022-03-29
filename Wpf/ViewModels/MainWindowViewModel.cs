@@ -2,6 +2,7 @@
 using NavisDataExtraction.Annotations;
 using NavisDataExtraction.DataCollector;
 using NavisDataExtraction.DataExport;
+using NavisDataExtraction.Wpf.Views;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,11 +10,13 @@ using System.Runtime.CompilerServices;
 
 namespace NavisDataExtraction.Wpf.ViewModels
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : BaseViewModel
     {
+        //Constructors
         public MainWindowViewModel()
         {
             CollectElementsCommand = new RelayCommand(CollectElements);
+            SaveConfigCommand = new RelayCommand(SaveConfig);
             ModelItems = new ObservableCollection<ModelItem>();
             Properties = new ObservableCollection<NavisworksProperty>();
             ConfigFile = Config.FromFile();
@@ -24,9 +27,21 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
+        //Properties
         public Config ConfigFile { get; set; }
 
+        public List<ElementExportType> SelectedElementExportTypes;
+
         private ObservableCollection<ModelItem> _modelItems;
+
+        //UI properties
+        private BaseViewModel _selectedViewModel = new EditorViewModel();
+
+        public BaseViewModel SelectedViewModel
+        {
+            get { return _selectedViewModel; }
+            set { _selectedViewModel = value; }
+        }
 
         public ObservableCollection<ModelItem> ModelItems
         {
@@ -50,7 +65,6 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        public List<ElementExportType> SelectedElementExportTypes;
 
         private ObservableCollection<NavisworksProperty> _properties;
 
@@ -78,6 +92,8 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
+        //Methods
+        //Returns properties from a ModelItem
         private ObservableCollection<NavisworksProperty> GetProperties(ModelItem modelItem)
         {
             var props = new ObservableCollection<NavisworksProperty>();
@@ -96,6 +112,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             return props;
         }
 
+        //Select elements using an ElementExportType
         public RelayCommand CollectElementsCommand { get; set; }
 
         private void CollectElements()
@@ -105,12 +122,13 @@ namespace NavisDataExtraction.Wpf.ViewModels
             ModelItems = new ObservableCollection<ModelItem>(elements);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //Save config file in a local path
+        public RelayCommand SaveConfigCommand { get; set; }
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void SaveConfig()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            ConfigFile.ToFile();
         }
+
     }
 }

@@ -22,11 +22,15 @@ namespace NavisDataExtraction.Wpf.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Constructor
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainWindowViewModel();
         }
 
+        //Methods
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var vm = DataContext as MainWindowViewModel;

@@ -1,72 +1,125 @@
 ﻿<Window x:Class="NavisDataExtraction.Wpf.Views.MainWindow"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:NavisDataExtraction.Wpf.Views"
-             xmlns:vm="clr-namespace:NavisDataExtraction.Wpf.ViewModels"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:NavisDataExtraction.Wpf.ViewModels"
+        mc:Ignorable="d"
+        d:DesignHeight="600" d:DesignWidth="450">
     <Window.DataContext>
-        <vm:MainWindowViewModel x:Name="viewModel"/>
+        <vm:MainWindowViewModel x:Name="viewModel" />
     </Window.DataContext>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" MinHeight="180" />
+            <RowDefinition Height="Auto" MinHeight="90" />
+            <RowDefinition Height="Auto" MinHeight="90" />
+            <RowDefinition Height="Auto" MinHeight="90" />
+            <RowDefinition Height="*" MinHeight="30" />
         </Grid.RowDefinitions>
-        <Button Margin="5" Grid.Column="0" Grid.Row="2" Content="Get Elements"
-                Command="{Binding CollectElementsCommand}"/>
-        <StackPanel Grid.Column="0" Grid.Row="0">
-            <Label Grid.Row="0" FontWeight="Bold">Category name</Label>
-            <TextBox Grid.Row="0">Write the category name</TextBox>
+
+        <ContentControl Content="{Binding SelectedViewModel}"/>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock FontWeight="Bold" FontSize="16" Text="Manual input" />
+            <Separator></Separator>
+            <TextBlock FontWeight="Bold">Category name</TextBlock>
+            <TextBox Name="CategoryNameInput"
+                     Text="Write the category name"
+                     TextAlignment="Center"
+                     FontStyle="Italic"
+                     Foreground="DimGray" />
+            <TextBlock FontWeight="Bold">Property name</TextBlock>
+            <TextBox Text="Write the property name"
+                     TextAlignment="Center"
+                     FontStyle="Italic"
+                     Foreground="DimGray" />
+            <TextBlock FontWeight="Bold">Property value (Optional)</TextBlock>
+            <TextBox Text="Write the property value"
+                     TextAlignment="Center"
+                     FontStyle="Italic"
+                     Foreground="DimGray" />
+            <Separator></Separator>
+            <StackPanel>
+                <Button Content="Search elements with this property" />
+                <Button Content="New Type" />
+                <Button Content="Add mapped parameter to type" />
+                <TextBox Name="MappedParameterNameInput"
+                         Text="Mapped parameter name"
+                         TextAlignment="Center"
+                         FontStyle="Italic"
+                         Foreground="DimGray" />
+            </StackPanel>
         </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="0">
-            <Label Grid.Row="0" FontWeight="Bold">Property name</Label>
-            <TextBox Grid.Row="0">Write the property name</TextBox>
-        </StackPanel>
-        <ListView Grid.Column="0" Grid.Row="1"
+        <StackPanel Grid.Row="1">
+            <TextBlock FontWeight="Bold" FontSize="16" Text="Element export types" />
+            <Separator></Separator>
+            <StackPanel>
+                <Button Content="New type" Margin="5" />
+                <TextBox Text="New element export type name"
+                         TextAlignment="Center"
+                         FontStyle="Italic"
+                         Foreground="DimGray" />
+            </StackPanel>
+            <Separator></Separator>
+            <ListView
                   x:Name="ElementExportTypesList"
                   SelectionMode="Multiple"
                   SelectionChanged="ListView_SelectionChanged"
                   ItemsSource="{Binding ElementExportTypes}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            
-        </ListView>
-        <ListView Grid.Column="0" Grid.Row="3" 
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Separator></Separator>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Delete types" Margin="5" />
+                <Button Content="Search types" Margin="5" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="2">
+            <TextBlock FontWeight="Bold" FontSize="16" Text="Elements collected" />
+            <Separator></Separator>
+            <ListView
                   ItemsSource="{Binding ModelItems}"
                   SelectedItem="{Binding SelectedItem}"
                   SelectionMode="Single">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding DisplayName}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <ListView Grid.Column="1" Grid.Row="3" 
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+        <StackPanel Grid.Row="3">
+            <TextBlock FontWeight="Bold" FontSize="16" Text="Selected element properties" />
+            <ListView
                   ItemsSource="{Binding Properties}"
                   SelectionMode="Single">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <CheckBox IsChecked="{Binding Selected}">
-                        <TextBlock>
-                            <Run Text="{Binding Category.DisplayName, Mode=OneWay}"/>
-                            <Run Text=" - "/>
-                            <Run Text="{Binding Property.DisplayName, Mode=OneWay}"/>
-                        </TextBlock>
-                    </CheckBox>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding Selected}">
+                            <TextBlock>
+                            <Run Text="{Binding Category.DisplayName, Mode=OneWay}" />
+                            <Run Text=" - " />
+                            <Run Text="{Binding Property.DisplayName, Mode=OneWay}" />
+                            </TextBlock>
+                        </CheckBox>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <Button Margin="5" Content="Get Elements"
+                Command="{Binding CollectElementsCommand}" />
+            <Button Margin="5" Content="Save config file"
+                Command="{Binding SaveConfigCommand}" />
+            <Button Margin="5" Content="Editor" />
+        </StackPanel>
     </Grid>
 </Window>

@@ -67,11 +67,11 @@ namespace NavisDataExtraction.DataExport
             return "empty";
         }
 
-        public static string GetParameterByName(this ModelItem item, string tabName, string propertyName)
+        public static string GetParameterByName(this ModelItem item, string categoryName, string propertyName)
         {
             foreach (var category in item.PropertyCategories)
             {
-                if (category.DisplayName != tabName) continue;
+                if (category.DisplayName != categoryName) continue;
                 foreach (var property in category.Properties)
                 {
                     if (property.DisplayName == propertyName)
