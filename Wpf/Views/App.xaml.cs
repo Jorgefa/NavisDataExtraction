@@ -18,9 +18,9 @@ namespace NavisDataExtraction.Wpf
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class Application : UserControl
+    public partial class App : Application
     {
-        public Application()
+        public App()
         {
             InitializeComponent();
         }
