@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NavisDataExtraction.Wpf
+namespace NavisDataExtraction.Wpf.Views
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for EditorView.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class EditorView : UserControl
     {
-        public App()
+        public EditorView()
         {
             InitializeComponent();
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace NavisDataExtraction.Wpf
+namespace NavisDataExtraction.Commands
 {
     public class RelayCommand : ICommand
     {

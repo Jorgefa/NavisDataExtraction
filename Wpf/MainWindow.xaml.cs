@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NavisDataExtraction.Wpf.Views
+namespace NavisDataExtraction.Wpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -27,14 +27,24 @@ namespace NavisDataExtraction.Wpf.Views
         {
             InitializeComponent();
 
-            DataContext = new MainWindowViewModel();
+            //DataContext = new MainWindowViewModel();
+        }
+
+        private void Extraction_Clicked(object sender, RoutedEventArgs e)
+        {
+            DataContext = new ExtractionViewModel();
+        }
+
+        private void Editor_Clicked(object sender, RoutedEventArgs e)
+        {
+            DataContext = new EditorViewModel();
         }
 
         //Methods
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var vm = DataContext as MainWindowViewModel;
-            vm.SelectedElementExportTypes = ElementExportTypesList.SelectedItems.Cast<ElementExportType>().ToList();
-        }
+        //private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    var vm = DataContext as MainWindowViewModel;
+        //    vm.SelectedElementExportTypes = ElementExportTypesList.SelectedItems.Cast<ElementExportType>().ToList();
+        //}
     }
 }

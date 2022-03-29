@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using NavisDataExtraction.Wpf.Views;
 using NavisDataExtraction.Wpf.ViewModels;
-
+using NavisDataExtraction.Wpf;
 
 namespace NavisDataExtraction
 {
