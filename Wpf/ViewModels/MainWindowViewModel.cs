@@ -23,7 +23,6 @@ namespace NavisDataExtraction.Wpf.ViewModels
             ModelItems = new ObservableCollection<ModelItem>();
             Properties = new ObservableCollection<NavisworksProperty>();
             ConfigFile = Config.FromFile();
-            UpdateViewCommand = new UpdateViewCommand(this);
             ElementExportTypes = new ObservableCollection<ElementExportType>();
             foreach (var exportType in ConfigFile.CurrentElementExportTypes)
             {
@@ -100,10 +99,6 @@ namespace NavisDataExtraction.Wpf.ViewModels
         }
 
         //Methods
-        //Navigation
-        public ICommand UpdateViewCommand { get; set; }
-        
-
         //Returns properties from a ModelItem
         private ObservableCollection<NavisworksProperty> GetProperties(ModelItem modelItem)
         {

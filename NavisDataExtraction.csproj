@@ -52,7 +52,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\UpdateViewCommand.cs" />
     <Compile Include="Wpf\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>

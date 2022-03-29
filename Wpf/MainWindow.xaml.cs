@@ -26,8 +26,6 @@ namespace NavisDataExtraction.Wpf
         public MainWindow()
         {
             InitializeComponent();
-
-            //DataContext = new MainWindowViewModel();
         }
 
         private void Extraction_Clicked(object sender, RoutedEventArgs e)
@@ -39,12 +37,5 @@ namespace NavisDataExtraction.Wpf
         {
             DataContext = new EditorViewModel();
         }
-
-        //Methods
-        //private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    var vm = DataContext as MainWindowViewModel;
-        //    vm.SelectedElementExportTypes = ElementExportTypesList.SelectedItems.Cast<ElementExportType>().ToList();
-        //}
     }
 }
