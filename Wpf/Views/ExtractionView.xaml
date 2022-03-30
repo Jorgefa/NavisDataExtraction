@@ -18,10 +18,9 @@
             <RowDefinition Height="120" />
             <RowDefinition Height="120" />
             <RowDefinition Height="120" />
-
         </Grid.RowDefinitions>
 
-        <StackPanel Background="#FF535353">
+        <StackPanel Height="30" Background="#FF535353">
             <Label
                 HorizontalAlignment="Center"
                 Content="DATA EXTRACTION"
@@ -32,30 +31,40 @@
 
         <StackPanel Grid.Row="1">
             <TextBlock
+                Height="15"
                 HorizontalAlignment="Center"
                 FontSize="12"
                 FontWeight="Bold"
                 Text="Element export types" />
-            <Separator />
-            <ListView
-                x:Name="ElementExportTypesList"
-                ItemsSource="{Binding ElementExportTypes}"
-                SelectionChanged="ListView_SelectionChanged"
-                SelectionMode="Multiple">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Separator />
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+            <Separator Height="5" />
+            <StackPanel Height="60" Orientation="Horizontal">
+                <ListView
+                    x:Name="ElementExportTypesList"
+                    ItemsSource="{Binding ElementExportTypes}"
+                    SelectionChanged="ListView_SelectionChanged"
+                    SelectionMode="Multiple">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+            <Separator Height="5" />
+            <StackPanel
+                Height="30"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
                 <Button
                     Margin="5"
                     Command="{Binding CollectElementsCommand}"
-                    Content="Search types" />
+                    Content="Search elements" />
+                <Button
+                    Margin="5"
+                    Command="{Binding ExportDataCommand}"
+                    Content="Export data" />
             </StackPanel>
-            <Separator />
+            <Separator Height="5" />
         </StackPanel>
 
         <StackPanel Grid.Row="2">
@@ -63,18 +72,20 @@
                 HorizontalAlignment="Center"
                 FontSize="12"
                 FontWeight="Bold"
-                Text="Elements to export" />            
+                Text="Elements to export" />
             <Separator />
-            <ListView
-                ItemsSource="{Binding ModelItems}"
-                SelectedItem="{Binding SelectedItem}"
-                SelectionMode="Single">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding DisplayName}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <StackPanel Height="60" Orientation="Horizontal">
+                <ListView
+                    ItemsSource="{Binding ModelItems}"
+                    SelectedItem="{Binding SelectedItem}"
+                    SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
         </StackPanel>
 
         <StackPanel Grid.Row="3">
@@ -82,20 +93,26 @@
                 HorizontalAlignment="Center"
                 FontSize="12"
                 FontWeight="Bold"
-                Text="Properties" />            
-            <ListView ItemsSource="{Binding Properties}" SelectionMode="Single">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox IsChecked="{Binding Selected}">
-                            <TextBlock>
-                                <Run Text="{Binding Category.DisplayName, Mode=OneWay}" />
-                                <Run Text=" - " />
-                                <Run Text="{Binding Property.DisplayName, Mode=OneWay}" />
-                            </TextBlock>
-                        </CheckBox>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                Text="Properties" />
+            <StackPanel Height="60" Orientation="Horizontal">
+
+                <ListView
+                    Width="413                           "
+                    ItemsSource="{Binding Properties}"
+                    SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Selected}">
+                                <TextBlock>
+                                    <Run Text="{Binding Category.DisplayName, Mode=OneWay}" />
+                                    <Run Text=" - " />
+                                    <Run Text="{Binding Property.DisplayName, Mode=OneWay}" />
+                                </TextBlock>
+                            </CheckBox>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

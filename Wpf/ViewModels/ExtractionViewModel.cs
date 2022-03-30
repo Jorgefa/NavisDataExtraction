@@ -4,6 +4,7 @@ using NavisDataExtraction.DataCollector;
 using NavisDataExtraction.DataExport;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace NavisDataExtraction.Wpf.ViewModels
 {
@@ -12,6 +13,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
         public ExtractionViewModel()
         {
             CollectElementsCommand = new RelayCommand(CollectElements);
+            ExportDataCommand = new RelayCommand(ExportData);
             ModelItems = new ObservableCollection<ModelItem>();
             Properties = new ObservableCollection<NavisworksProperty>();
             ConfigFile = Config.FromFile();
@@ -49,7 +51,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        public List<ElementExportType> SelectedElementExportTypes;
+        public List<ElementExportType> SelectedElementExportTypes = new List<ElementExportType>();
 
         private ObservableCollection<NavisworksProperty> _properties;
 
@@ -97,14 +99,27 @@ namespace NavisDataExtraction.Wpf.ViewModels
             return props;
         }
 
-        //Select elements using an ElementExportType
+        //Select elements using ElmentExporTypes
         public RelayCommand CollectElementsCommand { get; set; }
 
         private void CollectElements()
         {
             List<ElementExportType> elementExportTypes = SelectedElementExportTypes;
-            var elements = NavisDataCollector.ElementCollector(elementExportTypes);
+            List<ElementExport> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(elementExportTypes);
+            var elements = elementExportList.Select(e => e.Element).ToList();
             ModelItems = new ObservableCollection<ModelItem>(elements);
+        }
+
+        public RelayCommand ExportDataCommand { get; set; }        
+        //Export elements using ElmentExporTypes
+        public void ExportData()
+        {
+            var config = ConfigFile;
+            List<ElementExportType> elementExportTypes = SelectedElementExportTypes;
+        
+            var navisDataTable = DataExtraction.CreateNavisDatatable(elementExportTypes);
+            
+            navisDataTable.ToCSV(config.csvExportationFilePath);
         }
 
         //Save config file in a local path

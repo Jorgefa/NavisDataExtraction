@@ -1,11 +1,12 @@
-﻿namespace NavisDataExtraction.DataExport
+﻿using System;
+
+namespace NavisDataExtraction.DataExport
 {
     public class DataExportType
     {
         //Constructors
         public DataExportType()
         {
-
         }
         public DataExportType(string dataName, string navisCategoryName, string navisPropertyName)
         {
@@ -26,6 +27,6 @@
         public string NavisCategoryName { get; set; }
         public string NavisPropertyName { get; set; }
         public string NavisPropertyValue { get; set; }
-
+        public Type DataType { get; set; } = typeof(string);
     }
 }

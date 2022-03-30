@@ -52,6 +52,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataExport\ElementExport.cs" />
     <Compile Include="Wpf\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -60,7 +61,7 @@
     <Compile Include="DataExport\ElementExportType.cs" />
     <Compile Include="DataCollector\NavisDataCollector.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="DataExtraction.cs" />
+    <Compile Include="DataExport\DataExtraction.cs" />
     <Compile Include="DataExport\Extension.cs" />
     <Compile Include="NavisDataTool.cs" />
     <Compile Include="NavisworksProperty.cs" />
