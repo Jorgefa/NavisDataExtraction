@@ -1,4 +1,5 @@
-﻿using NavisDataExtraction.Wpf.ViewModels;
+﻿using NavisDataExtraction.DataExport;
+using NavisDataExtraction.Wpf.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,11 @@ namespace NavisDataExtraction.Wpf.Views
             InitializeComponent();
         }
 
-        ////Methods
-        //private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    var vm = DataContext as MainWindowViewModel;
-        //    vm.SelectedElementExportTypes = ElementExportTypesList.SelectedItems.Cast<ElementExportType>().ToList();
-        //}
+        //Methods
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var vm = DataContext as ExtractionViewModel;
+            vm.SelectedElementExportTypes = ElementExportTypesList.SelectedItems.Cast<ElementExportType>().ToList();
+        }
     }
 }

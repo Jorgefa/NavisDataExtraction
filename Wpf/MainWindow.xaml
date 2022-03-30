@@ -30,25 +30,16 @@
             <RowDefinition Height="150" />
         </Grid.RowDefinitions>
 
-        <ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding}" />
+        <ContentControl
+            Grid.Row="0"
+            Grid.Column="0"
+            Content="{Binding}" />
 
         <StackPanel Grid.Row="1">
-            <Button Content="Extraction" Click="Extraction_Clicked"/>
-            <Button Content="Editor" Click="Editor_Clicked"/>
+            <Button Click="Extraction_Clicked" Content="Extraction" />
+            <Button Click="Editor_Clicked" Content="Editor" />
         </StackPanel>
-        
-        <!--<StackPanel Grid.Row="2">
-            <Button
-                Margin="5"
-                Command="{Binding UpdateViewCommand}"
-                CommandParameter="Extraction"
-                Content="Extraction" />
-            <Button
-                Margin="5"
-                Command="{Binding UpdateViewCommand}"
-                CommandParameter="Editor"
-                Content="Editor" />
-        </StackPanel>-->
+
 
         <!--<StackPanel Grid.Row="0">
             <TextBlock FontWeight="Bold" FontSize="16" Text="Manual input" />
