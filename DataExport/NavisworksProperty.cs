@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Autodesk.Navisworks.Api;
 using NavisDataExtraction.Annotations;
 
-namespace NavisDataExtraction
+namespace NavisDataExtraction.DataExport
 {
     public class NavisworksProperty : INotifyPropertyChanged
     {

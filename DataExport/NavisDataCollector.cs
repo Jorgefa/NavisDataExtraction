@@ -3,7 +3,7 @@ using NavisDataExtraction.DataExport;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NavisDataExtraction.DataCollector
+namespace NavisDataExtraction.DataExport
 {
     public class NavisDataCollector
     {
@@ -22,17 +22,29 @@ namespace NavisDataExtraction.DataCollector
         public static List<ElementExport> ElementCollectorByType(ElementExportType elementExportType)
         {
             List<ElementExport> elementExportList = new List<ElementExport>();
-            string searcherCategory = elementExportType.Searcher.NavisCategoryName;
-            string searcherProperty = elementExportType.Searcher.NavisPropertyName;
+            List<NavisSearcher> navisSearcherList = elementExportType.SearcherList;
+
             Search search = new Search();
             search.Selection.SelectAll();
 
-            if (searcherCategory != null && searcherProperty != null)
+            foreach (NavisSearcher searcher in navisSearcherList)
             {
-                var searchCondition = SearchCondition.HasPropertyByDisplayName(searcherCategory, searcherProperty);
-                search.SearchConditions.Add(searchCondition);
+                string searcherCategory = searcher.NavisCategoryName;
+                string searcherProperty = searcher.NavisPropertyName;
+                string searcherType = searcher.SearchType;
+
+                if (searcherCategory != null && searcherProperty != null)
+                {
+                    if (searcherType == "HasPropertyByDisplayName")
+                    {
+                        var searchCondition = SearchCondition.HasPropertyByDisplayName(searcherCategory, searcherProperty);
+                        search.SearchConditions.Add(searchCondition);
+                    }
+                }
             }
+
             List<ModelItem> elements = search.FindAll(Application.ActiveDocument, true).ToList();
+
             foreach (var element in elements)
             {
                 ElementExport elementExport = new ElementExport(element, elementExportType);

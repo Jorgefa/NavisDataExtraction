@@ -12,28 +12,36 @@ namespace NavisDataExtraction
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "PM Group", "Navis Data Exporter", "appConfig.json");
 
-        public string csvExportationFilePath { get; set; } = @"D:\02-GITHUB\NavisDataExtration\90-TEST\test.csv";
-
         public List<ElementExportType> CurrentElementExportTypes { get; set; }
 
         public Config(List<ElementExportType> elementExportTypes = null)
         {
             if (elementExportTypes == null)
             {
-                DataExportType RevitUniclassSs = new DataExportType("UniclassSs", "Revit Type", "UniclassSs");
-                DataExportType RevitZone = new DataExportType("Zone", "Revit Type", "Zone");
-                DataExportType RevitModuleNumber = new DataExportType("ModuleNumber", "Revit Type", "ModuleNumber");
+                NavisDataExportType RevitUniclassSs = new NavisDataExportType("UniclassSs", "Revit Type", "UniclassSs");
+                NavisDataExportType RevitZone = new NavisDataExportType("Zone", "Revit Type", "Zone");
+                NavisDataExportType RevitModuleNumber = new NavisDataExportType("ModuleNumber", "Revit Type", "ModuleNumber");
+                NavisSearcher RevitUniclassSsSearcher = new NavisSearcher("HasPropertyByDisplayName","Revit Type", "UniclassSs");
+                List<NavisSearcher> RevitNavisSearcherList = new List<NavisSearcher>
+                {
+                    RevitUniclassSsSearcher
+                };
 
-                DataExportType RevitIfcDataUniclassSs = new DataExportType("UniclassSs", "Data (IFC Type)", "UniclassSs");
-                DataExportType RevitIfcDataZone = new DataExportType("Zone", "Data", "Zone");
-                DataExportType RevitIfcDataModuleNumber = new DataExportType("ModuleNumber", "Data", "ModuleNumber");
+                NavisDataExportType RevitIfcDataUniclassSs = new NavisDataExportType("UniclassSs", "Data (IFC Type)", "UniclassSs");
+                NavisDataExportType RevitIfcDataZone = new NavisDataExportType("Zone", "Data", "Zone");
+                NavisDataExportType RevitIfcDataModuleNumber = new NavisDataExportType("ModuleNumber", "Data", "ModuleNumber");
+                NavisSearcher RevitIfcDataUniclassSsSearcher = new NavisSearcher("HasPropertyByDisplayName", "Revit Type", "UniclassSs");
+                List<NavisSearcher> RevitIfcDataSearcherList = new List<NavisSearcher>
+                {
+                    RevitIfcDataUniclassSsSearcher
+                };
 
-                var ElementExportTypeA = new ElementExportType("RevitType01", RevitUniclassSs);
+                var ElementExportTypeA = new ElementExportType("RevitType01", RevitNavisSearcherList);
                 ElementExportTypeA.AddDataExportType(RevitUniclassSs);
                 ElementExportTypeA.AddDataExportType(RevitZone);
                 ElementExportTypeA.AddDataExportType(RevitModuleNumber);
 
-                var ElementExportTypeB = new ElementExportType("IfcType01", RevitIfcDataUniclassSs);
+                var ElementExportTypeB = new ElementExportType("IfcType01", RevitIfcDataSearcherList);
                 ElementExportTypeB.AddDataExportType(RevitIfcDataUniclassSs);
                 ElementExportTypeB.AddDataExportType(RevitIfcDataZone);
                 ElementExportTypeB.AddDataExportType(RevitIfcDataModuleNumber);

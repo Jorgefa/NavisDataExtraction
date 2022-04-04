@@ -1,32 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace NavisDataExtraction.DataExport
 {
-    public class DataExportType
+    public class NavisDataType
     {
         //Constructors
-        public DataExportType()
+        public NavisDataType()
         {
         }
-        public DataExportType(string dataName, string navisCategoryName, string navisPropertyName)
+        public NavisDataType(string navisCategoryName, string navisPropertyName)
         {
-            DataName = dataName;
             NavisCategoryName = navisCategoryName;
             NavisPropertyName = navisPropertyName;
         }
-        public DataExportType(string dataName, string navisCategoryName, string navisPropertyName, string navisPropertyValue)
+        public NavisDataType(string navisCategoryName, string navisPropertyName, string navisPropertyValue)
         {
-            DataName = dataName;
             NavisCategoryName = navisCategoryName;
             NavisPropertyName = navisPropertyName;
             NavisPropertyValue = navisPropertyValue;
         }
 
         //Properties
-        public string DataName { get; set; }
         public string NavisCategoryName { get; set; }
         public string NavisPropertyName { get; set; }
         public string NavisPropertyValue { get; set; }
-        public Type DataType { get; set; } = typeof(string);
     }
 }

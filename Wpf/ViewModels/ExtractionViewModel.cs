@@ -1,10 +1,10 @@
 ﻿using Autodesk.Navisworks.Api;
 using NavisDataExtraction.Commands;
-using NavisDataExtraction.DataCollector;
 using NavisDataExtraction.DataExport;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace NavisDataExtraction.Wpf.ViewModels
 {
@@ -12,16 +12,16 @@ namespace NavisDataExtraction.Wpf.ViewModels
     {
         public ExtractionViewModel()
         {
-            CollectElementsCommand = new RelayCommand(CollectElements);
-            ExportDataCommand = new RelayCommand(ExportData);
+            ConfigFile = Config.FromFile();
             ModelItems = new ObservableCollection<ModelItem>();
             Properties = new ObservableCollection<NavisworksProperty>();
-            ConfigFile = Config.FromFile();
             ElementExportTypes = new ObservableCollection<ElementExportType>();
             foreach (var exportType in ConfigFile.CurrentElementExportTypes)
             {
                 ElementExportTypes.Add(exportType);
             }
+            CollectElementsCommand = new RelayCommand(CollectElements);
+            ExportDataCommand = new RelayCommand(ExportData);
         }
 
         //Properties
@@ -83,10 +83,10 @@ namespace NavisDataExtraction.Wpf.ViewModels
         //Returns properties from a ModelItem
         private ObservableCollection<NavisworksProperty> GetProperties(ModelItem modelItem)
         {
-            var props = new ObservableCollection<NavisworksProperty>();
-            foreach (var propertyCategory in modelItem.PropertyCategories)
+            ObservableCollection<NavisworksProperty> props = new ObservableCollection<NavisworksProperty>();
+            foreach (PropertyCategory propertyCategory in modelItem.PropertyCategories)
             {
-                foreach (var property in propertyCategory.Properties)
+                foreach (DataProperty property in propertyCategory.Properties)
                 {
                     props.Add(new NavisworksProperty
                     {
@@ -110,16 +110,27 @@ namespace NavisDataExtraction.Wpf.ViewModels
             ModelItems = new ObservableCollection<ModelItem>(elements);
         }
 
-        public RelayCommand ExportDataCommand { get; set; }        
+        public RelayCommand ExportDataCommand { get; set; }
+
         //Export elements using ElmentExporTypes
         public void ExportData()
         {
-            var config = ConfigFile;
-            List<ElementExportType> elementExportTypes = SelectedElementExportTypes;
-        
-            var navisDataTable = DataExtraction.CreateNavisDatatable(elementExportTypes);
-            
-            navisDataTable.ToCSV(config.csvExportationFilePath);
+            var dialog = new SaveFileDialog
+            {
+                Filter = "CSV file (*.csv)|*.csv",
+            };
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = dialog.FileName;
+
+                var config = ConfigFile;
+                List<ElementExportType> elementExportTypes = SelectedElementExportTypes;
+
+                var navisDataTable = DataExtraction.CreateNavisDatatable(elementExportTypes);
+
+                navisDataTable.ToCSV(filePath);
+            }
         }
 
         //Save config file in a local path

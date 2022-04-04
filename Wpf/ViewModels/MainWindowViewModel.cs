@@ -1,7 +1,6 @@
 ﻿using Autodesk.Navisworks.Api;
 using NavisDataExtraction.Annotations;
 using NavisDataExtraction.Commands;
-using NavisDataExtraction.DataCollector;
 using NavisDataExtraction.DataExport;
 using NavisDataExtraction.Wpf.Views;
 using NavisDataExtraction.Wpf;

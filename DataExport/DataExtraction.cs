@@ -1,5 +1,4 @@
 ﻿using Autodesk.Navisworks.Api;
-using NavisDataExtraction.DataCollector;
 using NavisDataExtraction.DataExport;
 using System;
 using System.Collections.Generic;
@@ -19,12 +18,15 @@ namespace NavisDataExtraction.DataExport
 
             foreach (ElementExportType elementType in elementExportTypes)
             {
-                List<DataExportType> dataList = elementType.DataExportList;
-                foreach (DataExportType data in dataList)
+                List<NavisDataExportType> dataList = elementType.DataExportList;
+                foreach (NavisDataExportType data in dataList)
                 {
                     string columnName = data.DataName;
                     Type columnType = data.DataType;
-                    if (dt.Columns.Contains(columnName)) continue;
+                    if (dt.Columns.Contains(columnName))
+                    {
+                        continue;
+                    }
                     dt.Columns.Add(columnName, columnType);
                 }
 

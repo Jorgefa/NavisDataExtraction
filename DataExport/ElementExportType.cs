@@ -1,28 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace NavisDataExtraction.DataExport
 {
     public class ElementExportType
     {
         //Constructors
-        public ElementExportType(string name, DataExportType searcher)
+        public ElementExportType()
+        {
+        }
+
+        public ElementExportType(string name)
         {
             Name = name;
-            Searcher = searcher;
-            DataExportList = new List<DataExportType>();
+            SearcherList = new List<NavisSearcher>();
+            DataExportList = new List<NavisDataExportType>();
+        }
+
+        public ElementExportType(string name, List<NavisSearcher> searcher)
+        {
+            Name = name;
+            SearcherList = searcher;
+            DataExportList = new List<NavisDataExportType>();
+        }
+
+        public ElementExportType(string name, NavisSearcher searcher)
+        {
+            Name = name;
+            SearcherList = new List<NavisSearcher>();
+            SearcherList.Add(searcher);
+            DataExportList = new List<NavisDataExportType>();
         }
 
         //Properties
         public string Name { get; set; }
-        public List<DataExportType> DataExportList { get; set; }
-        public DataExportType Searcher { get; set; }
+
+        public List<NavisDataExportType> DataExportList { get; set; }
+        public List<NavisSearcher> SearcherList { get; set; }
 
         //Methods
-        public void AddDataExportType(DataExportType dataExportType)
+        public void AddSearcher(NavisSearcher searcher)
+        {
+            if (searcher != null)
+            {
+                SearcherList.Add(searcher);
+            }
+        }
+
+        public void AddDataExportType(NavisDataExportType dataExportType)
         {
             if (dataExportType != null)
             {

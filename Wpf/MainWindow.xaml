@@ -8,9 +8,13 @@
     xmlns:viewmodels="clr-namespace:NavisDataExtraction.Wpf.ViewModels"
     xmlns:views="clr-namespace:NavisDataExtraction.Wpf.Views"
     Title="MainWindow"
-    d:DesignHeight="600"
+    Width="450"
+    Height="810"
+    d:DesignHeight="750"
     d:DesignWidth="450"
+    ResizeMode="NoResize"
     mc:Ignorable="d">
+
 
     <Window.Resources>
         <DataTemplate x:Name="extractionViewTemplate" DataType="{x:Type viewmodels:ExtractionViewModel}">
@@ -21,13 +25,13 @@
         </DataTemplate>
     </Window.Resources>
 
-    <Grid Margin="10">
+    <Grid Margin="6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="450" />
-            <RowDefinition Height="150" />
+            <RowDefinition Height="720" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <ContentControl
@@ -36,8 +40,14 @@
             Content="{Binding}" />
 
         <StackPanel Grid.Row="1">
-            <Button Click="Extraction_Clicked" Content="Extraction" />
-            <Button Click="Editor_Clicked" Content="Editor" />
+            <Button
+                Height="24"
+                Click="Extraction_Clicked"
+                Content="Extraction" />
+            <Button
+                Height="24"
+                Click="Editor_Clicked"
+                Content="Editor" />
         </StackPanel>
     </Grid>
 </Window>
