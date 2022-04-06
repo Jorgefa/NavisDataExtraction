@@ -9,6 +9,7 @@ using System.Linq;
 using NavisDataExtraction.Wpf.Views;
 using NavisDataExtraction.Wpf.ViewModels;
 using NavisDataExtraction.Wpf;
+using System.Windows.Forms.Integration;
 
 namespace NavisDataExtraction
 {
@@ -21,8 +22,9 @@ namespace NavisDataExtraction
         public override int Execute(params string[] parameters)
         {
             var window = new MainWindow();
+            ///ElementHost.EnableModelessKeyboardInterop(window);
             window.Show();
-
+            ElementHost.EnableModelessKeyboardInterop(window);
             return 0;
         }       
     }

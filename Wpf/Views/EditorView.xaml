@@ -47,6 +47,15 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <TextBox Height="24" Text="{Binding NewElementExportTypeName}" />
+            <Button
+                Height="24"
+                Command="{Binding AddNewElementExportTypeCommand}"
+                Content="New ElementExportType" />
+            <Button
+                Height="24"
+                Command="{Binding DeleteElementExportTypeCommad}"
+                Content="Delete ElementExportType" />
         </StackPanel>
 
         <StackPanel Grid.Row="2">
