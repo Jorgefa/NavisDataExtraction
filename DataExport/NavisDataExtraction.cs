@@ -1,25 +1,25 @@
-﻿using Autodesk.Navisworks.Api;
-using NavisDataExtraction.DataExport;
+﻿using NavisDataExtraction.DataClasses;
+using NavisDataExtraction.Others;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 
 namespace NavisDataExtraction.DataExport
 {
-    public class DataExtraction
+    public class NavisDataExtraction
     {
-        public static DataTable CreateNavisDatatable(List<ElementExportType> elementExportTypes)
+        public static DataTable CreateNavisDatatable(ObservableCollection<ElementExportType> elementExportTypes)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Guid", typeof(string));
             dt.Columns.Add("Name", typeof(string));
 
-            List<ElementExport> elements = new List<ElementExport>();
+            List<ElementExport> elementExportList = new List<ElementExport>();
 
             foreach (ElementExportType elementType in elementExportTypes)
             {
-                List<NavisDataExportType> dataList = elementType.DataExportList;
-                foreach (NavisDataExportType data in dataList)
+                foreach (NavisDataExport data in elementType.DataExportList)
                 {
                     string columnName = data.DataName;
                     Type columnType = data.DataType;
@@ -30,10 +30,9 @@ namespace NavisDataExtraction.DataExport
                     dt.Columns.Add(columnName, columnType);
                 }
 
-                List<ElementExport> curElements = NavisDataCollector.ElementCollectorByType(elementType);
-                elements.AddRange(curElements);
+                elementExportList.AddRange(NavisDataCollector.ElementCollectorByType(elementType));
             }
-            foreach (ElementExport elementExport in elements)
+            foreach (ElementExport elementExport in elementExportList)
             {
                 DataRow dataRow = dt.NewRow();
                 var ele = elementExport.Element;

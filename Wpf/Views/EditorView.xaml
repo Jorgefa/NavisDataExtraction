@@ -3,13 +3,25 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dc="clr-namespace:NavisDataExtraction.DataClasses"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:vm="clr-namespace:NavisDataExtraction.Wpf.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:EditorViewModel,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="720"
+    d:DesignHeight="810"
     d:DesignWidth="450"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <ObjectDataProvider
+            x:Key="SearchTypeEnum"
+            MethodName="GetValues"
+            ObjectType="{x:Type system:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="dc:NavisSearchType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
 
     <Grid Margin="6" Background="White">
 
@@ -19,7 +31,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="45" />
             <RowDefinition Height="225" />
-            <RowDefinition Height="225" />
+            <RowDefinition Height="300" />
             <RowDefinition Height="225" />
         </Grid.RowDefinitions>
 
@@ -38,7 +50,7 @@
             <Separator Height="5" />
             <ListView
                 Height="135"
-                ItemsSource="{Binding ElementExportTypes}"
+                ItemsSource="{Binding ConfigFile.CurrentElementExportTypes}"
                 SelectedItem="{Binding SelectedElementExportType}"
                 SelectionMode="Extended">
                 <ListView.ItemTemplate>
@@ -46,16 +58,17 @@
                         <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DeleteElementExportTypeCommad}" Header="Delete ElementExportType" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </ListView>
-            <TextBox Height="24" Text="{Binding NewElementExportTypeName}" />
+            <TextBox Height="24" Text="{Binding NewElementExportType.Name}" />
             <Button
                 Height="24"
                 Command="{Binding AddNewElementExportTypeCommand}"
                 Content="New ElementExportType" />
-            <Button
-                Height="24"
-                Command="{Binding DeleteElementExportTypeCommad}"
-                Content="Delete ElementExportType" />
         </StackPanel>
 
         <StackPanel Grid.Row="2">
@@ -66,9 +79,15 @@
                 Text="Searchers" />
             <Separator Height="5" />
             <DataGrid
-                Height="180"
+                Height="150"
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding SelectedElementExportType.SearcherList}">
+                ItemsSource="{Binding SelectedElementExportType.SearcherList}"
+                SelectedItem="{Binding SelectedNavisSearcher}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DeleteNavisSearcherCommand}" Header="Delete Searcher" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding SearchType}" Header="Name" />
                     <DataGridTextColumn Binding="{Binding NavisCategoryName}" Header="N.Group" />
@@ -76,6 +95,18 @@
                     <DataGridTextColumn Binding="{Binding NavisPropertyValue}" Header="Value" />
                 </DataGrid.Columns>
             </DataGrid>
+            <StackPanel>
+                <ComboBox
+                    Height="24"
+                    ItemsSource="{Binding Source={StaticResource SearchTypeEnum}}"
+                    SelectedItem="{Binding NewNavisSearcher.SearchType}" />
+                <TextBox Height="24" Text="{Binding NewNavisSearcher.NavisCategoryName}" />
+                <TextBox Height="24" Text="{Binding NewNavisSearcher.NavisPropertyName}" />
+            </StackPanel>
+            <Button
+                Height="24"
+                Command="{Binding AddNewNavisSearcherCommand}"
+                Content="New NavisSearcher" />
         </StackPanel>
 
         <StackPanel Grid.Row="3">
@@ -88,15 +119,20 @@
             <DataGrid
                 Height="180"
                 AutoGenerateColumns="False"
-                ItemsSource="{Binding SelectedElementExportType.DataExportList}">
+                ItemsSource="{Binding SelectedElementExportType.DataExportList}"
+                SelectedItem="{Binding SelectedNavisDataExport}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding DataName}" Header="Name" />
                     <DataGridTextColumn Binding="{Binding DataType}" Header="Type" />
                     <DataGridTextColumn Binding="{Binding NavisCategoryName}" Header="N.Group" />
                     <DataGridTextColumn Binding="{Binding NavisPropertyName}" Header="N.Name" />
                     <DataGridTextColumn Binding="{Binding NavisPropertyValue}" Header="Value" />
-
                 </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DeleteNavisSearcherCommand}" Header="Delete data" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
             </DataGrid>
         </StackPanel>
     </Grid>

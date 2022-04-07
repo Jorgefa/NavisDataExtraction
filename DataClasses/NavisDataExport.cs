@@ -1,21 +1,21 @@
 ﻿using System;
 
-namespace NavisDataExtraction.DataExport
+namespace NavisDataExtraction.DataClasses
 {
-    public class NavisDataExportType : NavisDataType
+    public class NavisDataExport : NavisData
     {
         //Constructors
-        public NavisDataExportType()
+        public NavisDataExport()
         {
         }
 
-        public NavisDataExportType(string dataName, string navisCategoryName, string navisPropertyName)
+        public NavisDataExport(string dataName, string navisCategoryName, string navisPropertyName)
         {
             DataName = dataName;
             NavisCategoryName = navisCategoryName;
             NavisPropertyName = navisPropertyName;
         }
-        public NavisDataExportType(string dataName, string navisCategoryName, string navisPropertyName, string navisPropertyValue)
+        public NavisDataExport(string dataName, string navisCategoryName, string navisPropertyName, string navisPropertyValue)
         {
             DataName = dataName;
             NavisCategoryName = navisCategoryName;

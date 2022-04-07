@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 
-namespace NavisDataExtraction.DataExport
+namespace NavisDataExtraction.DataClasses
 {
     public class ElementExportType
     {
@@ -12,30 +12,30 @@ namespace NavisDataExtraction.DataExport
         public ElementExportType(string name)
         {
             Name = name;
-            SearcherList = new List<NavisSearcher>();
-            DataExportList = new List<NavisDataExportType>();
+            SearcherList = new ObservableCollection<NavisSearcher>();
+            DataExportList = new ObservableCollection<NavisDataExport>();
         }
 
-        public ElementExportType(string name, List<NavisSearcher> searcher)
+        public ElementExportType(string name, ObservableCollection<NavisSearcher> searcher)
         {
             Name = name;
             SearcherList = searcher;
-            DataExportList = new List<NavisDataExportType>();
+            DataExportList = new ObservableCollection<NavisDataExport>();
         }
 
         public ElementExportType(string name, NavisSearcher searcher)
         {
             Name = name;
-            SearcherList = new List<NavisSearcher>();
+            SearcherList = new ObservableCollection<NavisSearcher>();
             SearcherList.Add(searcher);
-            DataExportList = new List<NavisDataExportType>();
+            DataExportList = new ObservableCollection<NavisDataExport>();
         }
 
         //Properties
         public string Name { get; set; }
 
-        public List<NavisDataExportType> DataExportList { get; set; }
-        public List<NavisSearcher> SearcherList { get; set; }
+        public ObservableCollection<NavisDataExport> DataExportList { get; set; }
+        public ObservableCollection<NavisSearcher> SearcherList { get; set; }
 
         //Methods
         public void AddSearcher(NavisSearcher searcher)
@@ -43,10 +43,11 @@ namespace NavisDataExtraction.DataExport
             if (searcher != null)
             {
                 SearcherList.Add(searcher);
+
             }
         }
 
-        public void AddDataExportType(NavisDataExportType dataExportType)
+        public void AddDataExportType(NavisDataExport dataExportType)
         {
             if (dataExportType != null)
             {

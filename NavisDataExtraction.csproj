@@ -54,24 +54,25 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataExport\NavisDataType.cs" />
-    <Compile Include="DataExport\ElementExport.cs" />
-    <Compile Include="DataExport\NavisSearcher.cs" />
+    <Compile Include="DataClasses\NavisData.cs" />
+    <Compile Include="DataClasses\ElementExport.cs" />
+    <Compile Include="DataClasses\NavisSearcher.cs" />
+    <Compile Include="DataClasses\NavisSearchType.cs" />
     <Compile Include="Wpf\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\ViewModels\BaseViewModel.cs" />
-    <Compile Include="DataExport\NavisDataExportType.cs" />
-    <Compile Include="DataExport\ElementExportType.cs" />
+    <Compile Include="DataClasses\NavisDataExport.cs" />
+    <Compile Include="DataClasses\ElementExportType.cs" />
     <Compile Include="DataExport\NavisDataCollector.cs" />
-    <Compile Include="Config.cs" />
-    <Compile Include="DataExport\DataExtraction.cs" />
-    <Compile Include="DataExport\Extension.cs" />
-    <Compile Include="NavisDataTool.cs" />
-    <Compile Include="DataExport\NavisworksProperty.cs" />
+    <Compile Include="DataClasses\Config.cs" />
+    <Compile Include="DataExport\NavisDataExtraction.cs" />
+    <Compile Include="Others\Extension.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="DataClasses\NavisworksProperty.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Others\RelayCommand.cs" />
     <Compile Include="Wpf\ViewModels\EditorViewModel.cs" />
     <Compile Include="Wpf\ViewModels\ExtractionViewModel.cs" />
     <Compile Include="Wpf\ViewModels\MainWindowViewModel.cs" />

@@ -17,7 +17,7 @@ namespace NavisDataExtraction
         "PMPK",
         ToolTip = "Export Data to Json",
         DisplayName ="Export")]
-    public class NavisDataTool : AddInPlugin
+    public class Main : AddInPlugin
     {
         public override int Execute(params string[] parameters)
         {

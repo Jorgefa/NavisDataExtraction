@@ -9,8 +9,8 @@
     xmlns:views="clr-namespace:NavisDataExtraction.Wpf.Views"
     Title="MainWindow"
     Width="450"
-    Height="810"
-    d:DesignHeight="750"
+    Height="1000"
+    d:DesignHeight="1000"
     d:DesignWidth="450"
     ResizeMode="NoResize"
     mc:Ignorable="d">
@@ -30,7 +30,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="720" />
+            <RowDefinition Height="900" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 

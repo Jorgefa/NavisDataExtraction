@@ -1,10 +1,10 @@
 ﻿using Autodesk.Navisworks.Api;
-using NavisDataExtraction.Commands;
+using NavisDataExtraction.Others;
 using NavisDataExtraction.DataExport;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
+using NavisDataExtraction.DataClasses;
 
 namespace NavisDataExtraction.Wpf.ViewModels
 {
@@ -51,7 +51,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        public List<ElementExportType> SelectedElementExportTypes = new List<ElementExportType>();
+        public ObservableCollection<ElementExportType> SelectedElementExportTypes = new ObservableCollection<ElementExportType>();
 
         private ObservableCollection<NavisworksProperty> _properties;
 
@@ -104,8 +104,8 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void CollectElements()
         {
-            List<ElementExportType> elementExportTypes = SelectedElementExportTypes;
-            List<ElementExport> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(elementExportTypes);
+            ObservableCollection<ElementExportType> elementExportTypes = SelectedElementExportTypes;
+            ObservableCollection<ElementExport> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(elementExportTypes);
             var elements = elementExportList.Select(e => e.Element).ToList();
             ModelItems = new ObservableCollection<ModelItem>(elements);
         }
@@ -125,9 +125,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 var filePath = dialog.FileName;
 
                 var config = ConfigFile;
-                List<ElementExportType> elementExportTypes = SelectedElementExportTypes;
+                ObservableCollection<ElementExportType> elementExportTypes = SelectedElementExportTypes;
 
-                var navisDataTable = DataExtraction.CreateNavisDatatable(elementExportTypes);
+                var navisDataTable = DataExport.NavisDataExtraction.CreateNavisDatatable(elementExportTypes);
 
                 navisDataTable.ToCSV(filePath);
             }

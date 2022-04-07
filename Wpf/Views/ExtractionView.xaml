@@ -7,7 +7,7 @@
     xmlns:vm="clr-namespace:NavisDataExtraction.Wpf.ViewModels"
     d:DataContext="{d:DesignInstance Type=vm:ExtractionViewModel,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="720"
+    d:DesignHeight="810"
     d:DesignWidth="450"
     mc:Ignorable="d">
 
@@ -39,7 +39,7 @@
             <ListView
                 x:Name="ElementExportTypesList"
                 Height="150"
-                ItemsSource="{Binding ElementExportTypes}"
+                ItemsSource="{Binding ConfigFile.CurrentElementExportTypes}"
                 SelectionChanged="ListView_SelectionChanged"
                 SelectionMode="Multiple">
                 <ListView.ItemTemplate>

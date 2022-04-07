@@ -1,37 +1,37 @@
-﻿using NavisDataExtraction.DataExport;
+﻿using NavisDataExtraction.Wpf.ViewModels;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 
-namespace NavisDataExtraction
+namespace NavisDataExtraction.DataClasses
 {
-    public class Config
+    public class Config : BaseViewModel
     {
-        public static readonly string ConfigLocation =
+        public static readonly string ConfigLocation =  
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "PM Group", "Navis Data Exporter", "appConfig.json");
 
-        public List<ElementExportType> CurrentElementExportTypes { get; set; }
+        public ObservableCollection<ElementExportType> CurrentElementExportTypes { get; set; }
 
-        public Config(List<ElementExportType> elementExportTypes = null)
+        public Config(ObservableCollection<ElementExportType> elementExportTypes = null)
         {
             if (elementExportTypes == null)
             {
-                NavisDataExportType RevitUniclassSs = new NavisDataExportType("UniclassSs", "Revit Type", "UniclassSs");
-                NavisDataExportType RevitZone = new NavisDataExportType("Zone", "Revit Type", "Zone");
-                NavisDataExportType RevitModuleNumber = new NavisDataExportType("ModuleNumber", "Revit Type", "ModuleNumber");
-                NavisSearcher RevitUniclassSsSearcher = new NavisSearcher("HasPropertyByDisplayName","Revit Type", "UniclassSs");
-                List<NavisSearcher> RevitNavisSearcherList = new List<NavisSearcher>
+                NavisDataExport RevitUniclassSs = new NavisDataExport("UniclassSs", "Revit Type", "UniclassSs");
+                NavisDataExport RevitZone = new NavisDataExport("Zone", "Revit Type", "Zone");
+                NavisDataExport RevitModuleNumber = new NavisDataExport("ModuleNumber", "Revit Type", "ModuleNumber");
+                NavisSearcher RevitUniclassSsSearcher = new NavisSearcher(NavisSearchType.HasPropertyByDisplayName,"Revit Type", "UniclassSs");
+                ObservableCollection<NavisSearcher> RevitNavisSearcherList = new ObservableCollection<NavisSearcher>
                 {
                     RevitUniclassSsSearcher
                 };
 
-                NavisDataExportType RevitIfcDataUniclassSs = new NavisDataExportType("UniclassSs", "Data (IFC Type)", "UniclassSs");
-                NavisDataExportType RevitIfcDataZone = new NavisDataExportType("Zone", "Data", "Zone");
-                NavisDataExportType RevitIfcDataModuleNumber = new NavisDataExportType("ModuleNumber", "Data", "ModuleNumber");
-                NavisSearcher RevitIfcDataUniclassSsSearcher = new NavisSearcher("HasPropertyByDisplayName", "Revit Type", "UniclassSs");
-                List<NavisSearcher> RevitIfcDataSearcherList = new List<NavisSearcher>
+                NavisDataExport RevitIfcDataUniclassSs = new NavisDataExport("UniclassSs", "Data (IFC Type)", "UniclassSs");
+                NavisDataExport RevitIfcDataZone = new NavisDataExport("Zone", "Data", "Zone");
+                NavisDataExport RevitIfcDataModuleNumber = new NavisDataExport("ModuleNumber", "Data", "ModuleNumber");
+                NavisSearcher RevitIfcDataUniclassSsSearcher = new NavisSearcher(NavisSearchType.HasPropertyByDisplayName, "Revit Type", "UniclassSs");
+                ObservableCollection<NavisSearcher> RevitIfcDataSearcherList = new ObservableCollection<NavisSearcher>
                 {
                     RevitIfcDataUniclassSsSearcher
                 };
@@ -46,7 +46,7 @@ namespace NavisDataExtraction
                 ElementExportTypeB.AddDataExportType(RevitIfcDataZone);
                 ElementExportTypeB.AddDataExportType(RevitIfcDataModuleNumber);
 
-                CurrentElementExportTypes = new List<ElementExportType>();
+                CurrentElementExportTypes = new ObservableCollection<ElementExportType>();
 
                 CurrentElementExportTypes.Add(ElementExportTypeA);
                 CurrentElementExportTypes.Add(ElementExportTypeB);
