@@ -10,9 +10,8 @@
     Title="MainWindow"
     Width="450"
     Height="1000"
-    d:DesignHeight="1000"
+    d:DesignHeight="720"
     d:DesignWidth="450"
-    ResizeMode="NoResize"
     mc:Ignorable="d">
 
 
@@ -30,8 +29,8 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="900" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ContentControl

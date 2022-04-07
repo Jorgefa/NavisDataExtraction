@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 
 namespace NavisDataExtraction.DataClasses
 {
@@ -18,38 +19,7 @@ namespace NavisDataExtraction.DataClasses
         {
             if (elementExportTypes == null)
             {
-                NavisDataExport RevitUniclassSs = new NavisDataExport("UniclassSs", "Revit Type", "UniclassSs");
-                NavisDataExport RevitZone = new NavisDataExport("Zone", "Revit Type", "Zone");
-                NavisDataExport RevitModuleNumber = new NavisDataExport("ModuleNumber", "Revit Type", "ModuleNumber");
-                NavisSearcher RevitUniclassSsSearcher = new NavisSearcher(NavisSearchType.HasPropertyByDisplayName,"Revit Type", "UniclassSs");
-                ObservableCollection<NavisSearcher> RevitNavisSearcherList = new ObservableCollection<NavisSearcher>
-                {
-                    RevitUniclassSsSearcher
-                };
-
-                NavisDataExport RevitIfcDataUniclassSs = new NavisDataExport("UniclassSs", "Data (IFC Type)", "UniclassSs");
-                NavisDataExport RevitIfcDataZone = new NavisDataExport("Zone", "Data", "Zone");
-                NavisDataExport RevitIfcDataModuleNumber = new NavisDataExport("ModuleNumber", "Data", "ModuleNumber");
-                NavisSearcher RevitIfcDataUniclassSsSearcher = new NavisSearcher(NavisSearchType.HasPropertyByDisplayName, "Revit Type", "UniclassSs");
-                ObservableCollection<NavisSearcher> RevitIfcDataSearcherList = new ObservableCollection<NavisSearcher>
-                {
-                    RevitIfcDataUniclassSsSearcher
-                };
-
-                var ElementExportTypeA = new ElementExportType("RevitType01", RevitNavisSearcherList);
-                ElementExportTypeA.AddDataExportType(RevitUniclassSs);
-                ElementExportTypeA.AddDataExportType(RevitZone);
-                ElementExportTypeA.AddDataExportType(RevitModuleNumber);
-
-                var ElementExportTypeB = new ElementExportType("IfcType01", RevitIfcDataSearcherList);
-                ElementExportTypeB.AddDataExportType(RevitIfcDataUniclassSs);
-                ElementExportTypeB.AddDataExportType(RevitIfcDataZone);
-                ElementExportTypeB.AddDataExportType(RevitIfcDataModuleNumber);
-
                 CurrentElementExportTypes = new ObservableCollection<ElementExportType>();
-
-                CurrentElementExportTypes.Add(ElementExportTypeA);
-                CurrentElementExportTypes.Add(ElementExportTypeB);
             }
             else
             {
@@ -76,6 +46,30 @@ namespace NavisDataExtraction.DataClasses
                 return newConfig;
             }
             return config;
+        }
+        public bool ConfigValidation()
+        {
+            foreach (var eleExpTyp in CurrentElementExportTypes)
+            {
+                foreach (var searcher in eleExpTyp.SearcherList)
+                {
+                    if (string.IsNullOrEmpty(searcher.NavisCategoryName) ||
+                        string.IsNullOrEmpty(searcher.NavisPropertyName))
+                    {
+                        return false;
+                    }
+                }
+                foreach (var data in eleExpTyp.DataExportList)
+                {
+                    if (string.IsNullOrEmpty(data.DataName) ||
+                        string.IsNullOrEmpty(data.NavisCategoryName) ||
+                        string.IsNullOrEmpty(data.NavisPropertyName))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         public void ToFile(string fileLocation = null)

@@ -10,16 +10,14 @@ namespace NavisDataExtraction.Wpf.ViewModels
         public EditorViewModel()
         {
             ConfigFile = Config.FromFile();
-            //ElementExportTypes = new ObservableCollection<ElementExportType>(ConfigFile.CurrentElementExportTypes);
+
             AddNewElementExportTypeCommand = new RelayCommand(AddNewExportType);
             DeleteElementExportTypeCommad = new RelayCommand(DeleteElementExportType);
-            AddNewNavisSearcherCommand = new RelayCommand(AddNewNavisNavisSearcher);
             DeleteNavisSearcherCommand = new RelayCommand(DeleteNavisSearcher);
-            AddNewElementExportTypeCommand = new RelayCommand(AddNewNavisDataExport);
             DeleteNavisDataExportCommand = new RelayCommand(DeleteNavisDataExport);
-            NewNavisSearcher = new NavisSearcher();
+            SaveConfigCommand = new RelayCommand(SaveConfig);
             NewElementExportType = new ElementExportType();
-            NewNavisDataExport = new NavisDataExport();
+
         }
 
         //Properties
@@ -32,7 +30,6 @@ namespace NavisDataExtraction.Wpf.ViewModels
             {
                 _configFile = value;
                 OnPropertyChanged();
-                ConfigFile.ToFile();
             }
         }
 
@@ -45,6 +42,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             {
                 _selectedElementExportType = value;
                 OnPropertyChanged();
+                SaveConfig();
             }
         }
 
@@ -84,96 +82,54 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisSearcher _newNavisSearcher;
-
-        public NavisSearcher NewNavisSearcher
-        {
-            get { return _newNavisSearcher; }
-            set
-            {
-                _newNavisSearcher = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private NavisDataExport _newNavisDataExport;
-
-        public NavisDataExport NewNavisDataExport
-        {
-            get { return _newNavisDataExport; }
-            set
-            {
-                _newNavisDataExport = value;
-                OnPropertyChanged();
-            }
-        }
-
         //Methods
 
         public RelayCommand AddNewElementExportTypeCommand { get; set; }
 
         private void AddNewExportType()
         {
-            if (string.IsNullOrEmpty(NewElementExportType.Name))
+            var input = Dialogs.Dialogs.ShowInputDialog();
+            if (string.IsNullOrEmpty(input))
             {
                 MessageBox.Show("Please enter a valid name");
                 return;
             }
-            ConfigFile.CurrentElementExportTypes.Add(NewElementExportType);
+            ConfigFile.CurrentElementExportTypes.Add(new ElementExportType(input));
             ConfigFile.ToFile();
-            NewElementExportType = new ElementExportType();
         }
-
         public RelayCommand DeleteElementExportTypeCommad { get; set; }
-
         private void DeleteElementExportType()
         {
             ConfigFile.CurrentElementExportTypes.Remove(SelectedElementExportType);
             ConfigFile.ToFile();
         }
 
-        public RelayCommand AddNewNavisSearcherCommand { get; set; }
-
-        private void AddNewNavisNavisSearcher()
-        {
-            if (string.IsNullOrEmpty(NewNavisSearcher.NavisCategoryName) || string.IsNullOrEmpty(NewNavisSearcher.NavisPropertyName))
-            {
-                MessageBox.Show("Please enter a valid category and property names");
-                return;
-            }
-            SelectedElementExportType.AddSearcher(NewNavisSearcher);
-            ConfigFile.ToFile();
-            NewNavisSearcher = new NavisSearcher();
-        }
-
         public RelayCommand DeleteNavisSearcherCommand { get; set; }
-
         private void DeleteNavisSearcher()
         {
             SelectedElementExportType.SearcherList.Remove(SelectedNavisSearcher);
             ConfigFile.ToFile();
         }
 
-        public RelayCommand AddNewNavisDataExportCommand { get; set; }
-
-        private void AddNewNavisDataExport()
-        {
-            if (string.IsNullOrEmpty(NewNavisDataExport.DataName) || string.IsNullOrEmpty(NewNavisDataExport.NavisCategoryName) || string.IsNullOrEmpty(NewNavisDataExport.NavisPropertyName))
-            {
-                MessageBox.Show("Please enter a valid data, category and property names");
-                return;
-            }
-            SelectedElementExportType.DataExportList.Add(NewNavisDataExport);
-            ConfigFile.ToFile();
-            NewNavisDataExport = new NavisDataExport();
-        }
-
         public RelayCommand DeleteNavisDataExportCommand { get; set; }
-
         private void DeleteNavisDataExport()
         {
             SelectedElementExportType.DataExportList.Remove(SelectedNavisDataExport);
             ConfigFile.ToFile();
         }
+
+        public RelayCommand SaveConfigCommand { get; set; }
+        private void SaveConfig()
+        {
+            if (ConfigFile.ConfigValidation())
+            {
+                ConfigFile.ToFile();
+            }
+            else
+            {
+                MessageBox.Show("Please enter correct data or remove empty searchers or data to export");
+            }
+        }
+
     }
 }
