@@ -23,6 +23,8 @@ namespace NavisDataExtraction.Wpf.Dialogs
         public InputDialog(string title, string message)
         {
             InitializeComponent();
+            this.Title = title;
+            this.MessageTextBlock.Text = message;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

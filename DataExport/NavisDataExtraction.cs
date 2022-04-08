@@ -9,20 +9,20 @@ namespace NavisDataExtraction.DataExport
 {
     public class NavisDataExtraction
     {
-        public static DataTable CreateNavisDatatable(ObservableCollection<ElementExportType> elementExportTypes)
+        public static DataTable CreateNavisDatatable(ObservableCollection<NavisExtractionType> elementExportTypes)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Guid", typeof(string));
             dt.Columns.Add("Name", typeof(string));
 
-            List<ElementExport> elementExportList = new List<ElementExport>();
+            List<NavisExtractionElement> elementExportList = new List<NavisExtractionElement>();
 
-            foreach (ElementExportType elementType in elementExportTypes)
+            foreach (NavisExtractionType elementType in elementExportTypes)
             {
-                foreach (NavisDataExport data in elementType.DataExportList)
+                foreach (NavisExtractionData data in elementType.Datas)
                 {
-                    string columnName = data.DataName;
-                    Type columnType = data.DataType;
+                    string columnName = data.Name;
+                    Type columnType = data.Type;
                     if (dt.Columns.Contains(columnName))
                     {
                         continue;
@@ -32,11 +32,11 @@ namespace NavisDataExtraction.DataExport
 
                 elementExportList.AddRange(NavisDataCollector.ElementCollectorByType(elementType));
             }
-            foreach (ElementExport elementExport in elementExportList)
+            foreach (NavisExtractionElement elementExport in elementExportList)
             {
                 DataRow dataRow = dt.NewRow();
                 var ele = elementExport.Element;
-                var properties = elementExport.ExportType.DataExportList;
+                var properties = elementExport.ExportType.Datas;
                 string guid = ele.InstanceGuid.ToString();
                 string name = ele.DisplayName.ToString();
                 dataRow["Guid"] = guid;
@@ -44,7 +44,7 @@ namespace NavisDataExtraction.DataExport
 
                 foreach (var property in properties)
                 {
-                    var dataName = property.DataName;
+                    var dataName = property.Name;
                     var categoryName = property.NavisCategoryName;
                     var propertyName = property.NavisPropertyName;
                     var propertyValue = ele.GetParameterByName(categoryName, propertyName);

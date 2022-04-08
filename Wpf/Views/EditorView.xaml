@@ -22,6 +22,22 @@
                 <x:Type TypeName="dc:NavisSearchType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <!--  DataGrid style  -->
+        <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
+            <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}" />
+            <Setter Property="Background" Value="White" />
+        </Style>
+        <!--  DataGridColumnHeader style  -->
+        <Style x:Key="ColumnHeaderStyle1" TargetType="DataGridColumnHeader">
+            <Setter Property="Height" Value="Auto" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Foreground" Value="Black" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="ToolTip" Value="Click to sort." />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Grid Background="White">
@@ -31,126 +47,153 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="45" />
-            <RowDefinition Height="630" />
-            <RowDefinition Height="45" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Label
             Grid.Row="0"
-            Content="EDITOR"
+            Content="Editor"
             FontSize="18"
             FontWeight="Bold" />
 
-        <ScrollViewer Grid.Row="1">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0">
-                    <TextBlock
-                        Height="15"
-                        FontSize="12"
-                        FontWeight="Bold"
-                        Text="Element export types" />
-                    <ListView
-                        Height="120"
-                        ItemsSource="{Binding ConfigFile.CurrentElementExportTypes}"
-                        SelectedItem="{Binding SelectedElementExportType}"
-                        SelectionMode="Extended">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Command="{Binding DeleteElementExportTypeCommad}" Header="Delete ElementExportType" />
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                    </ListView>
-                    <TextBox Height="24" Text="{Binding NewElementExportType.Name}" />
-                    <Button
-                        Height="24"
-                        Command="{Binding AddNewElementExportTypeCommand}"
-                        Content="New ElementExportType" />
-                </StackPanel>
-
-                <StackPanel Grid.Row="1">
-                    <TextBlock
-                        Height="15"
-                        FontSize="12"
-                        FontWeight="Bold"
-                        Text="Searchers" />
-                    <Separator Height="5" />
-                    <DataGrid
-                        Height="150"
-                        AutoGenerateColumns="False"
-                        ItemsSource="{Binding SelectedElementExportType.SearcherList}"
-                        SelectedItem="{Binding SelectedNavisSearcher}">
-                        <DataGrid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Command="{Binding DeleteNavisSearcherCommand}" Header="Delete Searcher" />
-                            </ContextMenu>
-                        </DataGrid.ContextMenu>
-                        <DataGrid.Columns>
-                            <!--<DataGridTextColumn Binding="{Binding SearchType}" Header="Name" />-->
-                            <DataGridComboBoxColumn
-                                Header="Type"
-                                ItemsSource="{Binding Source={StaticResource SearchTypeEnum}}"
-                                SelectedItemBinding="{Binding SearchType}" />
-                            <DataGridTextColumn Binding="{Binding NavisCategoryName}" Header="N.Group" />
-                            <DataGridTextColumn Binding="{Binding NavisPropertyName}" Header="N.Name" />
-                            <DataGridTextColumn Binding="{Binding NavisPropertyValue}" Header="Value" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <!--<StackPanel>
-                <ComboBox
+            <StackPanel Grid.Row="0">
+                <TextBlock
                     Height="24"
-                    ItemsSource="{Binding Source={StaticResource SearchTypeEnum}}"
-                    SelectedItem="{Binding NewNavisSearcher.SearchType}" />
-                <TextBox Height="24" Text="{Binding NewNavisSearcher.NavisCategoryName}" />
-                <TextBox Height="24" Text="{Binding NewNavisSearcher.NavisPropertyName}" />
-            </StackPanel>-->
-                </StackPanel>
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Element export types" />
+                <ListView
+                    Height="120"
+                    ItemsSource="{Binding ConfigFile.CurrentElementExportTypes}"
+                    SelectedItem="{Binding SelectedElementExportType}"
+                    SelectionMode="Extended">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DeleteElementExportTypeCommad}" Header="Delete ElementExportType" />
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+                <Button
+                    Height="Auto"
+                    Command="{Binding AddNewElementExportTypeCommand}"
+                    Content="New ElementExportType" />
+                <Separator />
+            </StackPanel>
 
-                <StackPanel Grid.Row="2">
-                    <TextBlock
-                        Height="15"
-                        FontSize="12"
-                        FontWeight="Bold"
-                        Text="Parameters" />
-                    <Separator Height="5" />
-                    <DataGrid
-                        Height="180"
-                        AutoGenerateColumns="False"
-                        ItemsSource="{Binding SelectedElementExportType.DataExportList}"
-                        SelectedItem="{Binding SelectedNavisDataExport}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding DataName}" Header="Name" />
-                            <DataGridTextColumn Binding="{Binding DataType}" Header="Type" />
-                            <DataGridTextColumn Binding="{Binding NavisCategoryName}" Header="N.Group" />
-                            <DataGridTextColumn Binding="{Binding NavisPropertyName}" Header="N.Name" />
-                            <DataGridTextColumn Binding="{Binding NavisPropertyValue}" Header="Value" />
-                        </DataGrid.Columns>
-                        <DataGrid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Command="{Binding DeleteNavisDataExportCommand}" Header="Delete data" />
-                            </ContextMenu>
-                        </DataGrid.ContextMenu>
-                    </DataGrid>
-                </StackPanel>
-            </Grid>
-        </ScrollViewer>
+            <StackPanel Grid.Row="1">
+                <TextBlock
+                    Height="24"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Searchers" />
+                <Separator Height="5" />
+                <DataGrid
+                    Height="150"
+                    AutoGenerateColumns="False"
+                    ItemsSource="{Binding SelectedElementExportType.Searchers}"
+                    SelectedItem="{Binding SelectedNavisSearcher}"
+                    Style="{DynamicResource DataGridStyle1}">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DeleteNavisSearcherCommand}" Header="Delete Searcher" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.Columns>
+                        <DataGridComboBoxColumn
+                            Width="Auto"
+                            MinWidth="90"
+                            Header="Searcher type"
+                            ItemsSource="{Binding Source={StaticResource SearchTypeEnum}}"
+                            SelectedItemBinding="{Binding SearchType}" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="90"
+                            Binding="{Binding NavisCategoryName}"
+                            Header="Navis category" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="90"
+                            Binding="{Binding NavisPropertyName}"
+                            Header="Navis property" />
+                        <DataGridTextColumn
+                            Width="*"
+                            MinWidth="90"
+                            Binding="{Binding NavisPropertyValue}"
+                            Header="Value (if needed)" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Separator />
+            </StackPanel>
+
+            <StackPanel Grid.Row="2">
+                <TextBlock
+                    Height="15"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Parameters" />
+                <Separator Height="5" />
+                <DataGrid
+                    Height="180"
+                    AutoGenerateColumns="False"
+                    ItemsSource="{Binding SelectedElementExportType.Datas}"
+                    SelectedItem="{Binding SelectedNavisDataExport}"
+                    Style="{DynamicResource DataGridStyle1}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="90"
+                            Binding="{Binding Name}"
+                            Header="Data Name" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="90"
+                            Binding="{Binding Type}"
+                            Header="Type" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="90"
+                            Binding="{Binding NavisCategoryName}"
+                            Header="Navis category" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            MinWidth="90"
+                            Binding="{Binding NavisPropertyName}"
+                            Header="Navis property" />
+                        <DataGridTextColumn
+                            Width="*"
+                            MinWidth="90"
+                            Binding="{Binding NavisPropertyValue}"
+                            Header="Value" />
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DeleteNavisDataExportCommand}" Header="Delete data" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+                <Separator />
+            </StackPanel>
+        </Grid>
 
         <Button
             Grid.Row="2"
-            Height="24"
+            Height="Auto"
             Command="{Binding SaveConfigCommand}"
             Content="Save configuration" />
     </Grid>

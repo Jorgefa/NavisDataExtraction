@@ -3,31 +3,37 @@ using NavisDataExtraction.DataClasses;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
 namespace NavisDataExtraction.DataExport
 {
     public class NavisDataCollector
     {
-        public static ObservableCollection<ElementExport> ElementCollectorByListOfTypes(ObservableCollection<ElementExportType> elementExportTypes)
+        public static ObservableCollection<NavisExtractionElement> ElementCollectorByListOfTypes(ObservableCollection<NavisExtractionType> elementExportTypes)
         {
-            List<ElementExport> elementExportList = new List<ElementExport>();
-            foreach (ElementExportType exportType in elementExportTypes)
+            List<NavisExtractionElement> elementExportList = new List<NavisExtractionElement>();
+            foreach (NavisExtractionType exportType in elementExportTypes)
             {
-                List<ElementExport> curElements = ElementCollectorByType(exportType).ToList();
+                List<NavisExtractionElement> curElements = ElementCollectorByType(exportType).ToList();
                 elementExportList.AddRange(curElements);
             }
-            ObservableCollection<ElementExport> obsElementExportList = new ObservableCollection<ElementExport>(elementExportList);
+            ObservableCollection<NavisExtractionElement> obsElementExportList = new ObservableCollection<NavisExtractionElement>(elementExportList);
             return obsElementExportList;
         }
 
-        public static ObservableCollection<ElementExport> ElementCollectorByType(ElementExportType elementExportType)
+        public static ObservableCollection<NavisExtractionElement> ElementCollectorByType(NavisExtractionType elementExportType)
         {
-            List<ElementExport> elementExportList = new List<ElementExport>();
+            List<NavisExtractionElement> elementExportList = new List<NavisExtractionElement>();
 
             Search search = new Search();
             search.Selection.SelectAll();
 
-            foreach (NavisSearcher searcher in elementExportType.SearcherList)
+            if (elementExportType.Searchers == null)
+            {
+                return null;
+            }
+
+            foreach (NavisExtractionSearcher searcher in elementExportType.Searchers)
             {
                 string searcherCategory = searcher.NavisCategoryName;
                 string searcherProperty = searcher.NavisPropertyName;
@@ -43,15 +49,15 @@ namespace NavisDataExtraction.DataExport
                 }
             }
 
-            List<ModelItem> elements = search.FindAll(Application.ActiveDocument, true).ToList();
+            List<ModelItem> elements = search.FindAll(Autodesk.Navisworks.Api.Application.ActiveDocument, true).ToList();
 
             foreach (var element in elements)
             {
-                ElementExport elementExport = new ElementExport(element, elementExportType);
+                NavisExtractionElement elementExport = new NavisExtractionElement(element, elementExportType);
                 elementExportList.Add(elementExport);
             }
 
-            ObservableCollection<ElementExport> obsElementExportList = new ObservableCollection<ElementExport>(elementExportList);
+            ObservableCollection<NavisExtractionElement> obsElementExportList = new ObservableCollection<NavisExtractionElement>(elementExportList);
             return obsElementExportList;
         }
     }

@@ -16,7 +16,8 @@ namespace NavisDataExtraction.Wpf.ViewModels
             DeleteNavisSearcherCommand = new RelayCommand(DeleteNavisSearcher);
             DeleteNavisDataExportCommand = new RelayCommand(DeleteNavisDataExport);
             SaveConfigCommand = new RelayCommand(SaveConfig);
-            NewElementExportType = new ElementExportType();
+
+            //NewElementExportType = new NavisExtractionType();
 
         }
 
@@ -33,9 +34,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private ElementExportType _selectedElementExportType;
+        private NavisExtractionType _selectedElementExportType;
 
-        public ElementExportType SelectedElementExportType
+        public NavisExtractionType SelectedElementExportType
         {
             get => _selectedElementExportType;
             set
@@ -46,9 +47,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisSearcher _selectedNavisSearcher;
+        private NavisExtractionSearcher _selectedNavisSearcher;
 
-        public NavisSearcher SelectedNavisSearcher
+        public NavisExtractionSearcher SelectedNavisSearcher
         {
             get => _selectedNavisSearcher;
             set
@@ -58,29 +59,29 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisDataExport _selectedNavisDataExport;
+        private NavisExtractionData _selectedNavisData;
 
-        public NavisDataExport SelectedNavisDataExport
+        public NavisExtractionData SelectedNavisData
         {
-            get { return _selectedNavisDataExport; }
+            get { return _selectedNavisData; }
             set
             {
-                _selectedNavisDataExport = value;
+                _selectedNavisData = value;
                 OnPropertyChanged();
             }
         }
 
-        private ElementExportType _newElementExportType;
+        //private NavisExtractionType _newElementExportType;
 
-        public ElementExportType NewElementExportType
-        {
-            get => _newElementExportType;
-            set
-            {
-                _newElementExportType = value;
-                OnPropertyChanged();
-            }
-        }
+        //public NavisExtractionType NewElementExportType
+        //{
+        //    get => _newElementExportType;
+        //    set
+        //    {
+        //        _newElementExportType = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         //Methods
 
@@ -88,13 +89,13 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void AddNewExportType()
         {
-            var input = Dialogs.Dialogs.ShowInputDialog();
+            var input = Dialogs.Dialogs.ShowInputDialog("New ElementExportType", "Please, enter the name for the new ElementExportType");
             if (string.IsNullOrEmpty(input))
             {
                 MessageBox.Show("Please enter a valid name");
                 return;
             }
-            ConfigFile.CurrentElementExportTypes.Add(new ElementExportType(input));
+            ConfigFile.CurrentElementExportTypes.Add(new NavisExtractionType(input));
             ConfigFile.ToFile();
         }
         public RelayCommand DeleteElementExportTypeCommad { get; set; }
@@ -107,14 +108,14 @@ namespace NavisDataExtraction.Wpf.ViewModels
         public RelayCommand DeleteNavisSearcherCommand { get; set; }
         private void DeleteNavisSearcher()
         {
-            SelectedElementExportType.SearcherList.Remove(SelectedNavisSearcher);
+            SelectedElementExportType.Searchers.Remove(SelectedNavisSearcher);
             ConfigFile.ToFile();
         }
 
         public RelayCommand DeleteNavisDataExportCommand { get; set; }
         private void DeleteNavisDataExport()
         {
-            SelectedElementExportType.DataExportList.Remove(SelectedNavisDataExport);
+            SelectedElementExportType.Datas.Remove(SelectedNavisData);
             ConfigFile.ToFile();
         }
 

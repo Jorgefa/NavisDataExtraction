@@ -3,15 +3,15 @@
 
 namespace NavisDataExtraction.DataClasses
 {
-    public class ElementExport
+    public class NavisExtractionElement
     {
-        public ElementExport(ModelItem element, ElementExportType exportType)
+        public NavisExtractionElement(ModelItem element, NavisExtractionType exportType)
         {
             Element = element;
             ExportType = exportType;
         }
 
         public ModelItem Element { get; set; }
-        public ElementExportType ExportType { get; set; }
+        public NavisExtractionType ExportType { get; set; }
     }
 }

@@ -3,23 +3,21 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
 
 namespace NavisDataExtraction.DataClasses
 {
     public class Config : BaseViewModel
     {
-        public static readonly string ConfigLocation =  
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "PM Group", "Navis Data Exporter", "appConfig.json");
+        //Constructors
+        public Config()
+        {
+        }
 
-        public ObservableCollection<ElementExportType> CurrentElementExportTypes { get; set; }
-
-        public Config(ObservableCollection<ElementExportType> elementExportTypes = null)
+        public Config(ObservableCollection<NavisExtractionType> elementExportTypes = null)
         {
             if (elementExportTypes == null)
             {
-                CurrentElementExportTypes = new ObservableCollection<ElementExportType>();
+                CurrentElementExportTypes = new ObservableCollection<NavisExtractionType>();
             }
             else
             {
@@ -27,6 +25,14 @@ namespace NavisDataExtraction.DataClasses
             }
         }
 
+        //Properties
+        public static readonly string ConfigLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PM Group", "Navis Data Exporter", "appConfig.json");
+
+        public ObservableCollection<NavisExtractionType> CurrentElementExportTypes { get; set; }
+
+        public ObservableCollection<NavisExtractionTypeCollection> NavisExtractionTypeCollections { get; set; }
+
+        //Methods
         public static Config FromFile(string fileLocation = null)
         {
             if (string.IsNullOrEmpty(fileLocation)) fileLocation = ConfigLocation;
@@ -47,25 +53,40 @@ namespace NavisDataExtraction.DataClasses
             }
             return config;
         }
+
         public bool ConfigValidation()
         {
-            foreach (var eleExpTyp in CurrentElementExportTypes)
+            foreach (var navisExtractionType in CurrentElementExportTypes)
             {
-                foreach (var searcher in eleExpTyp.SearcherList)
+                if (navisExtractionType.Searchers == null)
                 {
-                    if (string.IsNullOrEmpty(searcher.NavisCategoryName) ||
-                        string.IsNullOrEmpty(searcher.NavisPropertyName))
+                    return true;
+                }
+                else
+                {
+                    foreach (var searcher in navisExtractionType.Searchers)
                     {
-                        return false;
+                        if (string.IsNullOrEmpty(searcher.NavisCategoryName) ||
+                            string.IsNullOrEmpty(searcher.NavisPropertyName))
+                        {
+                            return false;
+                        }
                     }
                 }
-                foreach (var data in eleExpTyp.DataExportList)
+                if (navisExtractionType.Datas == null)
                 {
-                    if (string.IsNullOrEmpty(data.DataName) ||
-                        string.IsNullOrEmpty(data.NavisCategoryName) ||
-                        string.IsNullOrEmpty(data.NavisPropertyName))
+                    return true;
+                }
+                else
+                {
+                    foreach (var data in navisExtractionType.Datas)
                     {
-                        return false;
+                        if (string.IsNullOrEmpty(data.Name) ||
+                            string.IsNullOrEmpty(data.NavisCategoryName) ||
+                            string.IsNullOrEmpty(data.NavisPropertyName))
+                        {
+                            return false;
+                        }
                     }
                 }
             }

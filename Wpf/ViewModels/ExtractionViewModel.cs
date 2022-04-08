@@ -15,7 +15,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             ConfigFile = Config.FromFile();
             ModelItems = new ObservableCollection<ModelItem>();
             Properties = new ObservableCollection<NavisworksProperty>();
-            ElementExportTypes = new ObservableCollection<ElementExportType>();
+            ElementExportTypes = new ObservableCollection<NavisExtractionType>();
             foreach (var exportType in ConfigFile.CurrentElementExportTypes)
             {
                 ElementExportTypes.Add(exportType);
@@ -39,9 +39,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<ElementExportType> _elementExportTypes;
+        private ObservableCollection<NavisExtractionType> _elementExportTypes;
 
-        public ObservableCollection<ElementExportType> ElementExportTypes
+        public ObservableCollection<NavisExtractionType> ElementExportTypes
         {
             get => _elementExportTypes;
             set
@@ -51,7 +51,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        public ObservableCollection<ElementExportType> SelectedElementExportTypes = new ObservableCollection<ElementExportType>();
+        public ObservableCollection<NavisExtractionType> SelectedElementExportTypes = new ObservableCollection<NavisExtractionType>();
 
         private ObservableCollection<NavisworksProperty> _properties;
 
@@ -104,8 +104,8 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void CollectElements()
         {
-            ObservableCollection<ElementExportType> elementExportTypes = SelectedElementExportTypes;
-            ObservableCollection<ElementExport> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(elementExportTypes);
+            ObservableCollection<NavisExtractionType> elementExportTypes = SelectedElementExportTypes;
+            ObservableCollection<NavisExtractionElement> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(elementExportTypes);
             var elements = elementExportList.Select(e => e.Element).ToList();
             ModelItems = new ObservableCollection<ModelItem>(elements);
         }
@@ -125,7 +125,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 var filePath = dialog.FileName;
 
                 var config = ConfigFile;
-                ObservableCollection<ElementExportType> elementExportTypes = SelectedElementExportTypes;
+                ObservableCollection<NavisExtractionType> elementExportTypes = SelectedElementExportTypes;
 
                 var navisDataTable = DataExport.NavisDataExtraction.CreateNavisDatatable(elementExportTypes);
 

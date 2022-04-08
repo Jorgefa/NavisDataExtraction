@@ -33,7 +33,7 @@ namespace NavisDataExtraction.Wpf.Views
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var vm = DataContext as ExtractionViewModel;
-            vm.SelectedElementExportTypes = new ObservableCollection<ElementExportType>(ElementExportTypesList.SelectedItems.Cast<ElementExportType>());
+            vm.SelectedElementExportTypes = new ObservableCollection<NavisExtractionType>(ElementExportTypesList.SelectedItems.Cast<NavisExtractionType>());
         }
     }
 }

@@ -55,10 +55,11 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataClasses\NavisData.cs" />
-    <Compile Include="DataClasses\ElementExport.cs" />
-    <Compile Include="DataClasses\NavisSearcher.cs" />
+    <Compile Include="DataClasses\NavisExtractionTypeCollection.cs" />
+    <Compile Include="DataClasses\NavisExtractionElement.cs" />
+    <Compile Include="DataClasses\NavisExtractionSearcher.cs" />
     <Compile Include="DataClasses\NavisSearchType.cs" />
+    <Compile Include="DataClasses\NavisObservableItem.cs" />
     <Compile Include="Wpf\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -67,8 +68,8 @@
       <DependentUpon>InputDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\ViewModels\BaseViewModel.cs" />
-    <Compile Include="DataClasses\NavisDataExport.cs" />
-    <Compile Include="DataClasses\ElementExportType.cs" />
+    <Compile Include="DataClasses\NavisExtractionData.cs" />
+    <Compile Include="DataClasses\NavisExtractionType.cs" />
     <Compile Include="DataExport\NavisDataCollector.cs" />
     <Compile Include="DataClasses\Config.cs" />
     <Compile Include="DataExport\NavisDataExtraction.cs" />
@@ -117,7 +118,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Content\PMG-Logo.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF EXIST "C:\Program Files\Autodesk\Navisworks Manage 2022\Plugins\$(TargetName)\" rmdir /S /Q "$(ProjectDir)..\..\..\..\..\Plugins\$(TargetName)\"
