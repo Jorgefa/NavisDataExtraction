@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 
 namespace NavisDataExtraction.DataClasses
 {
@@ -15,6 +16,7 @@ namespace NavisDataExtraction.DataClasses
 
         public Config(ObservableCollection<NavisExtractionType> elementExportTypes = null)
         {
+
             if (elementExportTypes == null)
             {
                 CurrentElementExportTypes = new ObservableCollection<NavisExtractionType>();
@@ -22,6 +24,9 @@ namespace NavisDataExtraction.DataClasses
             else
             {
                 CurrentElementExportTypes = elementExportTypes;
+                var currentCollection = new NavisExtractionTypeCollection();
+                currentCollection.Types = CurrentElementExportTypes;
+                NavisExtractionTypeCollections.Add(currentCollection);
             }
         }
 
@@ -105,6 +110,17 @@ namespace NavisDataExtraction.DataClasses
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
+            }
+        }
+        public void SaveConfig()
+        {
+            if (ConfigValidation())
+            {
+                ToFile();
+            }
+            else
+            {
+                MessageBox.Show("Please enter correct data or remove empty searchers or data to export");
             }
         }
     }

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace NavisDataExtraction.DataClasses
 {
-    public class NavisExtractionTypeCollection
+    public class NavisExtractionTypeCollection : NavisObservableItem
     {
         //Constructors
-        NavisExtractionTypeCollection()
+        public NavisExtractionTypeCollection()
         {
 
         }
@@ -19,7 +19,7 @@ namespace NavisDataExtraction.DataClasses
         {
             Name = name;
         }
-        NavisExtractionTypeCollection(string name, ObservableCollection<NavisExtractionType> types)
+        public NavisExtractionTypeCollection(string name, ObservableCollection<NavisExtractionType> types)
         {
             Name = name;
             Types = types;

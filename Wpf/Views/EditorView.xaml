@@ -11,6 +11,7 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="720"
     d:DesignWidth="450"
+    Background="White"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -26,12 +27,15 @@
         <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
             <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}" />
             <Setter Property="Background" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
         </Style>
         <!--  DataGridColumnHeader style  -->
         <Style x:Key="ColumnHeaderStyle1" TargetType="DataGridColumnHeader">
             <Setter Property="Height" Value="Auto" />
-            <Setter Property="Background" Value="White" />
+            <!--<Setter Property="Background" Value="White" />
             <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Black"/>-->
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="ToolTip" Value="Click to sort." />
@@ -40,24 +44,32 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid Background="White">
+    <Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
+        <Grid.Margin>24</Grid.Margin>
         <Label
             Grid.Row="0"
             Content="Editor"
             FontSize="18"
             FontWeight="Bold" />
 
-        <Grid Grid.Row="1">
+        <Button
+            Grid.Row="1"
+            Height="Auto"
+            Margin="3"
+            Command="{Binding SaveConfigCommand}"
+            Content="Save configuration" />
+
+
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
@@ -65,17 +77,70 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0">
-                <TextBlock
-                    Height="24"
-                    FontSize="12"
-                    FontWeight="Bold"
-                    Text="Element export types" />
+                <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+                    <Button
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Width="18"
+                        Height="Auto"
+                        Margin="3"
+                        Command="{Binding AddNewCollectionCommand}"
+                        Content="+"
+                        DockPanel.Dock="Right" />
+                    <TextBlock
+                        Height="24"
+                        DockPanel.Dock="Left"
+                        FontSize="12"
+                        FontWeight="Bold"
+                        Text="Collections" />
+                </DockPanel>
                 <ListView
                     Height="120"
-                    ItemsSource="{Binding ConfigFile.CurrentElementExportTypes}"
+                    BorderThickness="0"
+                    ItemsSource="{Binding ConfigFile.NavisExtractionTypeCollections}"
+                    SelectedItem="{Binding SelectedCollection}"
+                    SelectionMode="Extended">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DeleteCollectionCommad}" Header="Delete collection" />
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                </ListView>
+
+                <Separator />
+            </StackPanel>
+
+            <StackPanel Grid.Row="1">
+                <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+                    <Button
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Width="18"
+                        Height="Auto"
+                        Margin="3"
+                        Command="{Binding AddNewElementExportTypeCommand}"
+                        Content="+"
+                        DockPanel.Dock="Right" />
+                    <TextBlock
+                        Height="24"
+                        DockPanel.Dock="Left"
+                        FontSize="12"
+                        FontWeight="Bold"
+                        Text="Types" />
+                </DockPanel>
+                <ListView
+                    Height="120"
+                    BorderThickness="0"
+                    ItemsSource="{Binding SelectedCollection.Types}"
                     SelectedItem="{Binding SelectedElementExportType}"
                     SelectionMode="Extended">
                     <ListView.ItemTemplate>
@@ -89,14 +154,11 @@
                         </ContextMenu>
                     </ListView.ContextMenu>
                 </ListView>
-                <Button
-                    Height="Auto"
-                    Command="{Binding AddNewElementExportTypeCommand}"
-                    Content="New ElementExportType" />
+
                 <Separator />
             </StackPanel>
 
-            <StackPanel Grid.Row="1">
+            <StackPanel Grid.Row="2">
                 <TextBlock
                     Height="24"
                     FontSize="12"
@@ -141,7 +203,7 @@
                 <Separator />
             </StackPanel>
 
-            <StackPanel Grid.Row="2">
+            <StackPanel Grid.Row="3">
                 <TextBlock
                     Height="15"
                     FontSize="12"
@@ -190,11 +252,5 @@
                 <Separator />
             </StackPanel>
         </Grid>
-
-        <Button
-            Grid.Row="2"
-            Height="Auto"
-            Command="{Binding SaveConfigCommand}"
-            Content="Save configuration" />
     </Grid>
 </UserControl>

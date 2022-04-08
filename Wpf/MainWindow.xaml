@@ -67,6 +67,5 @@
             Grid.Row="3"
             Content="PM Group"
             FontSize="8" />
-
     </Grid>
 </Window>

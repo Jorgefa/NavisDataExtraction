@@ -9,99 +9,141 @@
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="810"
     d:DesignWidth="450"
+    Background="White"
     mc:Ignorable="d">
 
-    <Grid Margin="6" Background="White">
+    <Grid>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45" />
-            <RowDefinition Height="225" />
-            <RowDefinition Height="225" />
-            <RowDefinition Height="225" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.Margin>24</Grid.Margin>
 
         <Label
             Grid.Row="0"
-            Content="DATA EXTRACTION"
+            Content="Extraction"
             FontSize="18"
             FontWeight="Bold" />
+        <DockPanel
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            LastChildFill="False">
+            <Button
+                Width="180"
+                Margin="0,3,3,3"
+                Command="{Binding CollectElementsCommand}"
+                Content="Search elements"
+                DockPanel.Dock="Left" />
+            <Button
+                Width="180"
+                Margin="3,3,0,3"
+                Command="{Binding ExportDataCommand}"
+                Content="Export data"
+                DockPanel.Dock="Right" />
+        </DockPanel>
 
-        <StackPanel Grid.Row="1">
-            <TextBlock
-                Height="15"
-                FontSize="12"
-                FontWeight="Bold"
-                Text="Element export types" />
-            <Separator Height="5" />
-            <ListView
-                x:Name="ElementExportTypesList"
-                Height="150"
-                ItemsSource="{Binding ConfigFile.CurrentElementExportTypes}"
-                SelectionChanged="ListView_SelectionChanged"
-                SelectionMode="Multiple">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Separator Height="5" />
-            <StackPanel Height="30" Orientation="Horizontal">
-                <Button
-                    Margin="5"
-                    Command="{Binding CollectElementsCommand}"
-                    Content="Search elements" />
-                <Button
-                    Margin="5"
-                    Command="{Binding ExportDataCommand}"
-                    Content="Export data" />
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock
+                    Height="24"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Collections" />
+                <ListView
+                    Height="120"
+                    BorderThickness="0"
+                    ItemsSource="{Binding ConfigFile.NavisExtractionTypeCollections}"
+                    SelectedItem="{Binding SelectedCollection}"
+                    SelectionMode="Extended">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackPanel>
-            <Separator Height="5" />
-        </StackPanel>
 
-        <StackPanel Grid.Row="2">
-            <TextBlock
-                FontSize="12"
-                FontWeight="Bold"
-                Text="Elements to export" />
-            <Separator />
-            <ListView
-                Height="180"
-                ItemsSource="{Binding ModelItems}"
-                SelectedItem="{Binding SelectedItem}"
-                SelectionMode="Single">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding DisplayName}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+            <StackPanel Grid.Row="1">
+                <TextBlock
+                    Height="24"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Types" />
+                <ListView
+                    x:Name="ElementExportTypesList"
+                    Height="120"
+                    BorderThickness="0"
+                    ItemsSource="{Binding ConfigFile.CurrentElementExportTypes}"
+                    SelectionChanged="ListView_SelectionChanged"
+                    SelectionMode="Multiple">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
 
-        <StackPanel Grid.Row="3">
-            <TextBlock
-                FontSize="12"
-                FontWeight="Bold"
-                Text="Properties" />
-            <ListView
-                Height="180"
-                ItemsSource="{Binding Properties}"
-                SelectionMode="Single">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <CheckBox IsChecked="{Binding Selected}">
-                            <TextBlock>
-                                <Run Text="{Binding Category.DisplayName, Mode=OneWay}" />
-                                <Run Text=" - " />
-                                <Run Text="{Binding Property.DisplayName, Mode=OneWay}" />
-                            </TextBlock>
-                        </CheckBox>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackPanel>
+            <StackPanel Grid.Row="2">
+                <TextBlock
+                    Height="24"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Elements" />
+                <ListView
+                    Height="120"
+                    BorderThickness="0"
+                    ItemsSource="{Binding ModelItems}"
+                    SelectedItem="{Binding SelectedItem}"
+                    SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DisplayName}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3">
+                <TextBlock
+                    Height="24"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Properties" />
+                <ListView
+                    Height="180"
+                    BorderThickness="0"
+                    ItemsSource="{Binding Properties}"
+                    SelectionMode="Single">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Selected}">
+                                <TextBlock>
+                                    <Run Text="{Binding Category.DisplayName, Mode=OneWay}" />
+                                    <Run Text=" - " />
+                                    <Run Text="{Binding Property.DisplayName, Mode=OneWay}" />
+                                </TextBlock>
+                            </CheckBox>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </UserControl>

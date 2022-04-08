@@ -2,7 +2,7 @@
 
 namespace NavisDataExtraction.DataClasses
 {
-    public class NavisExtractionType
+    public class NavisExtractionType : NavisObservableItem
     {
         //Constructors
         public NavisExtractionType()

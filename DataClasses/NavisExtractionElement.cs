@@ -3,7 +3,7 @@
 
 namespace NavisDataExtraction.DataClasses
 {
-    public class NavisExtractionElement
+    public class NavisExtractionElement : NavisObservableItem
     {
         public NavisExtractionElement(ModelItem element, NavisExtractionType exportType)
         {

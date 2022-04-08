@@ -13,20 +13,26 @@ namespace NavisDataExtraction.Wpf.ViewModels
         public ExtractionViewModel()
         {
             ConfigFile = Config.FromFile();
+
             ModelItems = new ObservableCollection<ModelItem>();
             Properties = new ObservableCollection<NavisworksProperty>();
-            ElementExportTypes = new ObservableCollection<NavisExtractionType>();
-            foreach (var exportType in ConfigFile.CurrentElementExportTypes)
-            {
-                ElementExportTypes.Add(exportType);
-            }
+            ElementExportTypes = new ObservableCollection<NavisExtractionType>(ConfigFile.CurrentElementExportTypes);
             CollectElementsCommand = new RelayCommand(CollectElements);
             ExportDataCommand = new RelayCommand(ExportData);
         }
 
         //Properties
-        public Config ConfigFile { get; set; }
+        private Config _configFile;
 
+        public Config ConfigFile
+        {
+            get => _configFile;
+            set
+            {
+                _configFile = value;
+                OnPropertyChanged();
+            }
+        }
         private ObservableCollection<ModelItem> _modelItems;
 
         public ObservableCollection<ModelItem> ModelItems
@@ -48,6 +54,32 @@ namespace NavisDataExtraction.Wpf.ViewModels
             {
                 _elementExportTypes = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private NavisExtractionTypeCollection _selectedCollection;
+
+        public NavisExtractionTypeCollection SelectedCollection
+        {
+            get => _selectedCollection;
+            set
+            {
+                _selectedCollection = value;
+                OnPropertyChanged();
+                ConfigFile.SaveConfig();
+            }
+        }
+
+        private NavisExtractionType _selectedElementExportType;
+
+        public NavisExtractionType SelectedElementExportType
+        {
+            get => _selectedElementExportType;
+            set
+            {
+                _selectedElementExportType = value;
+                OnPropertyChanged();
+                ConfigFile.SaveConfig();
             }
         }
 
@@ -136,9 +168,5 @@ namespace NavisDataExtraction.Wpf.ViewModels
         //Save config file in a local path
         public RelayCommand SaveConfigCommand { get; set; }
 
-        private void SaveConfig()
-        {
-            ConfigFile.ToFile();
-        }
     }
 }

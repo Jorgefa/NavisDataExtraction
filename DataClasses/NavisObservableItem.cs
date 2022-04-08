@@ -18,6 +18,17 @@ namespace NavisDataExtraction.DataClasses
         }
 
         //Properties
+        private bool _selected;
+        public bool Selected
+        {
+            get => _selected;
+            set
+            {
+                _selected = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         //Methods
