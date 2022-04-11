@@ -1,10 +1,10 @@
 ﻿using Autodesk.Navisworks.Api;
-using NavisDataExtraction.Others;
+using NavisDataExtraction.DataClasses;
 using NavisDataExtraction.DataExport;
+using NavisDataExtraction.Others;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
-using NavisDataExtraction.DataClasses;
 
 namespace NavisDataExtraction.Wpf.ViewModels
 {
@@ -19,6 +19,8 @@ namespace NavisDataExtraction.Wpf.ViewModels
             ElementExportTypes = new ObservableCollection<NavisExtractionType>(ConfigFile.CurrentElementExportTypes);
             CollectElementsCommand = new RelayCommand(CollectElements);
             ExportDataCommand = new RelayCommand(ExportData);
+            ImportConfigCommand = new RelayCommand(ImportConfig);
+            ExportConfigCommand = new RelayCommand(ConfigFile.ExportConfigToFile);
         }
 
         //Properties
@@ -33,29 +35,6 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 OnPropertyChanged();
             }
         }
-        private ObservableCollection<ModelItem> _modelItems;
-
-        public ObservableCollection<ModelItem> ModelItems
-        {
-            get => _modelItems;
-            set
-            {
-                _modelItems = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private ObservableCollection<NavisExtractionType> _elementExportTypes;
-
-        public ObservableCollection<NavisExtractionType> ElementExportTypes
-        {
-            get => _elementExportTypes;
-            set
-            {
-                _elementExportTypes = value;
-                OnPropertyChanged();
-            }
-        }
 
         private NavisExtractionTypeCollection _selectedCollection;
 
@@ -66,33 +45,29 @@ namespace NavisDataExtraction.Wpf.ViewModels
             {
                 _selectedCollection = value;
                 OnPropertyChanged();
-                ConfigFile.SaveConfig();
             }
         }
 
-        private NavisExtractionType _selectedElementExportType;
+        private NavisExtractionType _selectedNavisExtractionType;
 
-        public NavisExtractionType SelectedElementExportType
+        public NavisExtractionType SelectedNavisExtractionType
         {
-            get => _selectedElementExportType;
+            get => _selectedNavisExtractionType;
             set
             {
-                _selectedElementExportType = value;
+                _selectedNavisExtractionType = value;
                 OnPropertyChanged();
-                ConfigFile.SaveConfig();
             }
         }
 
-        public ObservableCollection<NavisExtractionType> SelectedElementExportTypes = new ObservableCollection<NavisExtractionType>();
+        private ObservableCollection<ModelItem> _modelItems;
 
-        private ObservableCollection<NavisworksProperty> _properties;
-
-        public ObservableCollection<NavisworksProperty> Properties
+        public ObservableCollection<ModelItem> ModelItems
         {
-            get => _properties;
+            get => _modelItems;
             set
             {
-                _properties = value;
+                _modelItems = value;
                 OnPropertyChanged();
             }
         }
@@ -108,6 +83,32 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 OnPropertyChanged();
                 if (value == null) return;
                 Properties = GetProperties(value);
+            }
+        }
+
+        private ObservableCollection<NavisExtractionType> _elementExportTypes;
+
+        public ObservableCollection<NavisExtractionType> ElementExportTypes
+        {
+            get => _elementExportTypes;
+            set
+            {
+                _elementExportTypes = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<NavisExtractionType> SelectedElementExportTypes = new ObservableCollection<NavisExtractionType>();
+
+        private ObservableCollection<NavisworksProperty> _properties;
+
+        public ObservableCollection<NavisworksProperty> Properties
+        {
+            get => _properties;
+            set
+            {
+                _properties = value;
+                OnPropertyChanged();
             }
         }
 
@@ -131,20 +132,20 @@ namespace NavisDataExtraction.Wpf.ViewModels
             return props;
         }
 
-        //Select elements using ElmentExporTypes
+        //Select elements using NavisExtractionTypes
         public RelayCommand CollectElementsCommand { get; set; }
 
         private void CollectElements()
         {
             ObservableCollection<NavisExtractionType> elementExportTypes = SelectedElementExportTypes;
-            ObservableCollection<NavisExtractionElement> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(elementExportTypes);
+            ObservableCollection<NavisExtractionElement> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(SelectedCollection.Types);
             var elements = elementExportList.Select(e => e.Element).ToList();
             ModelItems = new ObservableCollection<ModelItem>(elements);
         }
 
+        //Export elements using ElmentExporTypes
         public RelayCommand ExportDataCommand { get; set; }
 
-        //Export elements using ElmentExporTypes
         public void ExportData()
         {
             var dialog = new SaveFileDialog
@@ -165,8 +166,23 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        //Save config file in a local path
-        public RelayCommand SaveConfigCommand { get; set; }
+        //Config commands
 
+        public RelayCommand ImportConfigCommand { get; set; }
+
+        private void ImportConfig()
+        {
+            var newConfigFile = Config.ImportConfigFromFile();
+            if (newConfigFile != null)
+            {
+                ConfigFile = newConfigFile;
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Wrong config file. New config not imported.");
+            }
+        }
+
+        public RelayCommand ExportConfigCommand { get; set; }
     }
 }

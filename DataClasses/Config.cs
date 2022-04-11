@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Windows;
+using System.Windows.Forms;
 
 namespace NavisDataExtraction.DataClasses
 {
@@ -16,7 +16,6 @@ namespace NavisDataExtraction.DataClasses
 
         public Config(ObservableCollection<NavisExtractionType> elementExportTypes = null)
         {
-
             if (elementExportTypes == null)
             {
                 CurrentElementExportTypes = new ObservableCollection<NavisExtractionType>();
@@ -31,7 +30,7 @@ namespace NavisDataExtraction.DataClasses
         }
 
         //Properties
-        public static readonly string ConfigLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PM Group", "Navis Data Exporter", "appConfig.json");
+        public static readonly string ConfigDefaultLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PM Group", "Navis Data Exporter", "appConfig.json");
 
         public ObservableCollection<NavisExtractionType> CurrentElementExportTypes { get; set; }
 
@@ -40,7 +39,7 @@ namespace NavisDataExtraction.DataClasses
         //Methods
         public static Config FromFile(string fileLocation = null)
         {
-            if (string.IsNullOrEmpty(fileLocation)) fileLocation = ConfigLocation;
+            if (string.IsNullOrEmpty(fileLocation)) fileLocation = ConfigDefaultLocation;
             if (!File.Exists(fileLocation))
             {
                 var newConfig = new Config();
@@ -100,7 +99,7 @@ namespace NavisDataExtraction.DataClasses
 
         public void ToFile(string fileLocation = null)
         {
-            if (string.IsNullOrEmpty(fileLocation)) fileLocation = ConfigLocation;
+            if (string.IsNullOrEmpty(fileLocation)) fileLocation = ConfigDefaultLocation;
             var jsonString = JsonConvert.SerializeObject(this);
             try
             {
@@ -112,6 +111,7 @@ namespace NavisDataExtraction.DataClasses
                 System.Windows.MessageBox.Show(ex.Message);
             }
         }
+
         public void SaveConfig()
         {
             if (ConfigValidation())
@@ -120,7 +120,37 @@ namespace NavisDataExtraction.DataClasses
             }
             else
             {
-                MessageBox.Show("Please enter correct data or remove empty searchers or data to export");
+                System.Windows.MessageBox.Show("Please enter correct data or remove empty searchers or data to export");
+            }
+        }
+
+        public static Config ImportConfigFromFile()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt",
+            };
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = dialog.FileName;
+                var config = FromFile(filePath);
+                return config;
+            }
+            return null;
+        }
+
+        public void ExportConfigToFile()
+        {
+            var dialog = new SaveFileDialog
+            {
+                Filter = "Json files (*.json)|*.json|Text files (*.txt)|*.txt",
+            };
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = dialog.FileName;
+                ToFile(filePath);
             }
         }
     }

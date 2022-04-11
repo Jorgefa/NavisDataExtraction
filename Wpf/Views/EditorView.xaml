@@ -54,19 +54,36 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.Margin>24</Grid.Margin>
+        <Grid.Margin>0,0,6,0</Grid.Margin>
         <Label
             Grid.Row="0"
             Content="Editor"
             FontSize="18"
             FontWeight="Bold" />
 
-        <Button
+        <DockPanel
             Grid.Row="1"
-            Height="Auto"
-            Margin="3"
-            Command="{Binding SaveConfigCommand}"
-            Content="Save configuration" />
+            HorizontalAlignment="Left"
+            LastChildFill="False">
+            <Button
+                Width="90"
+                Margin="3"
+                Command="{Binding SaveCurrentConfigCommand}"
+                Content="Save config"
+                DockPanel.Dock="Left" />
+            <Button
+                Width="90"
+                Margin="3"
+                Command="{Binding ExportConfigCommand}"
+                Content="Export config"
+                DockPanel.Dock="Left" />
+            <Button
+                Width="90"
+                Margin="3"
+                Command="{Binding ImportConfigCommand}"
+                Content="Import config"
+                DockPanel.Dock="Left" />
+        </DockPanel>
 
 
         <Grid Grid.Row="2">
@@ -141,7 +158,7 @@
                     Height="120"
                     BorderThickness="0"
                     ItemsSource="{Binding SelectedCollection.Types}"
-                    SelectedItem="{Binding SelectedElementExportType}"
+                    SelectedItem="{Binding SelectedNavisExtractionType}"
                     SelectionMode="Extended">
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -168,7 +185,7 @@
                 <DataGrid
                     Height="150"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding SelectedElementExportType.Searchers}"
+                    ItemsSource="{Binding SelectedNavisExtractionType.Searchers}"
                     SelectedItem="{Binding SelectedNavisSearcher}"
                     Style="{DynamicResource DataGridStyle1}">
                     <DataGrid.ContextMenu>
@@ -213,8 +230,8 @@
                 <DataGrid
                     Height="180"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding SelectedElementExportType.Datas}"
-                    SelectedItem="{Binding SelectedNavisDataExport}"
+                    ItemsSource="{Binding SelectedNavisExtractionType.Datas}"
+                    SelectedItem="{Binding SelectedNavisData}"
                     Style="{DynamicResource DataGridStyle1}">
                     <DataGrid.Columns>
                         <DataGridTextColumn

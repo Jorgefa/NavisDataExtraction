@@ -24,7 +24,7 @@
         </DataTemplate>
     </Window.Resources>
 
-    <Grid Margin="6">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -34,6 +34,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.Margin>9</Grid.Margin>
+
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Image Height="30" Source="/Content/PMG-Logo.jpg" />
@@ -60,7 +62,7 @@
                 Content="Editor"
                 DockPanel.Dock="Right" />
         </DockPanel>
-        <ScrollViewer Grid.Row="2">
+        <ScrollViewer Grid.Row="2" Margin="0,12,0,0">
             <ContentControl Content="{Binding}" />
         </ScrollViewer>
         <Label

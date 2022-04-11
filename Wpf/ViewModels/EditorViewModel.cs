@@ -19,7 +19,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             DeleteNavisSearcherCommand = new RelayCommand(DeleteNavisSearcher);
             DeleteNavisDataExportCommand = new RelayCommand(DeleteNavisDataExport);
 
-            SaveConfigCommand = new RelayCommand(ConfigFile.SaveConfig);
+            SaveCurrentConfigCommand = new RelayCommand(ConfigFile.SaveConfig);
+            ImportConfigCommand = new RelayCommand(ImportConfig);
+            ExportConfigCommand = new RelayCommand(ConfigFile.ExportConfigToFile);
         }
 
         //Properties
@@ -48,14 +50,14 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisExtractionType _selectedElementExportType;
+        private NavisExtractionType _selectedNavisExtractionType;
 
-        public NavisExtractionType SelectedElementExportType
+        public NavisExtractionType SelectedNavisExtractionType
         {
-            get => _selectedElementExportType;
+            get => _selectedNavisExtractionType;
             set
             {
-                _selectedElementExportType = value;
+                _selectedNavisExtractionType = value;
                 OnPropertyChanged();
                 ConfigFile.SaveConfig();
             }
@@ -135,7 +137,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DeleteElementExportType()
         {
-            SelectedCollection.Types.Remove(SelectedElementExportType);
+            SelectedCollection.Types.Remove(SelectedNavisExtractionType);
             ConfigFile.ToFile();
         }
 
@@ -143,7 +145,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DeleteNavisSearcher()
         {
-            SelectedElementExportType.Searchers.Remove(SelectedNavisSearcher);
+            SelectedNavisExtractionType.Searchers.Remove(SelectedNavisSearcher);
             ConfigFile.ToFile();
         }
 
@@ -151,11 +153,29 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DeleteNavisDataExport()
         {
-            SelectedElementExportType.Datas.Remove(SelectedNavisData);
+            SelectedNavisExtractionType.Datas.Remove(SelectedNavisData);
             ConfigFile.ToFile();
         }
 
-        public RelayCommand SaveConfigCommand { get; set; }
+        //Config commands
 
+        public RelayCommand SaveCurrentConfigCommand { get; set; }
+
+        public RelayCommand ImportConfigCommand { get; set; }
+
+        private void ImportConfig()
+        {
+            var newConfigFile = Config.ImportConfigFromFile();
+            if (newConfigFile != null)
+            {
+                ConfigFile = newConfigFile;
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Wrong config file. New config not imported.");
+            }
+        }
+
+        public RelayCommand ExportConfigCommand { get; set; }
     }
 }
