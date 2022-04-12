@@ -18,9 +18,9 @@ namespace NavisDataExtraction.Wpf.Views
     /// <summary>
     /// Interaction logic for EditorView.xaml
     /// </summary>
-    public partial class EditorView : UserControl
+    public partial class ConfigView : UserControl
     {
-        public EditorView()
+        public ConfigView()
         {
             InitializeComponent();
         }

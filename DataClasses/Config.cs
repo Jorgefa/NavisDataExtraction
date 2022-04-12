@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace NavisDataExtraction.DataClasses
@@ -34,7 +35,16 @@ namespace NavisDataExtraction.DataClasses
 
         public ObservableCollection<NavisExtractionType> CurrentElementExportTypes { get; set; }
 
-        public ObservableCollection<NavisExtractionTypeCollection> NavisExtractionTypeCollections { get; set; }
+        private ObservableCollection<NavisExtractionTypeCollection> _navisExtractionTypeCollections;
+
+        public ObservableCollection<NavisExtractionTypeCollection> NavisExtractionTypeCollections
+        {
+            get { return _navisExtractionTypeCollections; }
+            set
+            {
+                _navisExtractionTypeCollections = value; OnPropertyChanged();
+            }
+        }
 
         //Methods
         public static Config FromFile(string fileLocation = null)
@@ -58,38 +68,60 @@ namespace NavisDataExtraction.DataClasses
             return config;
         }
 
-        public bool ConfigValidation()
+        public bool CollectionValidation()
         {
-            foreach (var navisExtractionType in CurrentElementExportTypes)
+            if (NavisExtractionTypeCollections == null)
             {
-                if (navisExtractionType.Searchers == null)
+                return true;
+            }
+
+            var collectionNames = NavisExtractionTypeCollections.ToList().Select(x => x.Name).ToList();
+
+            if (collectionNames.Count != collectionNames.Distinct().Count())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool TypesValidation()
+        {
+            foreach (var collection in NavisExtractionTypeCollections)
+            {
+                if (collection.Types == null)
                 {
                     return true;
                 }
-                else
+
+                var typeNames = collection.Types.ToList().Select(x => x.Name).ToList();
+
+                if (typeNames.Count != typeNames.Distinct().Count())
                 {
-                    foreach (var searcher in navisExtractionType.Searchers)
-                    {
-                        if (string.IsNullOrEmpty(searcher.NavisCategoryName) ||
-                            string.IsNullOrEmpty(searcher.NavisPropertyName))
-                        {
-                            return false;
-                        }
-                    }
+                    return false;
                 }
-                if (navisExtractionType.Datas == null)
+            }
+            return true;
+        }
+
+        public bool SearchersValidation()
+        {
+            foreach (var collection in NavisExtractionTypeCollections)
+            {
+                if (collection.Types != null)
                 {
-                    return true;
-                }
-                else
-                {
-                    foreach (var data in navisExtractionType.Datas)
+                    foreach (var type in collection.Types)
                     {
-                        if (string.IsNullOrEmpty(data.Name) ||
-                            string.IsNullOrEmpty(data.NavisCategoryName) ||
-                            string.IsNullOrEmpty(data.NavisPropertyName))
+                        if (type.Searchers != null)
                         {
-                            return false;
+                            foreach (var searcher in type.Searchers)
+                            {
+                                if (string.IsNullOrEmpty(searcher.NavisCategoryName) ||
+                                    string.IsNullOrEmpty(searcher.NavisPropertyName))
+                                {
+                                    return false;
+                                }
+                            }
                         }
                     }
                 }
@@ -97,10 +129,48 @@ namespace NavisDataExtraction.DataClasses
             return true;
         }
 
+        public bool DatasValidation()
+        {
+            foreach (var collection in NavisExtractionTypeCollections)
+            {
+                if (collection.Types != null)
+                {
+                    foreach (var type in collection.Types)
+                    {
+                        if (type.Datas != null)
+                        {
+                            var dataNames = type.Datas.ToList().Select(x => x.Name).ToList();
+
+                            if (dataNames.Count != dataNames.Distinct().Count())
+                            {
+                                return false;
+                            }
+
+                            foreach (var data in type.Datas)
+                            {
+                                if (string.IsNullOrEmpty(data.Name) ||
+                                    string.IsNullOrEmpty(data.NavisCategoryName) ||
+                                    string.IsNullOrEmpty(data.NavisPropertyName))
+                                {
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool ConfigValidation()
+        {
+            return CollectionValidation() && TypesValidation() && SearchersValidation() && DatasValidation();
+        }
+
         public void ToFile(string fileLocation = null)
         {
             if (string.IsNullOrEmpty(fileLocation)) fileLocation = ConfigDefaultLocation;
-            var jsonString = JsonConvert.SerializeObject(this);
+            var jsonString = JsonConvert.SerializeObject(this, Formatting.Indented);
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(fileLocation));
@@ -120,7 +190,7 @@ namespace NavisDataExtraction.DataClasses
             }
             else
             {
-                System.Windows.MessageBox.Show("Please enter correct data or remove empty searchers or data to export");
+                System.Windows.MessageBox.Show("Please enter correct  config data. Check that: there are not duplicates in types or data and searchers and datas are fullfiled (category and property).");
             }
         }
 

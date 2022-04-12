@@ -19,8 +19,8 @@
         <DataTemplate x:Name="extractionViewTemplate" DataType="{x:Type viewmodels:ExtractionViewModel}">
             <views:ExtractionView DataContext="{Binding}" />
         </DataTemplate>
-        <DataTemplate x:Name="editorViewTemplate" DataType="{x:Type viewmodels:EditorViewModel}">
-            <views:EditorView DataContext="{Binding}" />
+        <DataTemplate x:Name="configViewTemplate" DataType="{x:Type viewmodels:ConfigViewModel}">
+            <views:ConfigView DataContext="{Binding}" />
         </DataTemplate>
     </Window.Resources>
 
@@ -38,7 +38,7 @@
 
 
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Image Height="30" Source="/Content/PMG-Logo.jpg" />
+            <Image Height="30" Source="/NavisDataExtraction.PMPK;component/Resources/PMG-Logo.jpg" />
             <Label
                 Content="Data extraction tool"
                 FontSize="18"
@@ -58,8 +58,8 @@
             <Button
                 Width="180"
                 Margin="3,3,0,3"
-                Click="Editor_Clicked"
-                Content="Editor"
+                Click="Config_Clicked"
+                Content="Config"
                 DockPanel.Dock="Right" />
         </DockPanel>
         <ScrollViewer Grid.Row="2" Margin="0,12,0,0">

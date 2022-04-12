@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace NavisDataExtraction.DataClasses
 {
@@ -12,13 +7,13 @@ namespace NavisDataExtraction.DataClasses
         //Constructors
         public NavisExtractionTypeCollection()
         {
-
         }
 
         public NavisExtractionTypeCollection(string name)
         {
             Name = name;
         }
+
         public NavisExtractionTypeCollection(string name, ObservableCollection<NavisExtractionType> types)
         {
             Name = name;
@@ -26,7 +21,30 @@ namespace NavisDataExtraction.DataClasses
         }
 
         //Properties
-        public ObservableCollection<NavisExtractionType> Types { get; set; }
-        public string Name { get; set; }
+        //public ObservableCollection<NavisExtractionType> Types { get; set; }
+
+        private ObservableCollection<NavisExtractionType> _types;
+
+        public ObservableCollection<NavisExtractionType> Types
+        {
+            get { return _types; }
+            set
+            {
+                _types = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _name;
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

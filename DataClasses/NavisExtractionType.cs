@@ -19,10 +19,43 @@ namespace NavisDataExtraction.DataClasses
         }
 
         //Properties
-        public string Name { get; set; }
+        private string _name;
 
-        public ObservableCollection<NavisExtractionData> Datas { get; set; }
-        public ObservableCollection<NavisExtractionSearcher> Searchers { get; set; }
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
 
+        private ObservableCollection<NavisExtractionData> _datas;
+
+        public ObservableCollection<NavisExtractionData> Datas
+        {
+            get { return _datas; }
+            set
+            {
+                _datas = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<NavisExtractionSearcher> _searchers;
+
+        public ObservableCollection<NavisExtractionSearcher> Searchers
+        {
+            get { return _searchers; }
+            set
+            {
+                _searchers = value;
+                OnPropertyChanged();
+            }
+        }
+
+        //public ObservableCollection<NavisExtractionData> Datas { get; set; }
+        //public ObservableCollection<NavisExtractionSearcher> Searchers { get; set; }
     }
 }

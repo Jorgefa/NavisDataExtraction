@@ -33,9 +33,9 @@ namespace NavisDataExtraction.Wpf
             DataContext = new ExtractionViewModel();
         }
 
-        private void Editor_Clicked(object sender, RoutedEventArgs e)
+        private void Config_Clicked(object sender, RoutedEventArgs e)
         {
-            DataContext = new EditorViewModel();
+            DataContext = new ConfigViewModel();
         }
     }
 }
