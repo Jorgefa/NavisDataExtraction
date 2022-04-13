@@ -7,12 +7,13 @@
     xmlns:viewmodels="clr-namespace:NavisDataExtraction.Wpf.ViewModels"
     xmlns:views="clr-namespace:NavisDataExtraction.Wpf.Views"
     Title="PMG Data extraction tool"
-    Width="450"
+    Width="600"
     Height="Auto"
-    MinWidth="450"
+    MinWidth="600"
     MinHeight="90"
     d:DesignHeight="750"
-    d:DesignWidth="450"
+    d:DesignWidth="600"
+    Icon="/NavisDataExtraction.PMPK;component/Resources/Logo.ico"
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -22,6 +23,9 @@
         <DataTemplate x:Name="configViewTemplate" DataType="{x:Type viewmodels:ConfigViewModel}">
             <views:ConfigView DataContext="{Binding}" />
         </DataTemplate>
+        <DataTemplate x:Name="editionViewTemplate" DataType="{x:Type viewmodels:EditionViewModel}">
+            <views:EditionView DataContext="{Binding}"/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
@@ -30,43 +34,39 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.Margin>9</Grid.Margin>
+        <Grid.Margin>24</Grid.Margin>
 
-
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Image Height="30" Source="/NavisDataExtraction.PMPK;component/Resources/PMG-Logo.jpg" />
-            <Label
-                Content="Data extraction tool"
-                FontSize="18"
-                FontWeight="Bold" />
-        </StackPanel>
-
-        <DockPanel
-            Grid.Row="1"
-            HorizontalAlignment="Stretch"
-            LastChildFill="False">
+        <WrapPanel
+            Grid.Row="0"
+            HorizontalAlignment="Center"
+            >
             <Button
-                Width="180"
+                Width="90"
                 Margin="0,3,3,3"
                 Click="Extraction_Clicked"
                 Content="Extraction"
-                DockPanel.Dock="Left" />
+                DockPanel.Dock="Top" />
             <Button
-                Width="180"
+                Width="90"
                 Margin="3,3,0,3"
                 Click="Config_Clicked"
                 Content="Config"
-                DockPanel.Dock="Right" />
-        </DockPanel>
-        <ScrollViewer Grid.Row="2" Margin="0,12,0,0">
+                DockPanel.Dock="Top" />
+            <Button
+                Width="90"
+                Margin="3,3,0,3"
+                Click="Edition_Clicked"
+                Content="Edition"
+                DockPanel.Dock="Top" />
+        </WrapPanel>
+        <ScrollViewer Grid.Row="1" Margin="0,12,0,0">
             <ContentControl Content="{Binding}" />
         </ScrollViewer>
         <Label
-            Grid.Row="3"
+            Grid.Row="2"
             Content="PM Group"
             FontSize="8" />
     </Grid>

@@ -9,17 +9,21 @@ namespace NavisDataExtraction.DataExport
 {
     public class NavisDataExtraction
     {
-        public static DataTable CreateNavisDatatable(ObservableCollection<NavisExtractionType> elementExportTypes)
+        public static DataTable CreateNavisDatatable(ObservableCollection<NavisExtractionType> navisExtractionTypes)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Guid", typeof(string));
             dt.Columns.Add("Name", typeof(string));
+            dt.Columns.Add("CC-X", typeof(string));
+            dt.Columns.Add("CC-Y", typeof(string));
+            dt.Columns.Add("CC-Z", typeof(string));
+
 
             List<NavisExtractionElement> elementExportList = new List<NavisExtractionElement>();
 
-            foreach (NavisExtractionType elementType in elementExportTypes)
+            foreach (NavisExtractionType type in navisExtractionTypes)
             {
-                foreach (NavisExtractionData data in elementType.Datas)
+                foreach (NavisExtractionData data in type.Datas)
                 {
                     string columnName = data.Name;
                     Type columnType = data.Type;
@@ -30,7 +34,7 @@ namespace NavisDataExtraction.DataExport
                     dt.Columns.Add(columnName, columnType);
                 }
 
-                elementExportList.AddRange(NavisDataCollector.ElementCollectorByType(elementType));
+                elementExportList.AddRange(NavisDataCollector.ElementCollectorByType(type));
             }
             foreach (NavisExtractionElement elementExport in elementExportList)
             {
@@ -39,8 +43,15 @@ namespace NavisDataExtraction.DataExport
                 var properties = elementExport.ExportType.Datas;
                 string guid = ele.InstanceGuid.ToString();
                 string name = ele.DisplayName.ToString();
+                string coordX = NavisUnits.ConvertUnitsToMeters((float)ele.BoundingBox().Center.X).ToString();
+                string coordY = NavisUnits.ConvertUnitsToMeters((float)ele.BoundingBox().Center.Y).ToString();
+                string coordZ = NavisUnits.ConvertUnitsToMeters((float)ele.BoundingBox().Center.Z).ToString();
                 dataRow["Guid"] = guid;
                 dataRow["Name"] = name;
+                dataRow["CC-X"] = coordX;
+                dataRow["CC-Y"] = coordY;
+                dataRow["CC-Z"] = coordZ;
+
 
                 foreach (var property in properties)
                 {

@@ -1,7 +1,9 @@
 ﻿using Autodesk.Navisworks.Api;
 using NavisDataExtraction.DataClasses;
+using NavisDataExtraction.DataEdition;
 using NavisDataExtraction.DataExport;
 using NavisDataExtraction.Others;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,6 +12,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 {
     internal class ExtractionViewModel : BaseViewModel
     {
+        //COnstructor
         public ExtractionViewModel()
         {
             ConfigFile = Config.FromFile();
@@ -21,6 +24,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             ExportDataCommand = new RelayCommand(ExportData);
             ImportConfigCommand = new RelayCommand(ImportConfig);
             ExportConfigCommand = new RelayCommand(ConfigFile.ExportConfigToFile);
+
+            AddDataCommand = new RelayCommand(AddData);
+            IsolateElementsCommand = new RelayCommand(IsolateElements);
         }
 
         //Properties
@@ -137,7 +143,16 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void CollectElements()
         {
-            ObservableCollection<NavisExtractionType> elementExportTypes = SelectedElementExportTypes;
+            if (SelectedCollection == null)
+            {
+                MessageBox.Show("Please, select a collection.", "Error");
+                return;
+            }
+            if (SelectedCollection.Types == null)
+            {
+                MessageBox.Show("Please, select a collection with extraction types.", "Error");
+                return;
+            }
             ObservableCollection<NavisExtractionElement> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(SelectedCollection.Types);
             var elements = elementExportList.Select(e => e.Element).ToList();
             ModelItems = new ObservableCollection<ModelItem>(elements);
@@ -157,8 +172,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             {
                 var filePath = dialog.FileName;
 
-                var config = ConfigFile;
-                ObservableCollection<NavisExtractionType> elementExportTypes = SelectedElementExportTypes;
+                ObservableCollection<NavisExtractionType> elementExportTypes = SelectedCollection.Types;
 
                 var navisDataTable = DataExport.NavisDataExtraction.CreateNavisDatatable(elementExportTypes);
 
@@ -184,5 +198,21 @@ namespace NavisDataExtraction.Wpf.ViewModels
         }
 
         public RelayCommand ExportConfigCommand { get; set; }
+
+        // TESTING
+        //Adding data
+        public RelayCommand AddDataCommand { get; set; }
+        private void AddData()
+        {
+            var elements = new List<ModelItem>(ModelItems);
+            DataAdder.AddCoordinates(elements);
+        }
+
+        //Isolate elements
+        public RelayCommand IsolateElementsCommand { get; set; }
+        private void IsolateElements()
+        {
+            NavisDataCollector.IsolateElements(ModelItems);
+        }
     }
 }

@@ -8,7 +8,7 @@
     d:DataContext="{d:DesignInstance Type=vm:ExtractionViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="810"
-    d:DesignWidth="450"
+    d:DesignWidth="500"
     Background="White"
     mc:Ignorable="d">
 
@@ -29,10 +29,7 @@
             Content="Extraction"
             FontSize="18"
             FontWeight="Bold" />
-        <DockPanel
-            Grid.Row="1"
-            HorizontalAlignment="Stretch"
-            LastChildFill="False">
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
             <Button
                 Width="90"
                 Margin="3"
@@ -57,7 +54,19 @@
                 Command="{Binding ImportConfigCommand}"
                 Content="Import config"
                 DockPanel.Dock="Left" />
-        </DockPanel>
+            <Button
+                Width="90"
+                Margin="3"
+                Command="{Binding AddDataCommand}"
+                Content="Add Data Test"
+                DockPanel.Dock="Left" />
+            <Button
+                Width="90"
+                Margin="3"
+                Command="{Binding IsolateElementsCommand}"
+                Content="Isolate collection"
+                DockPanel.Dock="Left" />
+        </WrapPanel>
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>

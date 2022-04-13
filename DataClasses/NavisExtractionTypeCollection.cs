@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace NavisDataExtraction.DataClasses
 {
@@ -21,8 +22,6 @@ namespace NavisDataExtraction.DataClasses
         }
 
         //Properties
-        //public ObservableCollection<NavisExtractionType> Types { get; set; }
-
         private ObservableCollection<NavisExtractionType> _types;
 
         public ObservableCollection<NavisExtractionType> Types
@@ -45,6 +44,23 @@ namespace NavisDataExtraction.DataClasses
                 _name = value;
                 OnPropertyChanged();
             }
+        }
+
+        //Methods
+        public string TypesValidation()
+        {
+            if (Types == null)
+            {
+                return null;
+            }
+
+            var typeNames = Types.ToList().Select(x => x.Name).ToList();
+
+            if (typeNames.Count != typeNames.Distinct().Count())
+            {
+                return "duplicates";
+            }
+            return "ok";
         }
     }
 }

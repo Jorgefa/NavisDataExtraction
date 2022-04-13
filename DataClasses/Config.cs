@@ -68,103 +68,72 @@ namespace NavisDataExtraction.DataClasses
             return config;
         }
 
-        public bool CollectionValidation()
+        public string CollectionsValidation()
         {
             if (NavisExtractionTypeCollections == null)
             {
-                return true;
+                return null;
             }
 
             var collectionNames = NavisExtractionTypeCollections.ToList().Select(x => x.Name).ToList();
 
             if (collectionNames.Count != collectionNames.Distinct().Count())
             {
-                return false;
+                return "duplicates";
             }
 
-            return true;
+            return "ok";
         }
 
-        public bool TypesValidation()
+        public string ConfigValidation()
         {
-            foreach (var collection in NavisExtractionTypeCollections)
+            switch (CollectionsValidation())
             {
-                if (collection.Types == null)
-                {
-                    return true;
-                }
+                case null:
+                    return "ok-collections-null";
 
-                var typeNames = collection.Types.ToList().Select(x => x.Name).ToList();
+                case "duplicates":
+                    return "fail-collections-duplicates";
 
-                if (typeNames.Count != typeNames.Distinct().Count())
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public bool SearchersValidation()
-        {
-            foreach (var collection in NavisExtractionTypeCollections)
-            {
-                if (collection.Types != null)
-                {
-                    foreach (var type in collection.Types)
+                default:
+                    foreach (var collection in NavisExtractionTypeCollections)
                     {
-                        if (type.Searchers != null)
+                        switch (collection.TypesValidation())
                         {
-                            foreach (var searcher in type.Searchers)
-                            {
-                                if (string.IsNullOrEmpty(searcher.NavisCategoryName) ||
-                                    string.IsNullOrEmpty(searcher.NavisPropertyName))
+                            case "duplicates":
+                                return "fail-types-duplicates";
+
+                            case null:
+                                break;
+
+                            default:
+                                foreach (var type in collection.Types)
                                 {
-                                    return false;
+                                    switch (type.SearchersValidation())
+                                    {
+                                        case "blankValue":
+                                            return "fail-searchers-blankValue";
+
+                                        default:
+                                            break;
+                                    }
+                                    switch (type.DatasValidation())
+                                    {
+                                        case "duplicates":
+                                            return "fail-data-duplicates";
+
+                                        case "blankValue":
+                                            return "fail-data-blankValue";
+
+                                        default:
+                                            break;
+                                    }
                                 }
-                            }
+                                break;
                         }
                     }
-                }
+                    return "ok";
             }
-            return true;
-        }
-
-        public bool DatasValidation()
-        {
-            foreach (var collection in NavisExtractionTypeCollections)
-            {
-                if (collection.Types != null)
-                {
-                    foreach (var type in collection.Types)
-                    {
-                        if (type.Datas != null)
-                        {
-                            var dataNames = type.Datas.ToList().Select(x => x.Name).ToList();
-
-                            if (dataNames.Count != dataNames.Distinct().Count())
-                            {
-                                return false;
-                            }
-
-                            foreach (var data in type.Datas)
-                            {
-                                if (string.IsNullOrEmpty(data.Name) ||
-                                    string.IsNullOrEmpty(data.NavisCategoryName) ||
-                                    string.IsNullOrEmpty(data.NavisPropertyName))
-                                {
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
-        }
-
-        public bool ConfigValidation()
-        {
-            return CollectionValidation() && TypesValidation() && SearchersValidation() && DatasValidation();
         }
 
         public void ToFile(string fileLocation = null)
@@ -184,13 +153,20 @@ namespace NavisDataExtraction.DataClasses
 
         public void SaveConfig()
         {
-            if (ConfigValidation())
+            switch (ConfigValidation())
             {
-                ToFile();
-            }
-            else
-            {
-                System.Windows.MessageBox.Show("Please enter correct  config data. Check that: there are not duplicates in types or data and searchers and datas are fullfiled (category and property).");
+                case "ok":
+                    ToFile();
+                    break;
+
+                case "ok-collections-null":
+                    NavisExtractionTypeCollections = new ObservableCollection<NavisExtractionTypeCollection>();
+                    ToFile();
+                    break;
+
+                default:
+                    System.Windows.MessageBox.Show("Please enter correct  config data. Not duplicate names allowed and searchers and datas must be fullfiled (category and property).", "Error");
+                    break;
             }
         }
 

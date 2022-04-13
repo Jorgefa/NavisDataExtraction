@@ -5,19 +5,23 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:NavisDataExtraction.Wpf.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="Auto"
-    MaxWidth="270"
+    Width="360"
     Height="Auto"
     MaxHeight="180"
+    d:DesignHeight="180"
+    d:DesignWidth="360"
     mc:Ignorable="d">
-    <Grid Height="Auto" Width="Auto">
-        <StackPanel>
-            <TextBlock x:Name="MessageTextBlock" Height="Auto" />
-            <TextBox x:Name="Input" Height="Auto" />
-            <Button
-                Height="Auto"
-                Click="Button_Click"
-                Content="Ok" />
-        </StackPanel>
-    </Grid>
+    <StackPanel
+        Width="Auto"
+        Height="Auto"
+        Margin="12">
+        <TextBlock x:Name="MessageTextBlock" Height="Auto" />
+        <TextBox x:Name="Input" Height="Auto" />
+        <Button
+            Width="60"
+            Height="Auto"
+            Margin="6"
+            Click="Button_Click"
+            Content="Ok" />
+    </StackPanel>
 </Window>

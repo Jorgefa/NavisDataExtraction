@@ -10,7 +10,7 @@
     d:DataContext="{d:DesignInstance Type=vm:ConfigViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="720"
-    d:DesignWidth="450"
+    d:DesignWidth="500"
     Background="White"
     mc:Ignorable="d">
 
@@ -57,7 +57,7 @@
         <Grid.Margin>0,0,6,0</Grid.Margin>
         <Label
             Grid.Row="0"
-            Content="Editor"
+            Content="Config"
             FontSize="18"
             FontWeight="Bold" />
 
@@ -82,6 +82,12 @@
                 Margin="3"
                 Command="{Binding ImportConfigCommand}"
                 Content="Import config"
+                DockPanel.Dock="Left" />
+            <Button
+                Width="90"
+                Margin="3"
+                Command="{Binding ClearConfigCommand}"
+                Content="Reset config"
                 DockPanel.Dock="Left" />
         </DockPanel>
 

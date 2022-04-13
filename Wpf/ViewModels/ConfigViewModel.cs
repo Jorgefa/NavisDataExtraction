@@ -2,7 +2,7 @@
 using NavisDataExtraction.Others;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
+using System.Windows.Forms;
 
 namespace NavisDataExtraction.Wpf.ViewModels
 {
@@ -28,6 +28,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             SaveCurrentConfigCommand = new RelayCommand(ConfigFile.SaveConfig);
             ImportConfigCommand = new RelayCommand(ImportConfig);
             ExportConfigCommand = new RelayCommand(ConfigFile.ExportConfigToFile);
+            ClearConfigCommand = new RelayCommand(ClearConfig);
         }
 
         //Properties
@@ -101,7 +102,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             var input = Dialogs.Dialogs.ShowInputDialog("New Collection", "Please, enter new collection's name");
             if (string.IsNullOrEmpty(input))
             {
-                MessageBox.Show("Please enter a valid name");
+                System.Windows.Forms.MessageBox.Show("Please enter a valid name");
                 return;
             }
             if (ConfigFile.NavisExtractionTypeCollections == null)
@@ -112,14 +113,20 @@ namespace NavisDataExtraction.Wpf.ViewModels
             var newCollection = new NavisExtractionTypeCollection(input);
             ConfigFile.NavisExtractionTypeCollections.Add(newCollection);
 
-            if (ConfigFile.CollectionValidation())
+            switch (ConfigFile.CollectionsValidation())
             {
-                ConfigFile.SaveConfig();
-            }
-            else
-            {
-                ConfigFile.NavisExtractionTypeCollections.Remove(newCollection);
-                MessageBox.Show("Name already exists");
+                case "ok":
+                    ConfigFile.SaveConfig();
+                    break;
+
+                case "duplicates":
+                    ConfigFile.NavisExtractionTypeCollections.Remove(newCollection);
+                    System.Windows.Forms.MessageBox.Show("Name already exists");
+                    break;
+
+                default:
+                    System.Windows.Forms.MessageBox.Show("Unknow error");
+                    break;
             }
         }
 
@@ -142,13 +149,13 @@ namespace NavisDataExtraction.Wpf.ViewModels
         {
             if (SelectedCollection == null)
             {
-                MessageBox.Show("Please, select a collection");
+                System.Windows.Forms.MessageBox.Show("Please, select a collection.", "Error");
                 return;
             }
-            var input = Dialogs.Dialogs.ShowInputDialog("New ElementExportType", "Please, enter new extraction type's name");
+            var input = Dialogs.Dialogs.ShowInputDialog("New ElementExportType", "Please, enter new extraction type's name.");
             if (string.IsNullOrEmpty(input))
             {
-                MessageBox.Show("Please enter a valid name");
+                System.Windows.Forms.MessageBox.Show("Please enter a valid name.", "Error");
                 return;
             }
             if (SelectedCollection.Types == null)
@@ -159,14 +166,20 @@ namespace NavisDataExtraction.Wpf.ViewModels
             var newType = new NavisExtractionType(input);
             SelectedCollection.Types.Add(newType);
 
-            if (ConfigFile.TypesValidation())
+            switch (SelectedCollection.TypesValidation())
             {
-                ConfigFile.SaveConfig();
-            }
-            else
-            {
-                SelectedCollection.Types.Remove(newType);
-                MessageBox.Show("Name already exists");
+                case "ok":
+                    ConfigFile.SaveConfig();
+                    break;
+
+                case "duplicates":
+                    SelectedCollection.Types.Remove(newType);
+                    System.Windows.Forms.MessageBox.Show("Name already exists");
+                    break;
+
+                default:
+                    System.Windows.Forms.MessageBox.Show("Unknow error");
+                    break;
             }
         }
 
@@ -223,7 +236,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             var input = Dialogs.Dialogs.ShowInputDialog("Change Collection Name", "Please, enter new collection's name");
             if (string.IsNullOrEmpty(input))
             {
-                MessageBox.Show("Please enter a valid name");
+                System.Windows.Forms.MessageBox.Show("Please enter a valid name");
                 return;
             }
 
@@ -231,7 +244,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
             if (collectionNames.Contains(input))
             {
-                MessageBox.Show("This collection name already exists.");
+                System.Windows.Forms.MessageBox.Show("This collection name already exists.");
                 return;
             }
             SelectedCollection.Name = input;
@@ -242,21 +255,35 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void RenameType()
         {
-            var input = Dialogs.Dialogs.ShowInputDialog("Change Type Name", "Please, enter new collection's name");
+            var input = Dialogs.Dialogs.ShowInputDialog("Change Type Name", "Please, enter new collection's name.");
             if (string.IsNullOrEmpty(input))
             {
-                MessageBox.Show("Please enter a valid name");
+                System.Windows.Forms.MessageBox.Show("Please enter a valid name.", "Error");
                 return;
             }
             var typeNames = SelectedCollection.Types.ToList().Select(x => x.Name).ToList();
 
             if (typeNames.Contains(input))
             {
-                MessageBox.Show("This type name already exists.");
+                System.Windows.Forms.MessageBox.Show("This type name already exists.", "Error");
                 return;
             }
             SelectedNavisExtractionType.Name = input;
             ConfigFile.SaveConfig();
+        }
+
+        //Config methods
+
+        public RelayCommand ClearConfigCommand { get; set; }
+
+        private void ClearConfig()
+        {
+            DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("Are you sure that you want to reset the configuration and clear all collections?", "Reset configuration", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                ConfigFile = new Config();
+                ConfigFile.SaveConfig();
+            }
         }
 
         public RelayCommand SaveCurrentConfigCommand { get; set; }

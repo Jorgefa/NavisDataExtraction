@@ -34,6 +34,13 @@
     <Reference Include="Autodesk.Navisworks.Api">
       <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Api.dll</HintPath>
     </Reference>
+    <Reference Include="Autodesk.Navisworks.ComApi">
+      <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.ComApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autodesk.Navisworks.Interop.ComApi">
+      <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -60,6 +67,8 @@
     <Compile Include="DataClasses\NavisExtractionSearcher.cs" />
     <Compile Include="DataClasses\NavisSearchType.cs" />
     <Compile Include="DataClasses\NavisObservableItem.cs" />
+    <Compile Include="DataEdition\DataAdder.cs" />
+    <Compile Include="DataExport\NavisUnits.cs" />
     <Compile Include="Wpf\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -80,10 +89,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Others\RelayCommand.cs" />
     <Compile Include="Wpf\ViewModels\ConfigViewModel.cs" />
+    <Compile Include="Wpf\ViewModels\EditionViewModel.cs" />
     <Compile Include="Wpf\ViewModels\ExtractionViewModel.cs" />
     <Compile Include="Wpf\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Wpf\Views\ConfigView.xaml.cs">
       <DependentUpon>ConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wpf\Views\EditionView.xaml.cs">
+      <DependentUpon>EditionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\Views\ExtractionView.xaml.cs">
       <DependentUpon>ExtractionView.xaml</DependentUpon>
@@ -109,6 +122,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Wpf\Views\EditionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Wpf\Views\ExtractionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,8 +135,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Resource Include="Resources\PMG-Logo.jpg" />
+    <Resource Include="Resources\Logo.ico" />
+    <Resource Include="Resources\PM_Group_Logo %28RGB%29.jpg" />
+    <Resource Include="Resources\PM_Group_Logo %28RGB%29.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
