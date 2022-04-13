@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using NavisDataExtraction.Wpf.Views;
+using NavisDataExtraction.Wpf.ViewModels;
+using NavisDataExtraction.Wpf;
+using System.Windows.Forms.Integration;
 
 namespace NavisDataExtraction
 {
@@ -13,20 +17,14 @@ namespace NavisDataExtraction
         "PMPK",
         ToolTip = "Export Data to Json",
         DisplayName ="Export")]
-    public class NavisDataTool : AddInPlugin
+    public class Main : AddInPlugin
     {
-        public static int count = 0;
         public override int Execute(params string[] parameters)
         {
-           
-            var config = Config.FromFile();
-
-            var elements = ElementSelector.ElementGathering("Revit Type", "UniclassSs");
-
-            var navisDataTable = DataExtraction.CreateNavisDatatable(elements, config.CustomPropertyList);
-
-            navisDataTable.ToCSV(config.csvExportationFilePath);
-
+            var window = new MainWindow();
+            ///ElementHost.EnableModelessKeyboardInterop(window);
+            window.Show();
+            ElementHost.EnableModelessKeyboardInterop(window);
             return 0;
         }       
     }
