@@ -72,6 +72,7 @@
     <Compile Include="Configuration\NdeSearcher.cs" />
     <Compile Include="DataClasses\SearchConditionType.cs" />
     <Compile Include="Configuration\NdeSelectableItem.cs" />
+    <Compile Include="MainLoader.cs" />
     <Compile Include="Utils\NdeUnits.cs" />
     <Compile Include="Utils\Progress\ProgressDefined.xaml.cs">
       <DependentUpon>ProgressDefined.xaml</DependentUpon>
