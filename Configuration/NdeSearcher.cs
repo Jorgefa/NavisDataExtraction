@@ -1,4 +1,4 @@
-﻿using NavisDataExtraction.Configuration;
+﻿using NavisDataExtraction.DataClasses;
 
 namespace NavisDataExtraction.Configuration
 {
@@ -8,14 +8,14 @@ namespace NavisDataExtraction.Configuration
         {
         }
 
-        public NdeSearcher(NavisSearchType searchType, string navisCategoryName, string navisPropertyName)
+        public NdeSearcher(SearchConditionType searchType, string navisCategoryName, string navisPropertyName)
         {
             SearchType = searchType;
             NavisCategoryName = navisCategoryName;
             NavisPropertyName = navisPropertyName;
         }
 
-        public NavisSearchType SearchType { get; set; }
+        public SearchConditionType SearchType { get; set; }
         public string NavisCategoryName { get; set; }
         public string NavisPropertyName { get; set; }
         public string NavisPropertyValue { get; set; }

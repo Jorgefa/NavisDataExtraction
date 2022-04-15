@@ -122,7 +122,7 @@ namespace NavisDataExtraction.Configuration
             {
                 switch (searcher.SearchType)
                 {
-                    case SearchConditionhType.HasPropertyByDisplayName:
+                    case SearchConditionType.HasPropertyByDisplayName:
                         var sC = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
                         search.SearchConditions.Add(sC);
                         break;

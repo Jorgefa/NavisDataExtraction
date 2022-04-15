@@ -1,6 +1,6 @@
 ﻿namespace NavisDataExtraction.DataClasses
 {
-    public enum SearchConditionhType
+    public enum SearchConditionType
     {
         HasPropertyByDisplayName,
         Other

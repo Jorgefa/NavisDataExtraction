@@ -1,12 +1,7 @@
 ﻿using Autodesk.Navisworks.Api;
-using NavisDataExtraction.DataClasses;
 using NavisDataExtraction.Configuration;
-using NavisDataExtraction.DataEdition;
-using NavisDataExtraction.NavisUtils;
 using NavisDataExtraction.Utils;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace NavisDataExtraction.Wpf.ViewModels
