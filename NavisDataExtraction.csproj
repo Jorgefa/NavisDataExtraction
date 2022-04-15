@@ -79,9 +79,6 @@
     <Compile Include="Utils\Progress\ProgressUndefined.xaml.cs">
       <DependentUpon>ProgressUndefined.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Wpf\App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Wpf\Dialogs\Dialogs.cs" />
     <Compile Include="Wpf\Dialogs\InputDialog.xaml.cs">
       <DependentUpon>InputDialog.xaml</DependentUpon>
@@ -121,10 +118,6 @@
   <ItemGroup>
     <Page Include="Utils\Progress\ProgressDefined.xaml" />
     <Page Include="Utils\Progress\ProgressUndefined.xaml" />
-    <Page Include="Wpf\App.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Wpf\Dialogs\InputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
