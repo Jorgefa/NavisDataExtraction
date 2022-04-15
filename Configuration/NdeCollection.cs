@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using NavisDataExtraction.Utils.Progress;
 
 namespace NavisDataExtraction.Configuration
 {
@@ -68,6 +69,7 @@ namespace NavisDataExtraction.Configuration
             {
                 return "duplicates";
             }
+
             return "ok";
         }
 
@@ -77,12 +79,14 @@ namespace NavisDataExtraction.Configuration
             {
                 return null;
             }
+
             var modelItems = new List<ModelItem>();
             foreach (var type in Types)
             {
                 var modelItemGroup = type.SearchModelItems();
                 modelItems.AddRange(modelItemGroup);
             }
+
             return new ObservableCollection<ModelItem>(modelItems);
         }
 
@@ -91,8 +95,10 @@ namespace NavisDataExtraction.Configuration
             var modelItemsGRoups = new ObservableCollection<NdeModelItemGroup>();
             foreach (var type in Types)
             {
-                modelItemsGRoups.Add(new NdeModelItemGroup { ModelItemCollection = SearchModelItems(), Type = type, Collection = this });
+                modelItemsGRoups.Add(new NdeModelItemGroup
+                    { ModelItemCollection = SearchModelItems(), Type = type, Collection = this });
             }
+
             return modelItemsGRoups;
         }
 
@@ -125,6 +131,7 @@ namespace NavisDataExtraction.Configuration
                     {
                         continue;
                     }
+
                     datas.Add(data);
                     dt.Columns.Add(columnName, columnType);
                 }
@@ -155,72 +162,96 @@ namespace NavisDataExtraction.Configuration
                     var propertyValue = modelItem.GetParameterByName(categoryName, propertyName);
                     dataRow[dataName] = propertyValue;
                 }
+
                 dt.Rows.Add(dataRow);
             }
+
             return dt;
         }
 
         public void AddDataToNaviswork(ObservableCollection<NdeModelItemGroup> modelItemsGroups)
         {
             // current document (.NET)
-            Document doc = Application.ActiveDocument;
+            var doc = Application.ActiveDocument;
+
             // current document (COM)
-            InwOpState10 cdoc = ComApiBridge.State;
+            var cDoc = ComApiBridge.State;
+
             // new category name and displayName
-            string catName = "PMG";
-            string catDisplayName = "PMG_InternalName";
+            const string catName = "PMG";
+            const string catDisplayName = "PMG_InternalName";
 
             // override
-            bool overrideProps = false;
+            var overrideProps = false;
 
-            if (modelItemsGroups == null)
+            if (modelItemsGroups == null) return;
+
+            var total = modelItemsGroups.SelectMany(r => r.ModelItemCollection).Count();
+            var current = 0;
+
+            try
             {
-                return;
-            }
-            foreach (var group in modelItemsGroups)
-            {
-                if (group.Type == null || group.ModelItemCollection == null)
+                ProgressUtilDefined.Start();
+
+                foreach (var group in modelItemsGroups)
                 {
-                    return;
-                }
-                foreach (var item in group.ModelItemCollection)
-                {
-                    // check if the element already has the category
-                    var itemCategory = item.PropertyCategories.FindCategoryByDisplayName(catDisplayName);
-                    if (!Equals(itemCategory,null))
+                    if (group.Type == null || group.ModelItemCollection == null) return;
+
+                    foreach (var item in group.ModelItemCollection)
                     {
+                        ProgressUtilDefined.Update($"{group.Type.Name} - {item.DisplayName}", current, total);
+                        
+                        // check if the element already has the category
+                        var itemCategory = item.PropertyCategories.FindCategoryByDisplayName(catDisplayName);
+
                         // do some code to use the same category (search PMG category and use it in COM)
-                        continue;
-                    }
-                    // create new Category (PropertyDataCollection)
-                    InwOaPropertyVec newCat = (InwOaPropertyVec)cdoc.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec, null, null);
-                    // convert ModelItem to COM Path
-                    InwOaPath cItem = (InwOaPath)ComApiBridge.ToInwOaPath(item);
-                    // get item's PropertyCategoryCollection
-                    InwGUIPropertyNode2 cPropCats = (InwGUIPropertyNode2)cdoc.GetGUIPropertyNode(cItem, true);
-                    foreach (var data in group.Type.Datas)
-                    {
-                        var itemProperty = item.PropertyCategories.FindPropertyByDisplayName(catDisplayName, data.Name);
-                        // check if the element already has the property
-                        if (!Equals(itemProperty, null))
+                        if (!Equals(itemCategory, null)) continue;
+
+                        // create new Category (PropertyDataCollection)
+                        InwOaPropertyVec newCat =
+                            (InwOaPropertyVec)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec, null, null);
+                        // convert ModelItem to COM Path
+                        InwOaPath cItem = (InwOaPath)ComApiBridge.ToInwOaPath(item);
+                        // get item's PropertyCategoryCollection
+                        InwGUIPropertyNode2 cPropCats = (InwGUIPropertyNode2)cDoc.GetGUIPropertyNode(cItem, true);
+                        foreach (var data in group.Type.Datas)
                         {
-                            // do some code if the property already exist. Update property and check for override
-                            continue;
+                            var itemProperty =
+                                item.PropertyCategories.FindPropertyByDisplayName(catDisplayName, data.Name);
+                            // check if the element already has the property
+                            if (!Equals(itemProperty, null))
+                            {
+                                // do some code if the property already exist. Update property and check for override
+                                continue;
+                            }
+
+                            // create a new Property (PropertyData)
+                            InwOaProperty newProp =
+                                (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
+                            // set PropertyName
+                            newProp.name = data.Name + "_InternalName";
+                            // set PropertyDisplayName
+                            newProp.UserName = data.Name;
+                            // set PropertyValue
+                            newProp.value = item.GetParameterByName(data.NavisCategoryName, data.NavisPropertyName);
+                            // add PropertyData to Category
+                            newCat.Properties().Add(newProp);
                         }
-                        // create a new Property (PropertyData)
-                        InwOaProperty newProp = (InwOaProperty)cdoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
-                        // set PropertyName
-                        newProp.name = data.Name + "_InternalName";
-                        // set PropertyDisplayName
-                        newProp.UserName = data.Name;
-                        // set PropertyValue
-                        newProp.value = item.GetParameterByName(data.NavisCategoryName, data.NavisPropertyName);
-                        // add PropertyData to Category
-                        newCat.Properties().Add(newProp);
+
+                        // add CategoryData to item's CategoryDataCollection
+                        cPropCats.SetUserDefined(0, catName, catDisplayName, newCat);
+
+                        current++;
                     }
-                    // add CategoryData to item's CategoryDataCollection
-                    cPropCats.SetUserDefined(0, catName, catDisplayName, newCat);
                 }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+            finally
+            {
+                ProgressUtilDefined.Finish();
             }
         }
     }
