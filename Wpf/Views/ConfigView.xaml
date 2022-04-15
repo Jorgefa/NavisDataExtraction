@@ -132,7 +132,7 @@
                         <ListView
                             Height="120"
                             BorderThickness="0"
-                            ItemsSource="{Binding ConfigFile.NavisExtractionTypeCollections}"
+                            ItemsSource="{Binding ConfigFile.Collections}"
                             SelectedItem="{Binding SelectedCollection}"
                             SelectionMode="Extended">
                             <ListView.ItemTemplate>
@@ -170,7 +170,7 @@
                             Height="120"
                             BorderThickness="0"
                             ItemsSource="{Binding SelectedCollection.Types}"
-                            SelectedItem="{Binding SelectedNavisExtractionType}"
+                            SelectedItem="{Binding SelectedType}"
                             SelectionMode="Extended">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -201,7 +201,7 @@
                 <TextBlock DockPanel.Dock="Right">
                     <Run Text="{Binding SelectedCollection.Name}" />
                     <Run Text=" | " />
-                    <Run Text="{Binding SelectedNavisExtractionType.Name}" />
+                    <Run Text="{Binding SelectedType.Name}" />
                 </TextBlock>
             </DockPanel>
 
@@ -215,7 +215,7 @@
                 <DataGrid
                     Height="150"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding SelectedNavisExtractionType.Searchers}"
+                    ItemsSource="{Binding SelectedType.Searchers}"
                     SelectedItem="{Binding SelectedNavisSearcher}"
                     Style="{DynamicResource DataGridStyle1}">
                     <DataGrid.ContextMenu>
@@ -260,7 +260,7 @@
                 <DataGrid
                     Height="180"
                     AutoGenerateColumns="False"
-                    ItemsSource="{Binding SelectedNavisExtractionType.Datas}"
+                    ItemsSource="{Binding SelectedType.Datas}"
                     SelectedItem="{Binding SelectedNavisData}"
                     Style="{DynamicResource DataGridStyle1}">
                     <DataGrid.Columns>

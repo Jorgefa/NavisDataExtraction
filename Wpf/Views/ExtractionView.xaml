@@ -33,7 +33,7 @@
             <Button
                 Width="90"
                 Margin="3"
-                Command="{Binding CollectElementsCommand}"
+                Command="{Binding SearchModelItemsCommand}"
                 Content="Search elements"
                 DockPanel.Dock="Left" />
             <Button
@@ -63,8 +63,8 @@
             <Button
                 Width="90"
                 Margin="3"
-                Command="{Binding IsolateElementsCommand}"
-                Content="Isolate collection"
+                Command="{Binding SelectElementsCommand}"
+                Content="Select collection elements"
                 DockPanel.Dock="Left" />
         </WrapPanel>
 
@@ -88,7 +88,7 @@
                 <ListView
                     Height="120"
                     BorderThickness="0"
-                    ItemsSource="{Binding ConfigFile.NavisExtractionTypeCollections}"
+                    ItemsSource="{Binding ConfigFile.Collections}"
                     SelectedItem="{Binding SelectedCollection}"
                     SelectionMode="Extended">
                     <ListView.ItemTemplate>
@@ -110,7 +110,7 @@
                     Height="120"
                     BorderThickness="0"
                     ItemsSource="{Binding SelectedCollection.Types}"
-                    SelectedItem="{Binding SelectedNavisExtractionType}"
+                    SelectedItem="{Binding SelectedType}"
                     SelectionChanged="ListView_SelectionChanged"
                     SelectionMode="Multiple">
                     <ListView.ItemTemplate>

@@ -1,17 +1,17 @@
 ﻿using Autodesk.Navisworks.Api;
-
+using NavisDataExtraction.Configuration;
 
 namespace NavisDataExtraction.DataClasses
 {
-    public class NavisExtractionElement : NavisObservableItem
+    public class NavisExtractionElement : NdeSelectableItem
     {
-        public NavisExtractionElement(ModelItem element, NavisExtractionType exportType)
+        public NavisExtractionElement(ModelItem element, NdeType exportType)
         {
             Element = element;
             ExportType = exportType;
         }
 
         public ModelItem Element { get; set; }
-        public NavisExtractionType ExportType { get; set; }
+        public NdeType ExportType { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NavisDataExtraction.Others
+namespace NavisDataExtraction.Utils
 {
     public static class Extension
     {

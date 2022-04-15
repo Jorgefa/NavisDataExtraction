@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NavisDataExtraction.DataExport
+namespace NavisDataExtraction.NavisUtils
 {
-    class NavisUnits
+    class NdeUnits
     {
         public static float ConvertUnitsToMeters(float dim)
         {

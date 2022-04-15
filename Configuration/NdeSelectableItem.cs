@@ -1,4 +1,5 @@
 ﻿using NavisDataExtraction.Annotations;
+using NavisDataExtraction.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,12 +8,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NavisDataExtraction.DataClasses
+namespace NavisDataExtraction.Configuration
 {
-    public class NavisObservableItem : INotifyPropertyChanged
+    public class NdeSelectableItem : NdeObservableItem
     {
         // Constructors
-        public NavisObservableItem()
+        public NdeSelectableItem()
         {
 
         }
@@ -29,13 +30,6 @@ namespace NavisDataExtraction.DataClasses
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        //Methods
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

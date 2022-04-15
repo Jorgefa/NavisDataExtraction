@@ -1,4 +1,6 @@
-﻿using NavisDataExtraction.Wpf.ViewModels;
+﻿using NavisDataExtraction.Configuration;
+using NavisDataExtraction.DataClasses;
+using NavisDataExtraction.Wpf.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
@@ -6,62 +8,45 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace NavisDataExtraction.DataClasses
+namespace NavisDataExtraction.Configuration
 {
-    public class Config : BaseViewModel
+    public class NdeConfig : NdeObservableItem
     {
         //Constructors
-        public Config()
+        public NdeConfig()
         {
-        }
-
-        public Config(ObservableCollection<NavisExtractionType> elementExportTypes = null)
-        {
-            if (elementExportTypes == null)
-            {
-                CurrentElementExportTypes = new ObservableCollection<NavisExtractionType>();
-            }
-            else
-            {
-                CurrentElementExportTypes = elementExportTypes;
-                var currentCollection = new NavisExtractionTypeCollection();
-                currentCollection.Types = CurrentElementExportTypes;
-                NavisExtractionTypeCollections.Add(currentCollection);
-            }
         }
 
         //Properties
         public static readonly string ConfigDefaultLocation = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PM Group", "Navis Data Exporter", "appConfig.json");
 
-        public ObservableCollection<NavisExtractionType> CurrentElementExportTypes { get; set; }
+        private ObservableCollection<NdeCollection> _collections;
 
-        private ObservableCollection<NavisExtractionTypeCollection> _navisExtractionTypeCollections;
-
-        public ObservableCollection<NavisExtractionTypeCollection> NavisExtractionTypeCollections
+        public ObservableCollection<NdeCollection> Collections
         {
-            get { return _navisExtractionTypeCollections; }
+            get { return _collections; }
             set
             {
-                _navisExtractionTypeCollections = value; OnPropertyChanged();
+                _collections = value; OnPropertyChanged();
             }
         }
 
         //Methods
-        public static Config FromFile(string fileLocation = null)
+        public static NdeConfig FromFile(string fileLocation = null)
         {
             if (string.IsNullOrEmpty(fileLocation)) fileLocation = ConfigDefaultLocation;
             if (!File.Exists(fileLocation))
             {
-                var newConfig = new Config();
+                var newConfig = new NdeConfig();
                 newConfig.ToFile(fileLocation);
                 return newConfig;
             }
 
             var configText = File.ReadAllText(fileLocation);
-            var config = JsonConvert.DeserializeObject<Config>(configText);
+            var config = JsonConvert.DeserializeObject<NdeConfig>(configText);
             if (config == null)
             {
-                var newConfig = new Config();
+                var newConfig = new NdeConfig();
                 newConfig.ToFile(fileLocation);
                 return newConfig;
             }
@@ -70,12 +55,12 @@ namespace NavisDataExtraction.DataClasses
 
         public string CollectionsValidation()
         {
-            if (NavisExtractionTypeCollections == null)
+            if (Collections == null)
             {
                 return null;
             }
 
-            var collectionNames = NavisExtractionTypeCollections.ToList().Select(x => x.Name).ToList();
+            var collectionNames = Collections.ToList().Select(x => x.Name).ToList();
 
             if (collectionNames.Count != collectionNames.Distinct().Count())
             {
@@ -96,7 +81,7 @@ namespace NavisDataExtraction.DataClasses
                     return "fail-collections-duplicates";
 
                 default:
-                    foreach (var collection in NavisExtractionTypeCollections)
+                    foreach (var collection in Collections)
                     {
                         switch (collection.TypesValidation())
                         {
@@ -160,7 +145,7 @@ namespace NavisDataExtraction.DataClasses
                     break;
 
                 case "ok-collections-null":
-                    NavisExtractionTypeCollections = new ObservableCollection<NavisExtractionTypeCollection>();
+                    Collections = new ObservableCollection<NdeCollection>();
                     ToFile();
                     break;
 
@@ -170,7 +155,7 @@ namespace NavisDataExtraction.DataClasses
             }
         }
 
-        public static Config ImportConfigFromFile()
+        public static NdeConfig ImportConfigFromFile()
         {
             var dialog = new OpenFileDialog
             {

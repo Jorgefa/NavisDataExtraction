@@ -1,4 +1,4 @@
-﻿using NavisDataExtraction.DataExport;
+﻿using NavisDataExtraction.NavisUtils;
 using NavisDataExtraction.Wpf.ViewModels;
 using System;
 using System.Collections.Generic;

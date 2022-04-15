@@ -1,21 +1,22 @@
-﻿using System;
+﻿using NavisDataExtraction.Configuration;
+using System;
 
-namespace NavisDataExtraction.DataClasses
+namespace NavisDataExtraction.Configuration
 {
-    public class NavisExtractionData : NavisObservableItem
+    public class NdeData : NdeSelectableItem
     {
         //Constructors
-        public NavisExtractionData()
+        public NdeData()
         {
         }
 
-        public NavisExtractionData(string name, string navisCategoryName, string navisPropertyName)
+        public NdeData(string name, string navisCategoryName, string navisPropertyName)
         {
             Name = name;
             NavisCategoryName = navisCategoryName;
             NavisPropertyName = navisPropertyName;
         }
-        public NavisExtractionData(string dataName, string navisCategoryName, string navisPropertyName, string navisPropertyValue)
+        public NdeData(string dataName, string navisCategoryName, string navisPropertyName, string navisPropertyValue)
         {
             Name = dataName;
             NavisCategoryName = navisCategoryName;

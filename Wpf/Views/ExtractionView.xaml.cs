@@ -1,5 +1,6 @@
-﻿using NavisDataExtraction.DataClasses;
-using NavisDataExtraction.DataExport;
+﻿using NavisDataExtraction.Configuration;
+using NavisDataExtraction.DataClasses;
+using NavisDataExtraction.NavisUtils;
 using NavisDataExtraction.Wpf.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace NavisDataExtraction.Wpf.Views
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var vm = DataContext as ExtractionViewModel;
-            vm.SelectedElementExportTypes = new ObservableCollection<NavisExtractionType>(ElementExportTypesList.SelectedItems.Cast<NavisExtractionType>());
+            vm.SelectedElementExportTypes = new ObservableCollection<NdeType>(ElementExportTypesList.SelectedItems.Cast<NdeType>());
         }
     }
 }

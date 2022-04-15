@@ -1,8 +1,9 @@
 ﻿using Autodesk.Navisworks.Api;
 using NavisDataExtraction.DataClasses;
+using NavisDataExtraction.Configuration;
 using NavisDataExtraction.DataEdition;
-using NavisDataExtraction.DataExport;
-using NavisDataExtraction.Others;
+using NavisDataExtraction.NavisUtils;
+using NavisDataExtraction.Utils;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,24 +16,24 @@ namespace NavisDataExtraction.Wpf.ViewModels
         //COnstructor
         public ExtractionViewModel()
         {
-            ConfigFile = Config.FromFile();
+            ConfigFile = NdeConfig.FromFile();
 
             ModelItems = new ObservableCollection<ModelItem>();
             Properties = new ObservableCollection<NavisworksProperty>();
-            ElementExportTypes = new ObservableCollection<NavisExtractionType>(ConfigFile.CurrentElementExportTypes);
-            CollectElementsCommand = new RelayCommand(CollectElements);
             ExportDataCommand = new RelayCommand(ExportData);
             ImportConfigCommand = new RelayCommand(ImportConfig);
             ExportConfigCommand = new RelayCommand(ConfigFile.ExportConfigToFile);
 
+            SearchModelItemsCommand = new RelayCommand(SearchModelItems);
+
             AddDataCommand = new RelayCommand(AddData);
-            IsolateElementsCommand = new RelayCommand(IsolateElements);
+            SelectElementsCommand = new RelayCommand(SelectElements);
         }
 
         //Properties
-        private Config _configFile;
+        private NdeConfig _configFile;
 
-        public Config ConfigFile
+        public NdeConfig ConfigFile
         {
             get => _configFile;
             set
@@ -42,9 +43,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisExtractionTypeCollection _selectedCollection;
+        private NdeCollection _selectedCollection;
 
-        public NavisExtractionTypeCollection SelectedCollection
+        public NdeCollection SelectedCollection
         {
             get => _selectedCollection;
             set
@@ -54,17 +55,26 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisExtractionType _selectedNavisExtractionType;
+        private NdeType _selectedType;
 
-        public NavisExtractionType SelectedNavisExtractionType
+        public NdeType SelectedType
         {
-            get => _selectedNavisExtractionType;
+            get => _selectedType;
             set
             {
-                _selectedNavisExtractionType = value;
+                _selectedType = value;
                 OnPropertyChanged();
             }
         }
+
+        private ObservableCollection<NdeModelItemGroup> _modelItemGroups;
+
+        public ObservableCollection<NdeModelItemGroup> ModelItemGroups
+        {
+            get { return _modelItemGroups; }
+            set { _modelItemGroups = value; OnPropertyChanged(); }
+        }
+
 
         private ObservableCollection<ModelItem> _modelItems;
 
@@ -92,19 +102,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private ObservableCollection<NavisExtractionType> _elementExportTypes;
-
-        public ObservableCollection<NavisExtractionType> ElementExportTypes
-        {
-            get => _elementExportTypes;
-            set
-            {
-                _elementExportTypes = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<NavisExtractionType> SelectedElementExportTypes = new ObservableCollection<NavisExtractionType>();
+        public ObservableCollection<NdeType> SelectedElementExportTypes = new ObservableCollection<NdeType>();
 
         private ObservableCollection<NavisworksProperty> _properties;
 
@@ -141,21 +139,17 @@ namespace NavisDataExtraction.Wpf.ViewModels
         //Select elements using NavisExtractionTypes
         public RelayCommand CollectElementsCommand { get; set; }
 
-        private void CollectElements()
+        public RelayCommand SearchModelItemsCommand { get; set; }
+
+        private void SearchModelItems()
         {
-            if (SelectedCollection == null)
-            {
-                MessageBox.Show("Please, select a collection.", "Error");
-                return;
-            }
-            if (SelectedCollection.Types == null)
+            if (SelectedCollection == null || SelectedCollection.Types == null)
             {
                 MessageBox.Show("Please, select a collection with extraction types.", "Error");
                 return;
             }
-            ObservableCollection<NavisExtractionElement> elementExportList = NavisDataCollector.ElementCollectorByListOfTypes(SelectedCollection.Types);
-            var elements = elementExportList.Select(e => e.Element).ToList();
-            ModelItems = new ObservableCollection<ModelItem>(elements);
+            ModelItems = SelectedCollection.SearchModelItems();
+            ModelItemGroups = SelectedCollection.SearchModelItemsGroups();
         }
 
         //Export elements using ElmentExporTypes
@@ -172,9 +166,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             {
                 var filePath = dialog.FileName;
 
-                ObservableCollection<NavisExtractionType> elementExportTypes = SelectedCollection.Types;
+                ObservableCollection<NdeType> elementExportTypes = SelectedCollection.Types;
 
-                var navisDataTable = DataExport.NavisDataExtraction.CreateNavisDatatable(elementExportTypes);
+                var navisDataTable = SelectedCollection.GetDataTable();
 
                 navisDataTable.ToCSV(filePath);
             }
@@ -186,7 +180,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void ImportConfig()
         {
-            var newConfigFile = Config.ImportConfigFromFile();
+            var newConfigFile = NdeConfig.ImportConfigFromFile();
             if (newConfigFile != null)
             {
                 ConfigFile = newConfigFile;
@@ -204,15 +198,22 @@ namespace NavisDataExtraction.Wpf.ViewModels
         public RelayCommand AddDataCommand { get; set; }
         private void AddData()
         {
-            var elements = new List<ModelItem>(ModelItems);
-            DataAdder.AddCoordinates(elements);
+            if (SelectedCollection == null)
+            {
+                return;
+            }
+            if (ModelItemGroups == null)
+            {
+                ModelItemGroups = SelectedCollection.SearchModelItemsGroups();
+            }
+            SelectedCollection.AddDataToNaviswork(ModelItemGroups);
         }
 
         //Isolate elements
-        public RelayCommand IsolateElementsCommand { get; set; }
-        private void IsolateElements()
+        public RelayCommand SelectElementsCommand { get; set; }
+        private void SelectElements()
         {
-            NavisDataCollector.IsolateElements(ModelItems);
+            NavisStaticCommands.SelectElements(ModelItems);
         }
     }
 }

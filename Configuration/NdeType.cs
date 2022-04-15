@@ -1,22 +1,26 @@
-﻿using System.Collections.ObjectModel;
+﻿using Autodesk.Navisworks.Api;
+using NavisDataExtraction.DataClasses;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
-namespace NavisDataExtraction.DataClasses
+namespace NavisDataExtraction.Configuration
 {
-    public class NavisExtractionType : NavisObservableItem
+    public class NdeType : NdeSelectableItem
     {
         //Constructors
-        public NavisExtractionType()
+        public NdeType()
         {
             Searchers = new ObservableCollection<NavisExtractionSearcher>();
-            Datas = new ObservableCollection<NavisExtractionData>();
+            Datas = new ObservableCollection<NdeData>();
         }
 
-        public NavisExtractionType(string name)
+        public NdeType(string name)
         {
             Name = name;
             Searchers = new ObservableCollection<NavisExtractionSearcher>();
-            Datas = new ObservableCollection<NavisExtractionData>();
+            Datas = new ObservableCollection<NdeData>();
         }
 
         //Properties
@@ -32,9 +36,9 @@ namespace NavisDataExtraction.DataClasses
             }
         }
 
-        private ObservableCollection<NavisExtractionData> _datas;
+        private ObservableCollection<NdeData> _datas;
 
-        public ObservableCollection<NavisExtractionData> Datas
+        public ObservableCollection<NdeData> Datas
         {
             get { return _datas; }
             set
@@ -95,6 +99,47 @@ namespace NavisDataExtraction.DataClasses
                 }
             }
             return "ok";
+        }
+
+        public ObservableCollection<ModelItem> SearchModelItems()
+        {
+            // Get ActiveDocument
+            var doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+
+            // Create Search
+            Search search = new Search();
+            search.Selection.SelectAll();
+            search.Locations = SearchLocations.DescendantsAndSelf;
+            search.PruneBelowMatch = false;
+
+            // Create SearchConditions
+            if (Searchers == null)
+            {
+                return null;
+            }
+
+            foreach (var searcher in Searchers)
+            {
+                switch (searcher.SearchType)
+                {
+                    case NavisSearchType.HasPropertyByDisplayName:
+                        var sC = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
+                        search.SearchConditions.Add(sC);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // Collect ModelItems
+            ObservableCollection<ModelItem> modelItems = new ObservableCollection<ModelItem>(search.FindAll(doc, true));
+
+            return modelItems;
+        }
+
+        public NdeModelItemGroup SearchModelItemGroup()
+        {
+            return new NdeModelItemGroup { ModelItemCollection = SearchModelItems(), Type = this };
         }
     }
 }

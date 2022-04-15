@@ -1,5 +1,7 @@
-﻿using NavisDataExtraction.DataClasses;
-using NavisDataExtraction.Others;
+﻿using Autodesk.Navisworks.Api;
+using NavisDataExtraction.Configuration;
+using NavisDataExtraction.DataClasses;
+using NavisDataExtraction.Utils;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,7 +13,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
         //Constructor
         public ConfigViewModel()
         {
-            ConfigFile = Config.FromFile();
+            ConfigFile = NdeConfig.FromFile();
 
             AddNewElementExportTypeCommand = new RelayCommand(AddNewExportType);
             DuplicateSelectedCollectionCommand = new RelayCommand(DuplicateSelectedCollection);
@@ -29,12 +31,13 @@ namespace NavisDataExtraction.Wpf.ViewModels
             ImportConfigCommand = new RelayCommand(ImportConfig);
             ExportConfigCommand = new RelayCommand(ConfigFile.ExportConfigToFile);
             ClearConfigCommand = new RelayCommand(ClearConfig);
+
         }
 
         //Properties
-        private Config _configFile;
+        private NdeConfig _configFile;
 
-        public Config ConfigFile
+        public NdeConfig ConfigFile
         {
             get => _configFile;
             set
@@ -44,9 +47,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisExtractionTypeCollection _selectedCollection;
+        private NdeCollection _selectedCollection;
 
-        public NavisExtractionTypeCollection SelectedCollection
+        public NdeCollection SelectedCollection
         {
             get => _selectedCollection;
             set
@@ -57,14 +60,14 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisExtractionType _selectedNavisExtractionType;
+        private NdeType _selectedType;
 
-        public NavisExtractionType SelectedNavisExtractionType
+        public NdeType SelectedType
         {
-            get => _selectedNavisExtractionType;
+            get => _selectedType;
             set
             {
-                _selectedNavisExtractionType = value;
+                _selectedType = value;
                 OnPropertyChanged();
             }
         }
@@ -81,9 +84,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisExtractionData _selectedNavisData;
+        private NdeData _selectedNavisData;
 
-        public NavisExtractionData SelectedNavisData
+        public NdeData SelectedNavisData
         {
             get { return _selectedNavisData; }
             set
@@ -105,13 +108,13 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 System.Windows.Forms.MessageBox.Show("Please enter a valid name");
                 return;
             }
-            if (ConfigFile.NavisExtractionTypeCollections == null)
+            if (ConfigFile.Collections == null)
             {
-                ConfigFile.NavisExtractionTypeCollections = new ObservableCollection<NavisExtractionTypeCollection>();
+                ConfigFile.Collections = new ObservableCollection<NdeCollection>();
             }
 
-            var newCollection = new NavisExtractionTypeCollection(input);
-            ConfigFile.NavisExtractionTypeCollections.Add(newCollection);
+            var newCollection = new NdeCollection(input);
+            ConfigFile.Collections.Add(newCollection);
 
             switch (ConfigFile.CollectionsValidation())
             {
@@ -120,7 +123,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
                     break;
 
                 case "duplicates":
-                    ConfigFile.NavisExtractionTypeCollections.Remove(newCollection);
+                    ConfigFile.Collections.Remove(newCollection);
                     System.Windows.Forms.MessageBox.Show("Name already exists");
                     break;
 
@@ -134,12 +137,12 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DuplicateSelectedCollection()
         {
-            var newCollection = new NavisExtractionTypeCollection
+            var newCollection = new NdeCollection
             {
                 Name = SelectedCollection.Name + "_(Copy)",
                 Types = SelectedCollection.Types
             };
-            ConfigFile.NavisExtractionTypeCollections.Add(newCollection);
+            ConfigFile.Collections.Add(newCollection);
             ConfigFile.SaveConfig();
         }
 
@@ -160,10 +163,10 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
             if (SelectedCollection.Types == null)
             {
-                SelectedCollection.Types = new ObservableCollection<NavisExtractionType>();
+                SelectedCollection.Types = new ObservableCollection<NdeType>();
             }
 
-            var newType = new NavisExtractionType(input);
+            var newType = new NdeType(input);
             SelectedCollection.Types.Add(newType);
 
             switch (SelectedCollection.TypesValidation())
@@ -187,11 +190,11 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DuplicateSelectedType()
         {
-            var newType = new NavisExtractionType
+            var newType = new NdeType
             {
-                Name = SelectedNavisExtractionType.Name + "_(Copy)",
-                Searchers = SelectedNavisExtractionType.Searchers,
-                Datas = SelectedNavisExtractionType.Datas
+                Name = SelectedType.Name + "_(Copy)",
+                Searchers = SelectedType.Searchers,
+                Datas = SelectedType.Datas
             };
             SelectedCollection.Types.Add(newType);
             ConfigFile.SaveConfig();
@@ -201,7 +204,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DeleteCollection()
         {
-            ConfigFile.NavisExtractionTypeCollections.Remove(SelectedCollection);
+            ConfigFile.Collections.Remove(SelectedCollection);
             ConfigFile.SaveConfig();
         }
 
@@ -209,7 +212,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DeleteElementExportType()
         {
-            SelectedCollection.Types.Remove(SelectedNavisExtractionType);
+            SelectedCollection.Types.Remove(SelectedType);
             ConfigFile.SaveConfig();
         }
 
@@ -217,7 +220,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DeleteNavisSearcher()
         {
-            SelectedNavisExtractionType.Searchers.Remove(SelectedNavisSearcher);
+            SelectedType.Searchers.Remove(SelectedNavisSearcher);
             ConfigFile.SaveConfig();
         }
 
@@ -225,7 +228,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void DeleteNavisData()
         {
-            SelectedNavisExtractionType.Datas.Remove(SelectedNavisData);
+            SelectedType.Datas.Remove(SelectedNavisData);
             ConfigFile.SaveConfig();
         }
 
@@ -240,7 +243,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 return;
             }
 
-            var collectionNames = ConfigFile.NavisExtractionTypeCollections.ToList().Select(x => x.Name).ToList();
+            var collectionNames = ConfigFile.Collections.ToList().Select(x => x.Name).ToList();
 
             if (collectionNames.Contains(input))
             {
@@ -268,7 +271,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
                 System.Windows.Forms.MessageBox.Show("This type name already exists.", "Error");
                 return;
             }
-            SelectedNavisExtractionType.Name = input;
+            SelectedType.Name = input;
             ConfigFile.SaveConfig();
         }
 
@@ -281,7 +284,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             DialogResult dialogResult = System.Windows.Forms.MessageBox.Show("Are you sure that you want to reset the configuration and clear all collections?", "Reset configuration", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
-                ConfigFile = new Config();
+                ConfigFile = new NdeConfig();
                 ConfigFile.SaveConfig();
             }
         }
@@ -292,7 +295,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         private void ImportConfig()
         {
-            var newConfigFile = Config.ImportConfigFromFile();
+            var newConfigFile = NdeConfig.ImportConfigFromFile();
             if (newConfigFile != null)
             {
                 ConfigFile = newConfigFile;
@@ -304,5 +307,6 @@ namespace NavisDataExtraction.Wpf.ViewModels
         }
 
         public RelayCommand ExportConfigCommand { get; set; }
+
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace NavisDataExtraction.DataClasses
+﻿using NavisDataExtraction.Configuration;
+
+namespace NavisDataExtraction.DataClasses
 {
-    public class NavisExtractionSearcher : NavisObservableItem
+    public class NavisExtractionSearcher : NdeSelectableItem
     {
         public NavisExtractionSearcher()
         {
