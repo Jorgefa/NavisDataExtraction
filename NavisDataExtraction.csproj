@@ -69,6 +69,12 @@
     <Compile Include="DataClasses\SearchConditionhType.cs" />
     <Compile Include="Configuration\NdeSelectableItem.cs" />
     <Compile Include="Utils\NdeUnits.cs" />
+    <Compile Include="Utils\Progress\ProgressDefined.xaml.cs">
+      <DependentUpon>ProgressDefined.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Progress\ProgressUndefined.xaml.cs">
+      <DependentUpon>ProgressUndefined.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Wpf\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -109,6 +115,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Utils\Progress\ProgressDefined.xaml" />
+    <Page Include="Utils\Progress\ProgressUndefined.xaml" />
     <Page Include="Wpf\App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
