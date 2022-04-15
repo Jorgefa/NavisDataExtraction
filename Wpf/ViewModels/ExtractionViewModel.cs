@@ -19,7 +19,7 @@ namespace NavisDataExtraction.Wpf.ViewModels
             ConfigFile = NdeConfig.FromFile();
 
             ModelItems = new ObservableCollection<ModelItem>();
-            Properties = new ObservableCollection<NavisworksProperty>();
+            Properties = new ObservableCollection<NdeNavisProperty>();
             ExportDataCommand = new RelayCommand(ExportData);
             ImportConfigCommand = new RelayCommand(ImportConfig);
             ExportConfigCommand = new RelayCommand(ConfigFile.ExportConfigToFile);
@@ -104,9 +104,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         public ObservableCollection<NdeType> SelectedElementExportTypes = new ObservableCollection<NdeType>();
 
-        private ObservableCollection<NavisworksProperty> _properties;
+        private ObservableCollection<NdeNavisProperty> _properties;
 
-        public ObservableCollection<NavisworksProperty> Properties
+        public ObservableCollection<NdeNavisProperty> Properties
         {
             get => _properties;
             set
@@ -118,14 +118,14 @@ namespace NavisDataExtraction.Wpf.ViewModels
 
         //Methods
         //Returns properties from a ModelItem
-        private ObservableCollection<NavisworksProperty> GetProperties(ModelItem modelItem)
+        private ObservableCollection<NdeNavisProperty> GetProperties(ModelItem modelItem)
         {
-            ObservableCollection<NavisworksProperty> props = new ObservableCollection<NavisworksProperty>();
+            ObservableCollection<NdeNavisProperty> props = new ObservableCollection<NdeNavisProperty>();
             foreach (PropertyCategory propertyCategory in modelItem.PropertyCategories)
             {
                 foreach (DataProperty property in propertyCategory.Properties)
                 {
-                    props.Add(new NavisworksProperty
+                    props.Add(new NdeNavisProperty
                     {
                         Category = propertyCategory,
                         Property = property
@@ -209,11 +209,11 @@ namespace NavisDataExtraction.Wpf.ViewModels
             SelectedCollection.AddDataToNaviswork(ModelItemGroups);
         }
 
-        //Isolate elements
+        //Select elements
         public RelayCommand SelectElementsCommand { get; set; }
         private void SelectElements()
         {
-            NavisStaticCommands.SelectElements(ModelItems);
+            NdeNavisCommands.SelectElements(ModelItems);
         }
     }
 }

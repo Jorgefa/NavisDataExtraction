@@ -65,12 +65,9 @@
     <Compile Include="Configuration\NdeModelItemGroup.cs" />
     <Compile Include="Configuration\NdeObservableItem.cs" />
     <Compile Include="Configuration\NdeCollection.cs" />
-    <Compile Include="Configuration\NdeSearchCondition.cs" />
-    <Compile Include="DataClasses\NavisExtractionElement.cs" />
-    <Compile Include="DataClasses\NavisExtractionSearcher.cs" />
-    <Compile Include="DataClasses\NavisSearchType.cs" />
+    <Compile Include="Configuration\NdeSearcher.cs" />
+    <Compile Include="DataClasses\SearchConditionhType.cs" />
     <Compile Include="Configuration\NdeSelectableItem.cs" />
-    <Compile Include="DataEdition\DataAdder.cs" />
     <Compile Include="Utils\NdeUnits.cs" />
     <Compile Include="Wpf\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -82,11 +79,11 @@
     <Compile Include="Wpf\ViewModels\BaseViewModel.cs" />
     <Compile Include="Configuration\NdeData.cs" />
     <Compile Include="Configuration\NdeType.cs" />
-    <Compile Include="NavisUtils\NavisStaticCommands.cs" />
+    <Compile Include="Utils\NdeNavisCommands.cs" />
     <Compile Include="Configuration\NdeConfig.cs" />
-    <Compile Include="Utils\Extension.cs" />
+    <Compile Include="Utils\NdeExtensions.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="DataClasses\NavisworksProperty.cs" />
+    <Compile Include="Configuration\NdeNavisProperty.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
@@ -137,7 +134,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="NavisUtils\" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Logo.ico" />
     <Resource Include="Resources\PM_Group_Logo %28RGB%29.jpg" />

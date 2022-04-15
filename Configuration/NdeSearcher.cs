@@ -1,14 +1,14 @@
 ﻿using NavisDataExtraction.Configuration;
 
-namespace NavisDataExtraction.DataClasses
+namespace NavisDataExtraction.Configuration
 {
-    public class NavisExtractionSearcher : NdeSelectableItem
+    public class NdeSearcher : NdeSelectableItem
     {
-        public NavisExtractionSearcher()
+        public NdeSearcher()
         {
         }
 
-        public NavisExtractionSearcher(NavisSearchType searchType, string navisCategoryName, string navisPropertyName)
+        public NdeSearcher(NavisSearchType searchType, string navisCategoryName, string navisPropertyName)
         {
             SearchType = searchType;
             NavisCategoryName = navisCategoryName;

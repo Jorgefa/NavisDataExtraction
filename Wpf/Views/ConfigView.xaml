@@ -20,7 +20,7 @@
             MethodName="GetValues"
             ObjectType="{x:Type system:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="dc:NavisSearchType" />
+                <x:Type TypeName="dc:SearchConditionhType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <!--  DataGrid style  -->

@@ -12,14 +12,14 @@ namespace NavisDataExtraction.Configuration
         //Constructors
         public NdeType()
         {
-            Searchers = new ObservableCollection<NavisExtractionSearcher>();
+            Searchers = new ObservableCollection<NdeSearcher>();
             Datas = new ObservableCollection<NdeData>();
         }
 
         public NdeType(string name)
         {
             Name = name;
-            Searchers = new ObservableCollection<NavisExtractionSearcher>();
+            Searchers = new ObservableCollection<NdeSearcher>();
             Datas = new ObservableCollection<NdeData>();
         }
 
@@ -48,9 +48,9 @@ namespace NavisDataExtraction.Configuration
             }
         }
 
-        private ObservableCollection<NavisExtractionSearcher> _searchers;
+        private ObservableCollection<NdeSearcher> _searchers;
 
-        public ObservableCollection<NavisExtractionSearcher> Searchers
+        public ObservableCollection<NdeSearcher> Searchers
         {
             get { return _searchers; }
             set
@@ -122,7 +122,7 @@ namespace NavisDataExtraction.Configuration
             {
                 switch (searcher.SearchType)
                 {
-                    case NavisSearchType.HasPropertyByDisplayName:
+                    case SearchConditionhType.HasPropertyByDisplayName:
                         var sC = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
                         search.SearchConditions.Add(sC);
                         break;

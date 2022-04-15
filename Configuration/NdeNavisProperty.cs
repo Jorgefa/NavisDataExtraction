@@ -4,9 +4,9 @@ using Autodesk.Navisworks.Api;
 using NavisDataExtraction.Annotations;
 using NavisDataExtraction.Configuration;
 
-namespace NavisDataExtraction.DataClasses
+namespace NavisDataExtraction.Configuration
 {
-    public class NavisworksProperty : NdeSelectableItem
+    public class NdeNavisProperty : NdeSelectableItem
     {
         public PropertyCategory Category { get; set; }
         public DataProperty Property { get; set; }

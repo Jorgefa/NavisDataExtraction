@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NavisDataExtraction.Utils
 {
-    public static class Extension
+    public static class NdeExtensions
     {
         public static void ToCSV(this DataTable dtDataTable, string strFilePath, string separator = ";")
         {

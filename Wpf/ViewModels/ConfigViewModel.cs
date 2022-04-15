@@ -72,9 +72,9 @@ namespace NavisDataExtraction.Wpf.ViewModels
             }
         }
 
-        private NavisExtractionSearcher _selectedNavisSearcher;
+        private NdeSearcher _selectedNavisSearcher;
 
-        public NavisExtractionSearcher SelectedNavisSearcher
+        public NdeSearcher SelectedNavisSearcher
         {
             get => _selectedNavisSearcher;
             set

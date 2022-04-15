@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace NavisDataExtraction.NavisUtils
+namespace NavisDataExtraction.Utils
 {
-    public class NavisStaticCommands
+    public class NdeNavisCommands
     {
         public static void IsolateElements(ObservableCollection<ModelItem> modelItems)
         {
