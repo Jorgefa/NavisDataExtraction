@@ -66,7 +66,7 @@
     <Compile Include="Configuration\NdeObservableItem.cs" />
     <Compile Include="Configuration\NdeCollection.cs" />
     <Compile Include="Configuration\NdeSearcher.cs" />
-    <Compile Include="DataClasses\SearchConditionhType.cs" />
+    <Compile Include="DataClasses\SearchConditionType.cs" />
     <Compile Include="Configuration\NdeSelectableItem.cs" />
     <Compile Include="Utils\NdeUnits.cs" />
     <Compile Include="Utils\Progress\ProgressDefined.xaml.cs">
@@ -141,9 +141,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NavisUtils\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Logo.ico" />

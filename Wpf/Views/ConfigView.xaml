@@ -1,36 +1,36 @@
 ﻿<UserControl
+    Background="White"
+    d:DataContext="{d:DesignInstance Type=vm:ConfigViewModel,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="720"
+    d:DesignWidth="500"
+    mc:Ignorable="d"
     x:Class="NavisDataExtraction.Wpf.Views.ConfigView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dc="clr-namespace:NavisDataExtraction.DataClasses"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:vm="clr-namespace:NavisDataExtraction.Wpf.ViewModels"
-    d:DataContext="{d:DesignInstance Type=vm:ConfigViewModel,
-                                     IsDesignTimeCreatable=True}"
-    d:DesignHeight="720"
-    d:DesignWidth="500"
-    Background="White"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <UserControl.Resources>
         <ObjectDataProvider
-            x:Key="SearchTypeEnum"
             MethodName="GetValues"
-            ObjectType="{x:Type system:Enum}">
+            ObjectType="{x:Type system:Enum}"
+            x:Key="SearchTypeEnum">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="dc:SearchConditionhType" />
+                <x:Type TypeName="dc:SearchConditionType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <!--  DataGrid style  -->
-        <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
+        <Style TargetType="{x:Type DataGrid}" x:Key="DataGridStyle1">
             <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}" />
             <Setter Property="Background" Value="White" />
             <Setter Property="BorderThickness" Value="0" />
         </Style>
         <!--  DataGridColumnHeader style  -->
-        <Style x:Key="ColumnHeaderStyle1" TargetType="DataGridColumnHeader">
+        <Style TargetType="DataGridColumnHeader" x:Key="ColumnHeaderStyle1">
             <Setter Property="Height" Value="Auto" />
             <!--<Setter Property="Background" Value="White" />
             <Setter Property="Foreground" Value="Black" />
@@ -56,39 +56,39 @@
         </Grid.RowDefinitions>
         <Grid.Margin>0,0,6,0</Grid.Margin>
         <Label
-            Grid.Row="0"
             Content="Config"
             FontSize="18"
-            FontWeight="Bold" />
+            FontWeight="Bold"
+            Grid.Row="0" />
 
         <DockPanel
             Grid.Row="1"
             HorizontalAlignment="Left"
             LastChildFill="False">
             <Button
-                Width="90"
-                Margin="3"
                 Command="{Binding SaveCurrentConfigCommand}"
                 Content="Save config"
-                DockPanel.Dock="Left" />
-            <Button
-                Width="90"
+                DockPanel.Dock="Left"
                 Margin="3"
+                Width="90" />
+            <Button
                 Command="{Binding ExportConfigCommand}"
                 Content="Export config"
-                DockPanel.Dock="Left" />
-            <Button
-                Width="90"
+                DockPanel.Dock="Left"
                 Margin="3"
+                Width="90" />
+            <Button
                 Command="{Binding ImportConfigCommand}"
                 Content="Import config"
-                DockPanel.Dock="Left" />
-            <Button
-                Width="90"
+                DockPanel.Dock="Left"
                 Margin="3"
+                Width="90" />
+            <Button
                 Command="{Binding ClearConfigCommand}"
                 Content="Reset config"
-                DockPanel.Dock="Left" />
+                DockPanel.Dock="Left"
+                Margin="3"
+                Width="90" />
         </DockPanel>
 
 
@@ -116,22 +116,22 @@
                     <StackPanel Grid.Column="0" Margin="0,0,6,0">
                         <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
                             <TextBlock
-                                Height="24"
                                 DockPanel.Dock="Left"
                                 FontSize="12"
                                 FontWeight="Bold"
+                                Height="24"
                                 Text="Collections" />
                             <Button
-                                Width="18"
-                                Height="Auto"
-                                Margin="3"
                                 Command="{Binding AddNewCollectionCommand}"
                                 Content="+"
-                                DockPanel.Dock="Right" />
+                                DockPanel.Dock="Right"
+                                Height="Auto"
+                                Margin="3"
+                                Width="18" />
                         </DockPanel>
                         <ListView
-                            Height="120"
                             BorderThickness="0"
+                            Height="120"
                             ItemsSource="{Binding ConfigFile.Collections}"
                             SelectedItem="{Binding SelectedCollection}"
                             SelectionMode="Extended">
@@ -153,22 +153,22 @@
                     <StackPanel Grid.Column="1" Margin="6,0,0,0">
                         <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
                             <TextBlock
-                                Height="24"
                                 DockPanel.Dock="Left"
                                 FontSize="12"
                                 FontWeight="Bold"
+                                Height="24"
                                 Text="Types" />
                             <Button
-                                Width="18"
-                                Height="Auto"
-                                Margin="3"
                                 Command="{Binding AddNewElementExportTypeCommand}"
                                 Content="+"
-                                DockPanel.Dock="Right" />
+                                DockPanel.Dock="Right"
+                                Height="Auto"
+                                Margin="3"
+                                Width="18" />
                         </DockPanel>
                         <ListView
-                            Height="120"
                             BorderThickness="0"
+                            Height="120"
                             ItemsSource="{Binding SelectedCollection.Types}"
                             SelectedItem="{Binding SelectedType}"
                             SelectionMode="Extended">
@@ -193,10 +193,10 @@
 
             <DockPanel Grid.Row="2" LastChildFill="False">
                 <TextBlock
-                    Height="24"
                     DockPanel.Dock="Left"
                     FontSize="12"
                     FontWeight="Bold"
+                    Height="24"
                     Text="Current collection | type:" />
                 <TextBlock DockPanel.Dock="Right">
                     <Run Text="{Binding SelectedCollection.Name}" />
@@ -207,14 +207,14 @@
 
             <StackPanel Grid.Row="3">
                 <TextBlock
-                    Height="24"
                     FontSize="12"
                     FontWeight="Bold"
+                    Height="24"
                     Text="Searchers" />
                 <Separator Height="5" />
                 <DataGrid
-                    Height="150"
                     AutoGenerateColumns="False"
+                    Height="150"
                     ItemsSource="{Binding SelectedType.Searchers}"
                     SelectedItem="{Binding SelectedNavisSearcher}"
                     Style="{DynamicResource DataGridStyle1}">
@@ -225,26 +225,26 @@
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
                         <DataGridComboBoxColumn
-                            Width="Auto"
-                            MinWidth="90"
                             Header="Searcher type"
                             ItemsSource="{Binding Source={StaticResource SearchTypeEnum}}"
-                            SelectedItemBinding="{Binding SearchType}" />
-                        <DataGridTextColumn
-                            Width="Auto"
                             MinWidth="90"
+                            SelectedItemBinding="{Binding SearchType}"
+                            Width="Auto" />
+                        <DataGridTextColumn
                             Binding="{Binding NavisCategoryName}"
-                            Header="Navis category" />
-                        <DataGridTextColumn
-                            Width="Auto"
+                            Header="Navis category"
                             MinWidth="90"
+                            Width="Auto" />
+                        <DataGridTextColumn
                             Binding="{Binding NavisPropertyName}"
-                            Header="Navis property" />
-                        <DataGridTextColumn
-                            Width="*"
+                            Header="Navis property"
                             MinWidth="90"
+                            Width="Auto" />
+                        <DataGridTextColumn
                             Binding="{Binding NavisPropertyValue}"
-                            Header="Value (if needed)" />
+                            Header="Value (if needed)"
+                            MinWidth="90"
+                            Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <Separator />
@@ -252,43 +252,43 @@
 
             <StackPanel Grid.Row="4">
                 <TextBlock
-                    Height="15"
                     FontSize="12"
                     FontWeight="Bold"
+                    Height="15"
                     Text="Parameters" />
                 <Separator Height="5" />
                 <DataGrid
-                    Height="180"
                     AutoGenerateColumns="False"
+                    Height="180"
                     ItemsSource="{Binding SelectedType.Datas}"
                     SelectedItem="{Binding SelectedNavisData}"
                     Style="{DynamicResource DataGridStyle1}">
                     <DataGrid.Columns>
                         <DataGridTextColumn
-                            Width="Auto"
-                            MinWidth="90"
                             Binding="{Binding Name}"
-                            Header="Data Name" />
-                        <DataGridTextColumn
-                            Width="Auto"
+                            Header="Data Name"
                             MinWidth="90"
+                            Width="Auto" />
+                        <DataGridTextColumn
                             Binding="{Binding Type}"
-                            Header="Type" />
-                        <DataGridTextColumn
-                            Width="Auto"
+                            Header="Type"
                             MinWidth="90"
+                            Width="Auto" />
+                        <DataGridTextColumn
                             Binding="{Binding NavisCategoryName}"
-                            Header="Navis category" />
-                        <DataGridTextColumn
-                            Width="Auto"
+                            Header="Navis category"
                             MinWidth="90"
+                            Width="Auto" />
+                        <DataGridTextColumn
                             Binding="{Binding NavisPropertyName}"
-                            Header="Navis property" />
-                        <DataGridTextColumn
-                            Width="*"
+                            Header="Navis property"
                             MinWidth="90"
+                            Width="Auto" />
+                        <DataGridTextColumn
                             Binding="{Binding NavisPropertyValue}"
-                            Header="Value" />
+                            Header="Value"
+                            MinWidth="90"
+                            Width="*" />
                     </DataGrid.Columns>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
