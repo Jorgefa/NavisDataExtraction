@@ -3,12 +3,12 @@ using Autodesk.Navisworks.Api.ComApi;
 using Autodesk.Navisworks.Api.Interop.ComApi;
 using NavisDataExtraction.NavisUtils;
 using NavisDataExtraction.Utils;
+using NavisDataExtraction.Utils.Progress;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using NavisDataExtraction.Utils.Progress;
 
 namespace NavisDataExtraction.Configuration
 {
@@ -96,7 +96,7 @@ namespace NavisDataExtraction.Configuration
             foreach (var type in Types)
             {
                 modelItemsGRoups.Add(new NdeModelItemGroup
-                    { ModelItemCollection = SearchModelItems(), Type = type, Collection = this });
+                { ModelItemCollection = SearchModelItems(), Type = type, Collection = this });
             }
 
             return modelItemsGRoups;
@@ -177,9 +177,12 @@ namespace NavisDataExtraction.Configuration
             // current document (COM)
             var cDoc = ComApiBridge.State;
 
+            // testing
+            var partition = cDoc.CurrentPartition;
+
             // new category name and displayName
-            const string catName = "PMG";
-            const string catDisplayName = "PMG_InternalName";
+            const string catName = "PMG_InternalName";
+            const string catDisplayName = "PMG";
 
             // override
             var overrideProps = false;
@@ -200,20 +203,30 @@ namespace NavisDataExtraction.Configuration
                     foreach (var item in group.ModelItemCollection)
                     {
                         ProgressUtilDefined.Update($"{group.Type.Name} - {item.DisplayName}", current, total);
-                        
-                        // check if the element already has the category
-                        var itemCategory = item.PropertyCategories.FindCategoryByDisplayName(catDisplayName);
 
-                        // do some code to use the same category (search PMG category and use it in COM)
-                        if (!Equals(itemCategory, null)) continue;
-
-                        // create new Category (PropertyDataCollection)
-                        InwOaPropertyVec newCat =
-                            (InwOaPropertyVec)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec, null, null);
                         // convert ModelItem to COM Path
                         InwOaPath cItem = (InwOaPath)ComApiBridge.ToInwOaPath(item);
+                        // check if the element already has the category
+                        var itemCategory = item.PropertyCategories.FindCategoryByDisplayName(catDisplayName);
+                        // declare category
+                        InwOaPropertyVec curCat;
+
+                        // set index
+                        var index = 0;
+
+                        // do some code to use the same category (search PMG category and use it in COM)
+                        if (!Equals(itemCategory, null))
+                        {
+                            index = 1;
+                        }
+
+                        // assign Category (PropertyDataCollection)
+                        curCat = (InwOaPropertyVec)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec, null, null);
+
                         // get item's PropertyCategoryCollection
                         InwGUIPropertyNode2 cPropCats = (InwGUIPropertyNode2)cDoc.GetGUIPropertyNode(cItem, true);
+
+                        // run through each data
                         foreach (var data in group.Type.Datas)
                         {
                             var itemProperty =
@@ -226,20 +239,20 @@ namespace NavisDataExtraction.Configuration
                             }
 
                             // create a new Property (PropertyData)
-                            InwOaProperty newProp =
+                            InwOaProperty curProp =
                                 (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
                             // set PropertyName
-                            newProp.name = data.Name + "_InternalName";
+                            curProp.name = data.Name + "_InternalName";
                             // set PropertyDisplayName
-                            newProp.UserName = data.Name;
+                            curProp.UserName = data.Name;
                             // set PropertyValue
-                            newProp.value = item.GetParameterByName(data.NavisCategoryName, data.NavisPropertyName);
+                            curProp.value = item.GetParameterByName(data.NavisCategoryName, data.NavisPropertyName);
                             // add PropertyData to Category
-                            newCat.Properties().Add(newProp);
+                            curCat.Properties().Add(curProp);
                         }
 
                         // add CategoryData to item's CategoryDataCollection
-                        cPropCats.SetUserDefined(0, catName, catDisplayName, newCat);
+                        cPropCats.SetUserDefined(index, catDisplayName, catName, curCat);
 
                         current++;
                     }
