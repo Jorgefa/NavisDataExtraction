@@ -1,12 +1,10 @@
 ﻿<Window
-    Height="Auto"
+    Height="720"
     Icon="/NavisDataExtraction.PMPK;component/Resources/Logo.ico"
-    MinHeight="90"
-    MinWidth="600"
     Title="PMG Data extraction tool"
-    Width="600"
-    d:DesignHeight="750"
-    d:DesignWidth="600"
+    Width="900"
+    d:DesignHeight="720"
+    d:DesignWidth="900"
     mc:Ignorable="d"
     x:Class="NavisDataExtraction.Wpf.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -18,59 +16,38 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Window.Resources>
         <ResourceDictionary>
-            <DataTemplate DataType="{x:Type viewModels:ExtractionViewModel}" x:Name="extractionViewTemplate">
-                <views:ExtractionView DataContext="{Binding}" />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:ConfigViewModel}" x:Name="configViewTemplate">
-                <views:ConfigView DataContext="{Binding}" />
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:EditionViewModel}" x:Name="editionViewTemplate">
-                <views:EditionView DataContext="{Binding}" />
-            </DataTemplate>
             <ResourceDictionary.MergedDictionaries>
                 <hc:Theme Name="HandyTheme" />
                 <ResourceDictionary Source="/HandyControl;Component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <viewModels:ConfigViewModel x:Key="ConfigViewModel" />
+            <viewModels:EditionViewModel x:Key="EditionViewModel" />
+            <viewModels:ExtractionViewModel x:Key="ExtractionViewModel" />
         </ResourceDictionary>
     </Window.Resources>
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Window.DataContext>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.Margin>24</Grid.Margin>
 
-        <WrapPanel Grid.Row="0" HorizontalAlignment="Center">
-            <Button
-                Click="Extraction_Clicked"
-                Content="Extraction"
-                DockPanel.Dock="Top"
-                Margin="0,3,3,3"
-                Width="90" />
-            <Button
-                Click="Config_Clicked"
-                Content="Config"
-                DockPanel.Dock="Top"
-                Margin="3,3,0,3"
-                Width="90" />
-            <Button
-                Click="Edition_Clicked"
-                Content="Edition"
-                DockPanel.Dock="Top"
-                Margin="3,3,0,3"
-                Width="90" />
-        </WrapPanel>
-        <ScrollViewer Grid.Row="1" Margin="0,12,0,0">
-            <ContentControl Content="{Binding}" />
-        </ScrollViewer>
-        <Label
-            Content="PM Group"
-            FontSize="8"
-            Grid.Row="2" />
+        <TabControl
+            Grid.Row="1"
+            Padding="10"
+            TabStripPlacement="Top">
+            <TabItem Header="Extraction">
+                <views:ExtractionView DataContext="{StaticResource ExtractionViewModel}" />
+            </TabItem>
+            <TabItem Header="Configuration">
+                <views:ConfigView DataContext="{StaticResource ConfigViewModel}" />
+            </TabItem>
+            <TabItem Header="Edition">
+                <views:EditionView DataContext="{StaticResource EditionViewModel}" />
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

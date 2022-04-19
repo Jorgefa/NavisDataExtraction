@@ -14,7 +14,6 @@
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:vm="clr-namespace:NavisDataExtraction.Wpf.ViewModels"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
     <UserControl.Resources>
         <ResourceDictionary>
             <ObjectDataProvider
@@ -25,286 +24,217 @@
                     <x:Type TypeName="dc:SearchConditionType" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            <!--  DataGrid style  -->
-            <Style TargetType="{x:Type DataGrid}" x:Key="DataGridStyle1">
-                <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}" />
-                <Setter Property="Background" Value="White" />
-                <Setter Property="BorderThickness" Value="0" />
-            </Style>
-            <!--  DataGridColumnHeader style  -->
-            <Style TargetType="DataGridColumnHeader" x:Key="ColumnHeaderStyle1">
-                <Setter Property="Height" Value="Auto" />
-                <!--<Setter Property="Background" Value="White" />
-            <Setter Property="Foreground" Value="Black" />
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="Black"/>-->
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="ToolTip" Value="Click to sort." />
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
             <ResourceDictionary.MergedDictionaries>
                 <hc:Theme Name="HandyTheme" />
                 <ResourceDictionary Source="/HandyControl;Component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-
-    <Grid>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.Margin>0,0,6,0</Grid.Margin>
-        <Label
-            Content="Config"
-            FontSize="18"
-            FontWeight="Bold"
-            Grid.Row="0" />
-
-        <DockPanel
-            Grid.Row="1"
-            HorizontalAlignment="Left"
-            LastChildFill="False">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0">
+                <GroupBox.Header>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            DockPanel.Dock="Left"
+                            Style="{StaticResource TextBlockDefaultBold}"
+                            Text="Collections" />
+                        <Button
+                            Command="{Binding AddNewCollectionCommand}"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ButtonIcon.Small}"
+                            hc:IconElement.Geometry="{StaticResource AddGeometry}" />
+                    </Grid>
+                </GroupBox.Header>
+                <StackPanel Margin="0,0,6,0">
+                    <ListBox
+                        BorderThickness="0"
+                        ItemsSource="{Binding ConfigFile.Collections}"
+                        SelectedItem="{Binding SelectedCollection}"
+                        SelectionMode="Extended">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{Binding RenameCollectionCommand}" Header="Rename" />
+                                <MenuItem Command="{Binding DuplicateSelectedCollectionCommand}" Header="Duplicate" />
+                                <MenuItem Command="{Binding DeleteCollectionCommad}" Header="Delete" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </ListBox>
+                </StackPanel>
+            </GroupBox>
+            <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                <DockPanel
+                    HorizontalAlignment="Stretch"
+                    LastChildFill="False"
+                    Margin="0,5">
+                    <TextBlock
+                        DockPanel.Dock="Left"
+                        Style="{StaticResource TextBlockDefaultBold}"
+                        Text="Types" />
+                    <Button
+                        Command="{Binding AddNewElementExportTypeCommand}"
+                        DockPanel.Dock="Right"
+                        Style="{StaticResource ButtonIcon.Small}"
+                        hc:IconElement.Geometry="{StaticResource AddGeometry}" />
+                </DockPanel>
+                <ListBox
+                    BorderThickness="0"
+                    ItemsSource="{Binding SelectedCollection.Types}"
+                    SelectedItem="{Binding SelectedType}"
+                    SelectionMode="Extended">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding RenameTypeCommand}" Header="Rename" />
+                            <MenuItem Command="{Binding DuplicateSelectedTypeCommand}" Header="Duplicate" />
+                            <MenuItem Command="{Binding DeleteElementExportTypeCommad}" Header="Delete" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1">
+            <TextBlock
+                HorizontalAlignment="Left"
+                Style="{StaticResource TextBlockDefault}"
+                Text="Searchers" />
+            <Separator Height="5" />
+            <DataGrid
+                AutoGenerateColumns="False"
+                Background="White"
+                ItemsSource="{Binding SelectedType.Searchers}"
+                SelectedItem="{Binding SelectedNavisSearcher}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DeleteNavisSearcherCommand}" Header="Delete Searcher" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridComboBoxColumn
+                        Header="Searcher"
+                        ItemsSource="{Binding Source={StaticResource SearchTypeEnum}}"
+                        MinWidth="90"
+                        SelectedItemBinding="{Binding SearchType}"
+                        Width="Auto" />
+                    <DataGridTextColumn
+                        Binding="{Binding NavisCategoryName}"
+                        Header="Category"
+                        MinWidth="90"
+                        Width="Auto" />
+                    <DataGridTextColumn
+                        Binding="{Binding NavisPropertyName}"
+                        Header="Property"
+                        MinWidth="90"
+                        Width="Auto" />
+                    <DataGridTextColumn
+                        Binding="{Binding NavisPropertyValue}"
+                        Header="Value (if needed)"
+                        MinWidth="90"
+                        Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Margin="0,10">
+            <TextBlock
+                HorizontalAlignment="Left"
+                Style="{StaticResource TextBlockDefault}"
+                Text="Parameters" />
+            <Separator Height="5" />
+            <DataGrid
+                AutoGenerateColumns="False"
+                Background="White"
+                ItemsSource="{Binding SelectedType.Datas}"
+                SelectedItem="{Binding SelectedNavisData}"
+                hc:DataGridAttach.CanUnselectAllWithBlankArea="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding Name}"
+                        Header="Data Name"
+                        MinWidth="90"
+                        Width="Auto" />
+                    <DataGridTextColumn
+                        Binding="{Binding Type}"
+                        Header="Type"
+                        MinWidth="90"
+                        Width="Auto" />
+                    <DataGridTextColumn
+                        Binding="{Binding NavisCategoryName}"
+                        Header="Category"
+                        MinWidth="90"
+                        Width="Auto" />
+                    <DataGridTextColumn
+                        Binding="{Binding NavisPropertyName}"
+                        Header="Property"
+                        MinWidth="90"
+                        Width="Auto" />
+                    <DataGridTextColumn
+                        Binding="{Binding NavisPropertyValue}"
+                        Header="Value"
+                        MinWidth="90"
+                        Width="*" />
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DeleteNavisDataExportCommand}" Header="Delete data" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </StackPanel>
+        <Grid Grid.Row="3" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <Button
                 Command="{Binding SaveCurrentConfigCommand}"
                 Content="Save config"
-                DockPanel.Dock="Left"
-                Margin="3"
-                Width="90" />
+                Grid.Column="0"
+                HorizontalAlignment="Stretch"
+                Margin="0,0,5,0" />
             <Button
                 Command="{Binding ExportConfigCommand}"
                 Content="Export config"
-                DockPanel.Dock="Left"
-                Margin="3"
-                Width="90" />
+                Grid.Column="1"
+                HorizontalAlignment="Stretch"
+                Margin="5,0,5,0" />
             <Button
                 Command="{Binding ImportConfigCommand}"
                 Content="Import config"
-                DockPanel.Dock="Left"
-                Margin="3"
-                Width="90" />
+                Grid.Column="2"
+                HorizontalAlignment="Stretch"
+                Margin="5,0,5,0" />
             <Button
                 Command="{Binding ClearConfigCommand}"
                 Content="Reset config"
-                DockPanel.Dock="Left"
-                Margin="3"
-                Width="90" />
-        </DockPanel>
-
-
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <StackPanel Grid.Row="0">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Column="0" Margin="0,0,6,0">
-                        <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
-                            <TextBlock
-                                DockPanel.Dock="Left"
-                                FontSize="12"
-                                FontWeight="Bold"
-                                Height="24"
-                                Text="Collections" />
-                            <Button
-                                Command="{Binding AddNewCollectionCommand}"
-                                Content="+"
-                                DockPanel.Dock="Right"
-                                Height="Auto"
-                                Margin="3"
-                                Width="18" />
-                        </DockPanel>
-                        <ListView
-                            BorderThickness="0"
-                            Height="120"
-                            ItemsSource="{Binding ConfigFile.Collections}"
-                            SelectedItem="{Binding SelectedCollection}"
-                            SelectionMode="Extended">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Command="{Binding RenameCollectionCommand}" Header="Rename" />
-                                    <MenuItem Command="{Binding DuplicateSelectedCollectionCommand}" Header="Duplicate" />
-                                    <MenuItem Command="{Binding DeleteCollectionCommad}" Header="Delete" />
-                                </ContextMenu>
-                            </ListView.ContextMenu>
-                        </ListView>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" Margin="6,0,0,0">
-                        <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
-                            <TextBlock
-                                DockPanel.Dock="Left"
-                                FontSize="12"
-                                FontWeight="Bold"
-                                Height="24"
-                                Text="Types" />
-                            <Button
-                                Command="{Binding AddNewElementExportTypeCommand}"
-                                Content="+"
-                                DockPanel.Dock="Right"
-                                Height="Auto"
-                                Margin="3"
-                                Width="18" />
-                        </DockPanel>
-                        <ListView
-                            BorderThickness="0"
-                            Height="120"
-                            ItemsSource="{Binding SelectedCollection.Types}"
-                            SelectedItem="{Binding SelectedType}"
-                            SelectionMode="Extended">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Command="{Binding RenameTypeCommand}" Header="Rename" />
-                                    <MenuItem Command="{Binding DuplicateSelectedTypeCommand}" Header="Duplicate" />
-                                    <MenuItem Command="{Binding DeleteElementExportTypeCommad}" Header="Delete" />
-                                </ContextMenu>
-                            </ListView.ContextMenu>
-                        </ListView>
-                    </StackPanel>
-                </Grid>
-                <Separator />
-            </StackPanel>
-
-
-            <DockPanel Grid.Row="2" LastChildFill="False">
-                <TextBlock
-                    DockPanel.Dock="Left"
-                    FontSize="12"
-                    FontWeight="Bold"
-                    Height="24"
-                    Text="Current collection | type:" />
-                <TextBlock DockPanel.Dock="Right">
-                    <Run Text="{Binding SelectedCollection.Name}" />
-                    <Run Text=" | " />
-                    <Run Text="{Binding SelectedType.Name}" />
-                </TextBlock>
-            </DockPanel>
-
-            <StackPanel Grid.Row="3">
-                <TextBlock
-                    FontSize="12"
-                    FontWeight="Bold"
-                    Height="24"
-                    Text="Searchers" />
-                <Separator Height="5" />
-                <DataGrid
-                    AutoGenerateColumns="False"
-                    Height="150"
-                    ItemsSource="{Binding SelectedType.Searchers}"
-                    SelectedItem="{Binding SelectedNavisSearcher}"
-                    Style="{DynamicResource DataGridStyle1}">
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Command="{Binding DeleteNavisSearcherCommand}" Header="Delete Searcher" />
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                    <DataGrid.Columns>
-                        <DataGridComboBoxColumn
-                            Header="Searcher type"
-                            ItemsSource="{Binding Source={StaticResource SearchTypeEnum}}"
-                            MinWidth="90"
-                            SelectedItemBinding="{Binding SearchType}"
-                            Width="Auto" />
-                        <DataGridTextColumn
-                            Binding="{Binding NavisCategoryName}"
-                            Header="Navis category"
-                            MinWidth="90"
-                            Width="Auto" />
-                        <DataGridTextColumn
-                            Binding="{Binding NavisPropertyName}"
-                            Header="Navis property"
-                            MinWidth="90"
-                            Width="Auto" />
-                        <DataGridTextColumn
-                            Binding="{Binding NavisPropertyValue}"
-                            Header="Value (if needed)"
-                            MinWidth="90"
-                            Width="*" />
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Separator />
-            </StackPanel>
-
-            <StackPanel Grid.Row="4">
-                <TextBlock
-                    FontSize="12"
-                    FontWeight="Bold"
-                    Height="15"
-                    Text="Parameters" />
-                <Separator Height="5" />
-                <DataGrid
-                    AutoGenerateColumns="False"
-                    Height="180"
-                    ItemsSource="{Binding SelectedType.Datas}"
-                    SelectedItem="{Binding SelectedNavisData}"
-                    Style="{DynamicResource DataGridStyle1}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Binding="{Binding Name}"
-                            Header="Data Name"
-                            MinWidth="90"
-                            Width="Auto" />
-                        <DataGridTextColumn
-                            Binding="{Binding Type}"
-                            Header="Type"
-                            MinWidth="90"
-                            Width="Auto" />
-                        <DataGridTextColumn
-                            Binding="{Binding NavisCategoryName}"
-                            Header="Navis category"
-                            MinWidth="90"
-                            Width="Auto" />
-                        <DataGridTextColumn
-                            Binding="{Binding NavisPropertyName}"
-                            Header="Navis property"
-                            MinWidth="90"
-                            Width="Auto" />
-                        <DataGridTextColumn
-                            Binding="{Binding NavisPropertyValue}"
-                            Header="Value"
-                            MinWidth="90"
-                            Width="*" />
-                    </DataGrid.Columns>
-                    <DataGrid.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Command="{Binding DeleteNavisDataExportCommand}" Header="Delete data" />
-                        </ContextMenu>
-                    </DataGrid.ContextMenu>
-                </DataGrid>
-                <Separator />
-            </StackPanel>
+                Grid.Column="3"
+                HorizontalAlignment="Stretch"
+                Margin="5,0,0,0" />
         </Grid>
     </Grid>
 </UserControl>
