@@ -186,6 +186,7 @@ namespace NavisDataExtraction.Configuration
 
             // override
             var overrideProps = false;
+            var updateProps = false;
 
             if (modelItemsGroups == null) return;
 
@@ -200,59 +201,125 @@ namespace NavisDataExtraction.Configuration
                 {
                     if (group.Type == null || group.ModelItemCollection == null) return;
 
-                    foreach (var item in group.ModelItemCollection)
+                    // loop trough each item
+                    foreach (var modelItem in group.ModelItemCollection)
                     {
-                        ProgressUtilDefined.Update($"{group.Type.Name} - {item.DisplayName}", current, total);
+                        ProgressUtilDefined.Update($"{group.Type.Name} - {modelItem.DisplayName}", current, total);
 
                         // convert ModelItem to COM Path
-                        InwOaPath cItem = (InwOaPath)ComApiBridge.ToInwOaPath(item);
-                        // check if the element already has the category
-                        var itemCategory = item.PropertyCategories.FindCategoryByDisplayName(catDisplayName);
-                        // declare category
-                        InwOaPropertyVec curCat;
+                        InwOaPath cItem = (InwOaPath)ComApiBridge.ToInwOaPath(modelItem);
 
-                        // set index
-                        var index = 0;
-
-                        // do some code to use the same category (search PMG category and use it in COM)
-                        if (!Equals(itemCategory, null))
-                        {
-                            index = 1;
-                        }
-
-                        // assign Category (PropertyDataCollection)
-                        curCat = (InwOaPropertyVec)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec, null, null);
+                        // declare Category (PropertyDataCollection)
+                        InwOaPropertyVec newCat = (InwOaPropertyVec)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaPropertyVec, null, null);
 
                         // get item's PropertyCategoryCollection
-                        InwGUIPropertyNode2 cPropCats = (InwGUIPropertyNode2)cDoc.GetGUIPropertyNode(cItem, true);
+                        InwGUIPropertyNode2 cItemCats = (InwGUIPropertyNode2)cDoc.GetGUIPropertyNode(cItem, true);
 
-                        // run through each data
-                        foreach (var data in group.Type.Datas)
+                        // set index
+                        int index = 0;
+
+                        // check if the element already has the category
+                        var itemCategory = modelItem.PropertyCategories.FindCategoryByDisplayName(catDisplayName);
+
+                        // create a new category and new properties if category doesn't exist
+                        if (Equals(itemCategory, null))
                         {
-                            var itemProperty =
-                                item.PropertyCategories.FindPropertyByDisplayName(catDisplayName, data.Name);
-                            // check if the element already has the property
-                            if (!Equals(itemProperty, null))
+                            // run through each data
+                            foreach (var data in group.Type.Datas)
                             {
-                                // do some code if the property already exist. Update property and check for override
-                                continue;
+                                // create a new Property (PropertyData)
+                                InwOaProperty newProp = (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
+                                // set PropertyName
+                                newProp.name = data.Name + "_InternalName";
+                                // set PropertyDisplayName
+                                newProp.UserName = data.Name;
+                                // set PropertyValue
+                                newProp.value = modelItem.GetParameterByName(data.NavisCategoryName, data.NavisPropertyName);
+                                // add PropertyData to Category
+                                newCat.Properties().Add(newProp);
                             }
 
-                            // create a new Property (PropertyData)
-                            InwOaProperty curProp =
-                                (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
-                            // set PropertyName
-                            curProp.name = data.Name + "_InternalName";
-                            // set PropertyDisplayName
-                            curProp.UserName = data.Name;
-                            // set PropertyValue
-                            curProp.value = item.GetParameterByName(data.NavisCategoryName, data.NavisPropertyName);
-                            // add PropertyData to Category
-                            curCat.Properties().Add(curProp);
+                            // add CategoryData to item's CategoryDataCollection
+                            cItemCats.SetUserDefined(index, catDisplayName, catName, newCat);
                         }
 
-                        // add CategoryData to item's CategoryDataCollection
-                        cPropCats.SetUserDefined(index, catDisplayName, catName, curCat);
+                        // loop trough existing categories if exists
+                        else
+                        {
+                            index = 1;
+
+                            // category looping using COM
+                            foreach (InwGUIAttribute2 atrib in cItemCats.GUIAttributes())
+                            {
+                                // checks if is user defined
+                                if (!atrib.UserDefined)
+                                {
+                                    continue;
+                                }
+
+                                // checks if is same name. If not, increase index and continue
+                                if (!Equals(atrib.ClassUserName, catDisplayName))
+                                {
+                                    index += 1;
+                                    continue;
+                                }
+
+                                // if category is user defined and same name, add new parameters in new category (newCat)
+                                foreach (var data in group.Type.Datas)
+                                {
+                                    var itemProperty = modelItem.PropertyCategories.FindPropertyByDisplayName(catDisplayName, data.Name);
+
+                                    // check if the element already has the property
+                                    if (Equals(itemProperty, null))
+                                    {
+                                        // create a new Property (PropertyData) and set name, display name and value. Add it to newCat.
+                                        InwOaProperty newProp = (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
+                                        newProp.name = data.Name + "_InternalName";
+                                        newProp.UserName = data.Name;
+                                        newProp.value = modelItem.GetParameterByName(data.NavisCategoryName, data.NavisPropertyName);
+                                        newCat.Properties().Add(newProp);
+                                    }
+                                    // if the property exists, add it to the newCat
+                                    else
+                                    {
+                                        // create a new Property (PropertyData) and set name, display name and value. Add it to newCat.
+                                        InwOaProperty newProp = (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
+                                        newProp.name = data.Name + "_InternalName";
+                                        newProp.UserName = data.Name;
+                                        var newValue = modelItem.GetParameterByName(data.NavisCategoryName, data.NavisPropertyName);
+                                        if (Equals(newValue, null))
+                                        {
+                                            newProp.value = modelItem.GetParameterByName(catDisplayName, data.Name);
+                                        }
+                                        else
+                                        {
+                                            newProp.value = newValue;
+                                        }
+                                        newCat.Properties().Add(newProp);
+                                    }
+                                }
+
+                                // if category is user defined and same name, add existing parameters in new category (newCat)
+                                foreach (InwOaProperty prop in atrib.Properties())
+                                {
+                                    var dataNames = group.Type.Datas.Select(x => x.Name).ToList();
+                                    if (dataNames.Contains(prop.UserName))
+                                    {
+                                        continue;
+                                    }
+                                    // create a new Property (PropertyData)
+                                    InwOaProperty newProp = (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
+                                    newProp.name = prop.name;
+                                    newProp.UserName = prop.UserName;
+                                    newProp.value = prop.value;
+                                    newCat.Properties().Add(newProp);
+                                }
+                                break;
+                            }
+
+                            // add CategoryData to item's CategoryDataCollection
+                            cItemCats.SetUserDefined(index, catDisplayName, catName, newCat);
+                        }
 
                         current++;
                     }
