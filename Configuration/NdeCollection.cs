@@ -181,11 +181,11 @@ namespace NavisDataExtraction.Configuration
             var partition = cDoc.CurrentPartition;
 
             // new category name and displayName
-            const string catName = "PMG_InternalName";
             const string catDisplayName = "PMG";
+            const string catName = catDisplayName + "_InternalName";
 
             // override
-            var overrideProps = false;
+            var keepPreviousData = false;
             var updateProps = false;
 
             if (modelItemsGroups == null) return;
@@ -299,20 +299,23 @@ namespace NavisDataExtraction.Configuration
                                     }
                                 }
 
-                                // if category is user defined and same name, add existing parameters in new category (newCat)
-                                foreach (InwOaProperty prop in atrib.Properties())
+                                // if category is user defined and same name, and keepPreviousData is true, keep existing parameters in new category (newCat)
+                                if (keepPreviousData)
                                 {
-                                    var dataNames = group.Type.Datas.Select(x => x.Name).ToList();
-                                    if (dataNames.Contains(prop.UserName))
+                                    foreach (InwOaProperty prop in atrib.Properties())
                                     {
-                                        continue;
+                                        var dataNames = group.Type.Datas.Select(x => x.Name).ToList();
+                                        if (dataNames.Contains(prop.UserName))
+                                        {
+                                            continue;
+                                        }
+                                        // create a new Property (PropertyData)
+                                        InwOaProperty newProp = (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
+                                        newProp.name = prop.name;
+                                        newProp.UserName = prop.UserName;
+                                        newProp.value = prop.value;
+                                        newCat.Properties().Add(newProp);
                                     }
-                                    // create a new Property (PropertyData)
-                                    InwOaProperty newProp = (InwOaProperty)cDoc.ObjectFactory(nwEObjectType.eObjectType_nwOaProperty, null, null);
-                                    newProp.name = prop.name;
-                                    newProp.UserName = prop.UserName;
-                                    newProp.value = prop.value;
-                                    newCat.Properties().Add(newProp);
                                 }
                                 break;
                             }

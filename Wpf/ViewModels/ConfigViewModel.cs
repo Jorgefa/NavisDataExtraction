@@ -1,6 +1,4 @@
-﻿using Autodesk.Navisworks.Api;
-using NavisDataExtraction.Configuration;
-using NavisDataExtraction.DataClasses;
+﻿using NavisDataExtraction.Configuration;
 using NavisDataExtraction.Utils;
 using System.Collections.ObjectModel;
 using System.Linq;

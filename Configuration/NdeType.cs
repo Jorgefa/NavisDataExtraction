@@ -1,9 +1,6 @@
 ﻿using Autodesk.Navisworks.Api;
-using NavisDataExtraction.DataClasses;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 
 namespace NavisDataExtraction.Configuration
 {

@@ -1,4 +1,4 @@
-﻿namespace NavisDataExtraction.DataClasses
+﻿namespace NavisDataExtraction.Configuration
 {
     public enum SearchConditionType
     {

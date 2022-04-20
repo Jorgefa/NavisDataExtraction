@@ -1,6 +1,4 @@
-﻿using NavisDataExtraction.DataClasses;
-
-namespace NavisDataExtraction.Configuration
+﻿namespace NavisDataExtraction.Configuration
 {
     public class NdeSearcher : NdeSelectableItem
     {
