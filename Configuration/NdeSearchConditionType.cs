@@ -1,6 +1,6 @@
 ﻿namespace NavisDataExtraction.Configuration
 {
-    public enum SearchConditionType
+    public enum NdeSearchConditionType
     {
         HasPropertyByDisplayName,
         Other

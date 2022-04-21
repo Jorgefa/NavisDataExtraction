@@ -2,13 +2,13 @@
 
 namespace NavisDataExtraction.Configuration
 {
-    public class SearchGroup : NdeObservableItem
+    public class NdeSearchGroup : NdeObservableItem
     {
-        public SearchGroup()
+        public NdeSearchGroup()
         {
         }
 
-        public SearchGroup(string name)
+        public NdeSearchGroup(string name)
         {
             Name = name;
         }

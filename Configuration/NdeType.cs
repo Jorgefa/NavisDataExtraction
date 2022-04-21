@@ -46,9 +46,9 @@ namespace NavisDataExtraction.Configuration
             }
         }
 
-        private ObservableCollection<SearchGroup> _searchGroups;
+        private ObservableCollection<NdeSearchGroup> _searchGroups;
 
-        public ObservableCollection<SearchGroup> SearchGroups
+        public ObservableCollection<NdeSearchGroup> SearchGroups
         {
             get { return _searchGroups; }
             set
@@ -140,16 +140,26 @@ namespace NavisDataExtraction.Configuration
 
                 foreach (var searcher in group.Searchers)
                 {
-                    switch (searcher.SearchType)
+                    switch (searcher.Comparison)
                     {
-                        case SearchConditionType.HasPropertyByDisplayName:
-                            var sC = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
-                            sCGroup.Add(sC);
+                        case SearchConditionComparison.HasCategory:
+                            var sCCat = SearchCondition.HasCategoryByDisplayName(searcher.NavisCategoryName);
+                            sCGroup.Add(sCCat);
+                            break;
+
+                        case SearchConditionComparison.HasProperty:
+                            var sCProp = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
+                            if (!(searcher.NavisPropertyValue == null))
+                            {
+                                sCProp = sCProp.EqualValue(VariantData.FromDisplayString(searcher.NavisPropertyValue));
+                            }
+                            
                             break;
 
                         default:
                             break;
                     }
+
                 }
                 search.SearchConditions.AddGroup(sCGroup);
             }
@@ -181,7 +191,7 @@ namespace NavisDataExtraction.Configuration
             {
                 switch (searcher.SearchType)
                 {
-                    case SearchConditionType.HasPropertyByDisplayName:
+                    case NdeSearchConditionType.HasPropertyByDisplayName:
                         var sC = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
                         search.SearchConditions.Add(sC);
                         break;
