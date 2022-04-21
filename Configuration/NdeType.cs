@@ -1,4 +1,5 @@
 ﻿using Autodesk.Navisworks.Api;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -41,6 +42,18 @@ namespace NavisDataExtraction.Configuration
             set
             {
                 _datas = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<SearchGroup> _searchGroups;
+
+        public ObservableCollection<SearchGroup> SearchGroups
+        {
+            get { return _searchGroups; }
+            set
+            {
+                _searchGroups = value;
                 OnPropertyChanged();
             }
         }
@@ -98,10 +111,59 @@ namespace NavisDataExtraction.Configuration
             return "ok";
         }
 
+        public ObservableCollection<ModelItem> SearchModelItemGroups()
+        {
+            // Get ActiveDocument
+            var doc = Application.ActiveDocument;
+
+            // Create Search
+            Search search = new Search();
+            search.Selection.SelectAll();
+            search.Locations = SearchLocations.DescendantsAndSelf;
+            search.PruneBelowMatch = false;
+
+            // Create SearchConditions
+            if (SearchGroups == null)
+            {
+                return null;
+            }
+
+            // groups
+            foreach (var group in SearchGroups)
+            {
+                if (group.Searchers == null)
+                {
+                    continue;
+                }
+
+                List<SearchCondition> sCGroup = new List<SearchCondition>();
+
+                foreach (var searcher in group.Searchers)
+                {
+                    switch (searcher.SearchType)
+                    {
+                        case SearchConditionType.HasPropertyByDisplayName:
+                            var sC = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
+                            sCGroup.Add(sC);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                search.SearchConditions.AddGroup(sCGroup);
+            }
+
+            // Collect ModelItems
+            ObservableCollection<ModelItem> modelItems = new ObservableCollection<ModelItem>(search.FindAll(doc, true));
+
+            return modelItems;
+        }
+
         public ObservableCollection<ModelItem> SearchModelItems()
         {
             // Get ActiveDocument
-            var doc = Autodesk.Navisworks.Api.Application.ActiveDocument;
+            var doc = Application.ActiveDocument;
 
             // Create Search
             Search search = new Search();
@@ -123,6 +185,7 @@ namespace NavisDataExtraction.Configuration
                         var sC = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
                         search.SearchConditions.Add(sC);
                         break;
+
                     default:
                         break;
                 }

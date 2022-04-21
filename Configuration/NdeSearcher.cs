@@ -18,4 +18,4 @@
         public string NavisPropertyName { get; set; }
         public string NavisPropertyValue { get; set; }
     }
-    }
+}
