@@ -8,7 +8,7 @@
     x:Class="NavisDataExtraction.Wpf.Views.ConfigView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dc="clr-namespace:NavisDataExtraction.DataClasses"
+    xmlns:dc="clr-namespace:NavisDataExtraction.Configuration"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
@@ -21,7 +21,7 @@
                 ObjectType="{x:Type system:Enum}"
                 x:Key="SearchTypeEnum">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="dc:SearchConditionType" />
+                    <x:Type TypeName="dc:NdeSearchConditionType" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
             <ResourceDictionary.MergedDictionaries>
@@ -42,16 +42,16 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <GroupBox Grid.Column="0">
+            <GroupBox Grid.Column="0" HorizontalContentAlignment="Stretch">
                 <GroupBox.Header>
-                    <Grid HorizontalAlignment="Stretch">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock
-                            DockPanel.Dock="Left"
                             Style="{StaticResource TextBlockDefaultBold}"
+                            HorizontalAlignment="Left"
                             Text="Collections" />
                         <Button
                             Command="{Binding AddNewCollectionCommand}"
@@ -61,26 +61,23 @@
                             hc:IconElement.Geometry="{StaticResource AddGeometry}" />
                     </Grid>
                 </GroupBox.Header>
-                <StackPanel Margin="0,0,6,0">
-                    <ListBox
-                        BorderThickness="0"
-                        ItemsSource="{Binding ConfigFile.Collections}"
-                        SelectedItem="{Binding SelectedCollection}"
-                        SelectionMode="Extended">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Command="{Binding RenameCollectionCommand}" Header="Rename" />
-                                <MenuItem Command="{Binding DuplicateSelectedCollectionCommand}" Header="Duplicate" />
-                                <MenuItem Command="{Binding DeleteCollectionCommad}" Header="Delete" />
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                    </ListBox>
-                </StackPanel>
+                <ListBox BorderThickness="0"
+                         ItemsSource="{Binding ConfigFile.Collections}"
+                         SelectedItem="{Binding SelectedCollection}"
+                         SelectionMode="Extended">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding RenameCollectionCommand}" Header="Rename" />
+                            <MenuItem Command="{Binding DuplicateSelectedCollectionCommand}" Header="Duplicate" />
+                            <MenuItem Command="{Binding DeleteCollectionCommad}" Header="Delete" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
             </GroupBox>
             <StackPanel Grid.Column="1" Margin="6,0,0,0">
                 <DockPanel
