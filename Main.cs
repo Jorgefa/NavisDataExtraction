@@ -18,7 +18,9 @@ namespace NavisDataExtraction
     [Plugin("NavisDataExtraction.DataExport",
         "PMPK",
         ToolTip = "Export Data to Json",
-        DisplayName ="Export")]
+        DisplayName ="DataExtraction")]
+    [RibbonTab("PMG_CustomTab_01", DisplayName = "PMG Tools")]
+    [Command("ID_BUtton_01",ToolTip ="Interface")]
     public class Main : AddInPlugin
     {
         private static string _thisAssemblyPath;

@@ -1,7 +1,4 @@
 ﻿using Autodesk.Navisworks.Api;
-using Autodesk.Navisworks.Api.DocumentParts;
-using NavisDataExtraction.Configuration;
-using NavisDataExtraction.DataClasses;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;

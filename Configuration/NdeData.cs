@@ -1,5 +1,4 @@
-﻿using NavisDataExtraction.Configuration;
-using System;
+﻿using System;
 
 namespace NavisDataExtraction.Configuration
 {

@@ -1,7 +1,4 @@
-﻿using NavisDataExtraction.Configuration;
-using NavisDataExtraction.DataClasses;
-using NavisDataExtraction.Wpf.ViewModels;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
