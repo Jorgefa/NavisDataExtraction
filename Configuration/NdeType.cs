@@ -193,6 +193,7 @@ namespace NavisDataExtraction.Configuration
                 {
                     case NdeSearchConditionType.HasPropertyByDisplayName:
                         var sC = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
+                        
                         search.SearchConditions.Add(sC);
                         break;
 

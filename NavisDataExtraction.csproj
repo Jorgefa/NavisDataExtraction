@@ -13,22 +13,26 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files\Autodesk\Navisworks Manage 2022\Roamer.exe</StartProgram>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autodesk.Navisworks.Api">
@@ -40,6 +44,10 @@
     <Reference Include="Autodesk.Navisworks.Interop.ComApi">
       <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="HandyControl, Version=3.3.0.0, Culture=neutral, PublicKeyToken=45be8712787a1e5b">
+      <HintPath>packages\HandyControl.3.3.0\lib\net47\HandyControl.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -68,16 +76,17 @@
     <Compile Include="Configuration\NdeSearcher.cs" />
     <Compile Include="Configuration\NdeSearchConditionType.cs" />
     <Compile Include="Configuration\NdeSelectableItem.cs" />
+
+    <Compile Include="MainLoader.cs" />
+
     <Compile Include="Configuration\NdeSearchGroup.cs" />
+
     <Compile Include="Utils\NdeUnits.cs" />
     <Compile Include="Utils\Progress\ProgressDefined.xaml.cs">
       <DependentUpon>ProgressDefined.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Progress\ProgressUndefined.xaml.cs">
       <DependentUpon>ProgressUndefined.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Wpf\App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Wpf\Dialogs\Dialogs.cs" />
     <Compile Include="Wpf\Dialogs\InputDialog.xaml.cs">
@@ -118,10 +127,6 @@
   <ItemGroup>
     <Page Include="Utils\Progress\ProgressDefined.xaml" />
     <Page Include="Utils\Progress\ProgressUndefined.xaml" />
-    <Page Include="Wpf\App.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Wpf\Dialogs\InputDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
