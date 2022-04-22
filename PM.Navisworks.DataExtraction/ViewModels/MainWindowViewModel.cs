@@ -218,7 +218,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
 
             SelectedSearcher.Conditions.Add(new ConditionDto
             {
-                Category = Categories.First()
+                Category = Categories.Any() ? Categories.First() : null
             });
             SelectedCondition = SelectedSearcher.Conditions.Last();
             UpdateValues();
@@ -228,7 +228,10 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         {
             if (SelectedSearcher == null) return;
 
-            SelectedSearcher.Pairs.Add(new CategoryPropertyPair { Category = Categories?.First() });
+            SelectedSearcher.Pairs.Add(new CategoryPropertyPair
+            {
+                Category = Categories.Any() ? Categories.First() : null
+            });
         }
 
         private void SelectInNavisworks()
