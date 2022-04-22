@@ -32,7 +32,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
 
         private void GetCategories()
         {
-            ProgressBarVisibility = Visibility.Visible;
+            ProgressBarVisibility = true;
             ProgressBarMessage = "Loading available Navisworks Properties ....";
 
             var task = new Task(() =>
@@ -40,7 +40,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
                 Categories = new ObservableCollection<Category>(NavisworksCollector.GetModelCategories(_document));
                 _dispatcher.Invoke(() =>
                 {
-                    ProgressBarVisibility = Visibility.Collapsed;
+                    ProgressBarVisibility = false;
                     ProgressBarMessage = string.Empty;
                 });
             });
@@ -62,9 +62,9 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             }
         }
 
-        private Visibility _progressBarVisibility = Visibility.Collapsed;
+        private bool _progressBarVisibility;
 
-        public Visibility ProgressBarVisibility
+        public bool ProgressBarVisibility
         {
             get => _progressBarVisibility;
             set => SetProperty(ref _progressBarVisibility, value);
@@ -235,14 +235,14 @@ namespace PM.Navisworks.DataExtraction.ViewModels
 
             var search = Searcher.FromDto(SelectedSearcher);
 
-            ProgressBarVisibility = Visibility.Visible;
+            ProgressBarVisibility = true;
             ProgressBarMessage = "Loading available Navisworks Properties ....";
 
             var elements = search.FindAll(_document, false);
             _document.CurrentSelection.Clear();
             _document.CurrentSelection.CopyFrom(elements);
 
-            ProgressBarVisibility = Visibility.Collapsed;
+            ProgressBarVisibility = false;
             ProgressBarMessage = string.Empty;
         }
     }

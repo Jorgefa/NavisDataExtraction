@@ -17,10 +17,12 @@
                 <ResourceDictionary Source="/HandyControl;Component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <utilities:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <utilities:ConditionExistsToVisibilityConverter x:Key="ConditionExistsToVisibilityConverter" />
+            <utilities:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Margin="15">
+    <Grid Margin="15" IsEnabled="{Binding ProgressBarVisibility, Converter={StaticResource InverseBooleanConverter}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*" />
@@ -204,7 +206,7 @@
             </Grid>
         </Grid>
         <Border
-            Visibility="{Binding ProgressBarVisibility}"
+            Visibility="{Binding ProgressBarVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
             Width="450"
             Height="80"
             CornerRadius="10"
@@ -223,10 +225,10 @@
                 <ProgressBar
                     Margin="10,5"
                     IsIndeterminate="True"
-                    VerticalAlignment="Center"/>
+                    VerticalAlignment="Center" />
                 <TextBlock Margin="10" Grid.Row="1" Text="{Binding ProgressBarMessage, FallbackValue=Message}"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
+                           HorizontalAlignment="Center" />
             </Grid>
         </Border>
         <hc:ButtonGroup Grid.Row="2"
