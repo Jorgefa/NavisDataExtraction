@@ -1,4 +1,5 @@
 ﻿using Autodesk.Navisworks.Api;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -121,7 +122,7 @@ namespace NavisDataExtraction.Configuration
             search.Selection.SelectAll();
             search.Locations = SearchLocations.DescendantsAndSelf;
             search.PruneBelowMatch = false;
-
+        
             // Create SearchConditions
             if (SearchGroups == null)
             {
@@ -140,20 +141,45 @@ namespace NavisDataExtraction.Configuration
 
                 foreach (var searcher in group.Searchers)
                 {
+                    var sCCat = SearchCondition.HasCategoryByDisplayName(searcher.NavisCategoryName);
+                    var sCProp = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
+
                     switch (searcher.Comparison)
                     {
+
                         case SearchConditionComparison.HasCategory:
-                            var sCCat = SearchCondition.HasCategoryByDisplayName(searcher.NavisCategoryName);
+                            sCGroup.Add(sCCat);
+                            break;
+
+                        case SearchConditionComparison.NotHasCategory:
+                            sCCat = sCCat.Negate();
                             sCGroup.Add(sCCat);
                             break;
 
                         case SearchConditionComparison.HasProperty:
-                            var sCProp = SearchCondition.HasPropertyByDisplayName(searcher.NavisCategoryName, searcher.NavisPropertyName);
-                            if (!(searcher.NavisPropertyValue == null))
-                            {
-                                sCProp = sCProp.EqualValue(VariantData.FromDisplayString(searcher.NavisPropertyValue));
-                            }
-                            
+                            sCGroup.Add(sCCat);
+                            break;
+
+                        case SearchConditionComparison.NotHasProperty:
+                            sCProp = sCProp.Negate();
+                            sCGroup.Add(sCProp);
+                            break;
+
+                        case SearchConditionComparison.Equal:
+                            sCProp.EqualValue(VariantData.FromDisplayString(searcher.NavisPropertyValue));
+                            sCGroup.Add(sCProp);
+                            break;
+
+                        case SearchConditionComparison.NotEqual:
+                            sCProp.EqualValue(VariantData.FromDisplayString(searcher.NavisPropertyValue));
+                            sCProp = sCProp.Negate();
+                            sCGroup.Add(sCProp);
+                            break;
+
+                        case SearchConditionComparison.NumericGreaterThan:
+                            sCProp.CompareWith(SearchConditionComparison.HasProperty,VariantData.FromDisplayString(searcher.NavisPropertyValue));
+                            sCProp = sCProp.Negate();
+                            sCGroup.Add(sCProp);
                             break;
 
                         default:

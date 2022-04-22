@@ -16,6 +16,7 @@ namespace NavisDataExtraction.Configuration
         }
 
         public NdeSearchConditionType SearchType { get; set; }
+
         public string NavisCategoryName { get; set; }
         public string NavisPropertyName { get; set; }
         public string NavisPropertyValue { get; set; }

@@ -70,17 +70,16 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Test-Navis.cs" />
     <Compile Include="Configuration\NdeModelItemGroup.cs" />
     <Compile Include="Configuration\NdeObservableItem.cs" />
     <Compile Include="Configuration\NdeCollection.cs" />
+    <Compile Include="Configuration\NdeSearchConditionComparison.cs" />
     <Compile Include="Configuration\NdeSearcher.cs" />
     <Compile Include="Configuration\NdeSearchConditionType.cs" />
     <Compile Include="Configuration\NdeSelectableItem.cs" />
-
     <Compile Include="MainLoader.cs" />
-
     <Compile Include="Configuration\NdeSearchGroup.cs" />
-
     <Compile Include="Utils\NdeUnits.cs" />
     <Compile Include="Utils\Progress\ProgressDefined.xaml.cs">
       <DependentUpon>ProgressDefined.xaml</DependentUpon>

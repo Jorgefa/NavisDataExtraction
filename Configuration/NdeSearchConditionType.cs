@@ -2,7 +2,9 @@
 {
     public enum NdeSearchConditionType
     {
-        HasPropertyByDisplayName,
+        HasCategoryByDisplayName = 0,
+        HasPropertyByDisplayName = 1,
+        HasPropertyByDisplayNameAndValue = 2,
         Other
     }
 }
