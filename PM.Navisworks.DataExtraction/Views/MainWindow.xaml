@@ -1,0 +1,247 @@
+﻿<Window x:Class="PM.Navisworks.DataExtraction.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PM.Navisworks.DataExtraction.Views"
+        xmlns:viewModels="clr-namespace:PM.Navisworks.DataExtraction.ViewModels"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:utilities="clr-namespace:PM.Navisworks.DataExtraction.Utilities"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="720" Width="900"
+        d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <hc:Theme Name="HandyTheme" />
+                <ResourceDictionary Source="/HandyControl;Component/Themes/Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <utilities:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <utilities:ConditionExistsToVisibilityConverter x:Key="ConditionExistsToVisibilityConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid Margin="15">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="0" Margin="10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <hc:Divider Grid.Row="0" Grid.ColumnSpan="2" Margin="0,5"
+                        Content="Search" HorizontalContentAlignment="Left" />
+            <ListBox Grid.Row="1" Grid.Column="0"
+                     Margin="0,0,5,0"
+                     ItemsSource="{Binding Searchers}"
+                     SelectionMode="Single"
+                     SelectedItem="{Binding SelectedSearcher}">
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add" Command="{Binding AddNewSearcherCommand}" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Row="1" Grid.Column="1"
+                        Margin="5,0,0,0"
+                        IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}">
+                <hc:Divider Margin="2"
+                            Content="Properties" />
+                <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
+                           Text="Searcher Name"
+                           HorizontalAlignment="Left" />
+                <TextBox hc:InfoElement.Placeholder="Searcher Name"
+                         Text="{Binding SelectedSearcher.Name, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,2,0,15" />
+                <CheckBox Content="Prune Below"
+                          IsChecked="{Binding SelectedSearcher.PruneBelow}"
+                          Margin="0,2,0,5" />
+                <TextBlock Style="{StaticResource TextBlockDefaultThiLight}"
+                           Text="When value is true, search ignores descendants of any matching model items."
+                           TextWrapping="Wrap"
+                           FontSize="10"
+                           HorizontalAlignment="Left">
+                </TextBlock>
+            </StackPanel>
+            <hc:Divider Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5"
+                        Content="Search Conditions" HorizontalContentAlignment="Left" />
+            <ListBox Grid.Row="3" Grid.Column="0"
+                     Margin="0,0,5,0"
+                     ItemsSource="{Binding SelectedSearcher.Conditions}"
+                     SelectionMode="Single"
+                     SelectedItem="{Binding SelectedCondition}"
+                     IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add" Command="{Binding AddNewConditionCommand}" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+            <StackPanel Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
+                        IsEnabled="{Binding SelectedCondition, Converter={StaticResource NullToBoolConverter}}">
+                <hc:Divider Margin="5,2"
+                            Content="Rules" />
+                <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
+                           Text="Category"
+                           HorizontalAlignment="Left"
+                           Margin="2" />
+                <ComboBox ItemsSource="{Binding Categories}"
+                          SelectedItem="{Binding SelectedCondition.Category}" />
+                <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
+                           Text="Property"
+                           HorizontalAlignment="Left"
+                           Margin="2,15,2,2" />
+                <ComboBox ItemsSource="{Binding SelectedCondition.Category.Properties}"
+                          IsEnabled="{Binding SelectedCondition.Category, Converter={StaticResource NullToBoolConverter}}"
+                          SelectedItem="{Binding SelectedCondition.Property}" />
+                <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
+                           Text="Compare"
+                           HorizontalAlignment="Left"
+                           Margin="2,15,2,2" />
+                <ComboBox ItemsSource="{Binding Comparers}"
+                          IsEnabled="{Binding SelectedCondition.Property, Converter={StaticResource NullToBoolConverter}}"
+                          SelectedItem="{Binding SelectedCondition.Comparer}" />
+                <StackPanel
+                    Visibility="{Binding SelectedCondition.Comparer, Converter={StaticResource ConditionExistsToVisibilityConverter}}">
+                    <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
+                               Text="Value"
+                               HorizontalAlignment="Left"
+                               Margin="2,15,2,2" />
+                    <CheckBox IsChecked="{Binding SelectedCondition.BoolValue}"
+                              Content="Yes / No"
+                              Visibility="{Binding BoolVisibility}" />
+                    <TextBox Text="{Binding SelectedCondition.StringValue}"
+                             Visibility="{Binding StringVisibility}" />
+                    <hc:NumericUpDown Value="{Binding SelectedCondition.IntegerValue}"
+                                      Visibility="{Binding IntegerVisibility}" />
+                    <hc:NumericUpDown Value="{Binding SelectedCondition.DoubleValue}"
+                                      Visibility="{Binding DoubleVisibility}" />
+                    <hc:DatePicker SelectedDate="{Binding SelectedCondition.DateTimeValue}"
+                                   Visibility="{Binding DateTimeVisibility}" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <hc:Divider Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Orientation="Vertical" Margin="0" />
+        <Grid Grid.Row="0" Grid.Column="1"
+              IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}"
+              Margin="10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <hc:Divider Grid.Row="0" Margin="0,5"
+                        Content="Exported Properties" HorizontalContentAlignment="Left" />
+            <ListBox Grid.Row="1"
+                     ItemsSource="{Binding SelectedSearcher.Pairs}"
+                     SelectionMode="Single"
+                     SelectedItem="{Binding SelectedPair}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <Run Text="{Binding Category.Name}" />
+                            <Run Text=" " />
+                            <Run Text="{Binding Property.Name}" />
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add" Command="{Binding AddNewPairCommand}" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+            </ListBox>
+            <hc:Divider Grid.Row="2" Margin="0,5"
+                        Content="Selected Property" HorizontalContentAlignment="Left" />
+            <Grid Grid.Row="3"
+                  IsEnabled="{Binding SelectedPair, Converter={StaticResource NullToBoolConverter}}"
+                  Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="5,0">
+                    <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
+                               Text="Category"
+                               HorizontalAlignment="Left"
+                               Margin="2" />
+                    <ComboBox ItemsSource="{Binding Categories}"
+                              SelectedItem="{Binding SelectedPair.Category}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Margin="5,0"
+                            IsEnabled="{Binding SelectedPair.Category, Converter={StaticResource NullToBoolConverter}}">
+                    <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
+                               Text="Property"
+                               HorizontalAlignment="Left"
+                               Margin="2" />
+                    <ComboBox ItemsSource="{Binding SelectedPair.Category.Properties}"
+                              SelectedItem="{Binding SelectedPair.Property}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Border
+            Visibility="{Binding ProgressBarVisibility}"
+            Width="450"
+            Height="80"
+            CornerRadius="10"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Grid.RowSpan="3"
+            Background="White"
+            BorderThickness="1"
+            BorderBrush="LightGray">
+            <Grid VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ProgressBar
+                    Margin="10,5"
+                    IsIndeterminate="True"
+                    VerticalAlignment="Center"/>
+                <TextBlock Margin="10" Grid.Row="1" Text="{Binding ProgressBarMessage, FallbackValue=Message}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+            </Grid>
+        </Border>
+        <hc:ButtonGroup Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="10,0">
+            <Button Content="Find and Select in Navisworks"
+                    HorizontalAlignment="Stretch"
+                    IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}"
+                    Command="{Binding SelectInNavisworksCommand}" />
+        </hc:ButtonGroup>
+        <hc:ButtonGroup Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="10,0">
+            <Button Content="Import Config" />
+            <Button Content="Export Config" />
+        </hc:ButtonGroup>
+    </Grid>
+</Window>
