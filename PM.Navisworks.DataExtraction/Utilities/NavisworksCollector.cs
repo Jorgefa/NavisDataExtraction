@@ -14,7 +14,8 @@ namespace PM.Navisworks.DataExtraction.Utilities
             var search = new Search();
             search.PruneBelowMatch = false;
             search.SearchConditions.Clear();
-            search.Selection.SelectAll();
+            search.Selection.Clear();
+            search.Selection.CopyFrom(document.CurrentSelection);
 
             var searchCondition = new SearchCondition(new NamedConstant("Item"), new NamedConstant(""),
                 SearchConditionOptions.IgnoreNames, SearchConditionComparison.HasCategory, VariantData.FromNone());

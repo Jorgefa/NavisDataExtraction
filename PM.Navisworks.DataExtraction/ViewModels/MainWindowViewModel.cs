@@ -26,6 +26,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             AddNewConditionCommand = new DelegateCommand(AddNewCondition);
             AddNewPairCommand = new DelegateCommand(AddNewPair);
             SelectInNavisworksCommand = new DelegateCommand(SelectInNavisworks);
+            RefreshCategoriesCommand = new DelegateCommand(GetCategories);
 
             GetCategories();
         }
@@ -201,6 +202,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public DelegateCommand AddNewConditionCommand { get; set; }
         public DelegateCommand AddNewPairCommand { get; set; }
         public DelegateCommand SelectInNavisworksCommand { get; set; }
+        public DelegateCommand RefreshCategoriesCommand { get; set; }
 
         private void AddNewSearcher()
         {

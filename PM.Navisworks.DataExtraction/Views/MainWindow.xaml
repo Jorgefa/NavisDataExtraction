@@ -234,6 +234,9 @@
         <hc:ButtonGroup Grid.Row="2"
                         Grid.Column="0"
                         Margin="10,0">
+            <Button Content="Refresh From Current Selection"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding RefreshCategoriesCommand}" />
             <Button Content="Find and Select in Navisworks"
                     HorizontalAlignment="Stretch"
                     IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}"
