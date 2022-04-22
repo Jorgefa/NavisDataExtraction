@@ -1,10 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
         <Nullable>disable</Nullable>
         <Configurations>Debug;Release;Debug_2018;Debug_2020;Debug_2021;Debug_2022;Release_2018;Release_2020;Release_2021;Release_2022</Configurations>
         <Platforms>x64</Platforms>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+        <AssemblyName>PM.Navisworks.DataExtraction.PMPK</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)' == 'Debug_2018' Or '$(Configuration)' == 'Release_2018'">

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PM.Navisworks.DataExtraction": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\Autodesk\\Navisworks Manage 2022\\Roamer.exe"
+    }
+  }
+}
