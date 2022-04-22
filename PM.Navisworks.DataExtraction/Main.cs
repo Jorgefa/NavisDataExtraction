@@ -6,12 +6,10 @@ using Autodesk.Navisworks.Api.Plugins;
 
 namespace PM.Navisworks.DataExtraction
 {
-    [Plugin("NavisDataExtraction.DataExport",
+    [Plugin("PM.Navisworks.DataExtraction.Export",
         "PMPK",
-        ToolTip = "Export Data to Json",
-        DisplayName ="DataExtraction")]
-    [RibbonTab("PMG_CustomTab_01", DisplayName = "PMG Tools")]
-    [Command("ID_BUtton_01",ToolTip ="Interface")]
+        ToolTip = "Export Data to Json or whatever",
+        DisplayName = "New\nExport")]
     public class Main : AddInPlugin
     {
         private static string _thisAssemblyPath;

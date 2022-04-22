@@ -6,9 +6,9 @@ using Autodesk.Navisworks.Api.Plugins;
 
 namespace PM.Navisworks.DataExtraction
 {
-    [Plugin("NavisDataExtraction.MainLoader",
+    [Plugin("PM.Navisworks.DataExtraction.Loader",
         "PMPK",
-        DisplayName ="Export Loader")]
+        DisplayName ="New Export Loader")]
     public class MainLoader : EventWatcherPlugin
     {
         private static string _thisAssemblyPath;
