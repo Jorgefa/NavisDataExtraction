@@ -1,0 +1,73 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Nullable>disable</Nullable>
+        <Configurations>Debug;Release;Debug_2018;Debug_2020;Debug_2021;Debug_2022;Release_2018;Release_2020;Release_2021;Release_2022</Configurations>
+        <Platforms>x64</Platforms>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+        <AssemblyName>PM.Navisworks.DataExtraction.PMPK</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug_2018' Or '$(Configuration)' == 'Release_2018'">
+        <TargetFramework>net452</TargetFramework>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug_2020' Or '$(Configuration)' == 'Release_2020'">
+        <TargetFramework>net47</TargetFramework>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug_2021' Or '$(Configuration)' == 'Release_2021'">
+        <TargetFramework>net47</TargetFramework>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug_2022' Or '$(Configuration)' == 'Release_2022'">
+        <TargetFramework>net47</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Debug_2018' Or '$(Configuration)' == 'Release_2018'">
+        <Reference Include="Autodesk.Navisworks.Api, Version=15.0.1314.36, Culture=neutral, PublicKeyToken=d85e58fa5af9b484">
+            <HintPath>..\ApiDlls\2018_dll\Autodesk.Navisworks.Api.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Debug_2020' Or '$(Configuration)' == 'Release_2020'">
+        <Reference Include="Autodesk.Navisworks.Api, Version=17.0.1336.83, Culture=neutral, PublicKeyToken=d85e58fa5af9b484">
+            <HintPath>..\ApiDlls\2020_dll\Autodesk.Navisworks.Api.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Debug_2021' Or '$(Configuration)' == 'Release_2021'">
+        <Reference Include="Autodesk.Navisworks.Api, Version=18.0.1347.51, Culture=neutral, PublicKeyToken=d85e58fa5af9b484">
+            <HintPath>..\ApiDlls\2021_dll\Autodesk.Navisworks.Api.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Debug_2022' Or '$(Configuration)' == 'Release_2022'">
+        <Reference Include="Autodesk.Navisworks.Api, Version=19.0.1374.1, Culture=neutral, PublicKeyToken=d85e58fa5af9b484">
+            <HintPath>..\ApiDlls\2022_dll\Autodesk.Navisworks.Api.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+      <Page Include="Views\MainWindow.xaml" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="PresentationCore" />
+      <Reference Include="PresentationFramework" />
+      <Reference Include="System.Windows" />
+      <Reference Include="System.Windows.Forms" />
+      <Reference Include="System.Xaml" />
+      <Reference Include="WindowsBase" />
+      <Reference Include="WindowsFormsIntegration" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="CommandLineParser" Version="2.8.0" />
+      <PackageReference Include="HandyControl" Version="3.3.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="6.0.8" />
+    </ItemGroup>
+    <ItemGroup>
+      <Resource Include="Resources\PM.ico" />
+    </ItemGroup>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="IF EXIST &quot;C:\Program Files\Autodesk\Navisworks Manage 2022\Plugins\$(TargetName)\&quot; rmdir /S /Q &quot;$(ProjectDir)..\..\..\..\..\Plugins\$(TargetName)\&quot;&#xA;xcopy /Y &quot;$(TargetDir)*.*&quot; &quot;C:\Program Files\Autodesk\Navisworks Manage 2022\Plugins\PM.Navisworks.DataExtraction.PMPK\&quot;" />
+    </Target>
+    
+</Project>

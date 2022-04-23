@@ -1,0 +1,81 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Navisworks.DataExtraction", "PM.Navisworks.DataExtraction\PM.Navisworks.DataExtraction.csproj", "{8D606E02-DD1F-4BC0-B4A9-5058A002F008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Navisworks.DataExtraction.Setup", "PM.Navisworks.DataExtraction.Setup\PM.Navisworks.DataExtraction.Setup.csproj", "{FF532B18-9252-4388-8BDD-C9FEA13FCE69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Navisworks.DataExtraction.Automation", "PM.Navisworks.DataExtraction.Automation\PM.Navisworks.DataExtraction.Automation.csproj", "{9CA5B147-E713-4005-94E6-CCE5078342B0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|x64 = Release|x64
+		Debug|x64 = Debug|x64
+		Debug_2018|x64 = Debug_2018|x64
+		Debug_2020|x64 = Debug_2020|x64
+		Debug_2021|x64 = Debug_2021|x64
+		Debug_2022|x64 = Debug_2022|x64
+		Release_2018|x64 = Release_2018|x64
+		Release_2020|x64 = Release_2020|x64
+		Release_2021|x64 = Release_2021|x64
+		Release_2022|x64 = Release_2022|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug_2018|x64.ActiveCfg = Debug_2018|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug_2018|x64.Build.0 = Debug_2018|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug_2020|x64.ActiveCfg = Debug_2020|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug_2020|x64.Build.0 = Debug_2020|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug_2021|x64.ActiveCfg = Debug_2021|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug_2021|x64.Build.0 = Debug_2021|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug_2022|x64.ActiveCfg = Debug_2022|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug_2022|x64.Build.0 = Debug_2022|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release_2018|x64.ActiveCfg = Release_2018|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release_2018|x64.Build.0 = Release_2018|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release_2020|x64.ActiveCfg = Release_2020|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release_2020|x64.Build.0 = Release_2020|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release_2021|x64.ActiveCfg = Release_2021|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release_2021|x64.Build.0 = Release_2021|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release_2022|x64.ActiveCfg = Release_2022|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release_2022|x64.Build.0 = Release_2022|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Debug|x64.ActiveCfg = Debug|x64
+		{8D606E02-DD1F-4BC0-B4A9-5058A002F008}.Release|x64.ActiveCfg = Release|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug|x64.ActiveCfg = Debug|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug_2018|x64.ActiveCfg = Debug_2018|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug_2018|x64.Build.0 = Debug_2018|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug_2020|x64.ActiveCfg = Debug_2020|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug_2020|x64.Build.0 = Debug_2020|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug_2021|x64.ActiveCfg = Debug_2021|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug_2021|x64.Build.0 = Debug_2021|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug_2022|x64.ActiveCfg = Debug_2022|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Debug_2022|x64.Build.0 = Debug_2022|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release|x64.ActiveCfg = Release|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release_2018|x64.ActiveCfg = Release_2018|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release_2018|x64.Build.0 = Release_2018|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release_2020|x64.ActiveCfg = Release_2020|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release_2020|x64.Build.0 = Release_2020|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release_2021|x64.ActiveCfg = Release_2021|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release_2021|x64.Build.0 = Release_2021|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release_2022|x64.ActiveCfg = Release_2022|x64
+		{9CA5B147-E713-4005-94E6-CCE5078342B0}.Release_2022|x64.Build.0 = Release_2022|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Debug|x64.ActiveCfg = Debug|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Debug|x64.Build.0 = Debug|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Debug_2018|x64.ActiveCfg = Debug_2018|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Debug_2020|x64.ActiveCfg = Debug_2020|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Debug_2021|x64.ActiveCfg = Debug_2021|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Debug_2022|x64.ActiveCfg = Debug_2022|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Release|x64.ActiveCfg = Release|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Release|x64.Build.0 = Release|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Release_2018|x64.ActiveCfg = Release_2018|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Release_2020|x64.ActiveCfg = Release_2020|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Release_2021|x64.ActiveCfg = Release_2021|x64
+		{FF532B18-9252-4388-8BDD-C9FEA13FCE69}.Release_2022|x64.ActiveCfg = Release_2022|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4BB0A9D8-5AA6-4B4A-B3FA-CAAEBB4B68F6}
+	EndGlobalSection
+EndGlobal
