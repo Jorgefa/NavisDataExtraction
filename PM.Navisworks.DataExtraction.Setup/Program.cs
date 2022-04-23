@@ -16,7 +16,11 @@ namespace PM.Navisworks.DataExtraction.Setup
         const string ProjectDescription = "Navisworks Data Exporter";
 
         //Change This when Building from different PC
-        private const string ProjectLocation = @"C:\Users\piotr.kulicki\RiderProjects\NavisDataExtraction\PM.Navisworks.DataExtraction";
+        private const string ProjectLocation =
+            @"C:\Users\piotr.kulicki\RiderProjects\NavisDataExtraction\PM.Navisworks.DataExtraction";
+
+        private const string AutomationProjectLocation =
+            @"C:\Users\piotr.kulicki\RiderProjects\NavisDataExtraction\PM.Navisworks.DataExtraction.Automation";
 
         public static void Main(string[] args)
         {
@@ -27,15 +31,27 @@ namespace PM.Navisworks.DataExtraction.Setup
                 { "2021", $@"{ProjectLocation}\bin\x64\Release_2021\net47" },
                 { "2022", $@"{ProjectLocation}\bin\x64\Release_2022\net47" }
             };
-            
+            var automationFolders = new Dictionary<string, string>
+            {
+                { "2018", $@"{AutomationProjectLocation}\bin\x64\Release_2018\net452" },
+                { "2020", $@"{AutomationProjectLocation}\bin\x64\Release_2020\net47" },
+                { "2021", $@"{AutomationProjectLocation}\bin\x64\Release_2021\net47" },
+                { "2022", $@"{AutomationProjectLocation}\bin\x64\Release_2022\net47" }
+            };
+
             AutoElements.DisableAutoKeyPath = true;
             var feature = new Feature(ProjectName, true, false);
             var directories = CreateDirectories(feature, folders);
-            var dir = new Dir(feature, $@"%AppData%/Autodesk/ApplicationPlugins/{PackageName}.bundle", 
+            var automationDirectories = CreateDirectories(feature, automationFolders);
+            var dir = new Dir(feature, $@"%AppData%/Autodesk/ApplicationPlugins/{PackageName}.bundle",
                 new File(feature, "./PackageContents.xml"),
                 new Dir(feature, "Contents")
                 {
                     Dirs = directories
+                },
+                new Dir(feature, "Automation")
+                {
+                    Dirs = automationDirectories
                 });
 
             var project = new Project(ProjectName, dir)
@@ -58,7 +74,7 @@ namespace PM.Navisworks.DataExtraction.Setup
                 BannerImage = "./Resources/Banner.bmp",
                 BackgroundImage = "./Resources/Main.bmp",
             };
-            
+
             project.AddRegValues(new RegValue(RegistryHive.CurrentUser, $"Software\\PM Group\\{ProjectName}", "Version",
                 GetVersion().ToString()));
             project.AddRegValues(new RegValue(RegistryHive.CurrentUser, $"Software\\PM Group\\{ProjectName}", "Guid",
@@ -83,7 +99,7 @@ namespace PM.Navisworks.DataExtraction.Setup
         private static Version GetVersion()
         {
             const int majorVersion = 0;
-            const int minorVersion = 1;
+            const int minorVersion = 2;
             var daysSinceProjectStarted = (int)((DateTime.UtcNow - ProjectStartedDate).TotalDays);
             var minutesSinceMidnight = (int)DateTime.UtcNow.TimeOfDay.TotalMinutes;
             var version = $"{majorVersion}.{minorVersion}.{daysSinceProjectStarted}.{minutesSinceMidnight}";
