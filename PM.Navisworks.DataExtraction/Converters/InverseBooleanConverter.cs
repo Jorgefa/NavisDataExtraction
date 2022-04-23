@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace PM.Navisworks.DataExtraction.Utilities
+namespace PM.Navisworks.DataExtraction.Converters
 {
     [ValueConversion(typeof(bool), typeof(bool))]
     public class InverseBooleanConverter : IValueConverter

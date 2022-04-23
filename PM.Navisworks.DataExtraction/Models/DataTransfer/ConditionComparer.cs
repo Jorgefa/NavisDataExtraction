@@ -1,4 +1,4 @@
-﻿namespace PM.Navisworks.DataExtraction.Models
+﻿namespace PM.Navisworks.DataExtraction.Models.DataTransfer
 {
     public enum ConditionComparer
     {

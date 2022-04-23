@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:PM.Navisworks.DataExtraction.Views"
         xmlns:viewModels="clr-namespace:PM.Navisworks.DataExtraction.ViewModels"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        xmlns:utilities="clr-namespace:PM.Navisworks.DataExtraction.Utilities"
+        xmlns:converters="clr-namespace:PM.Navisworks.DataExtraction.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="900"
         d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}">
@@ -16,10 +15,10 @@
                 <hc:Theme Name="HandyTheme" />
                 <ResourceDictionary Source="/HandyControl;Component/Themes/Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <utilities:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <utilities:ConditionExistsToVisibilityConverter x:Key="ConditionExistsToVisibilityConverter" />
-            <utilities:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:ConditionExistsToVisibilityConverter x:Key="ConditionExistsToVisibilityConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="15" IsEnabled="{Binding ProgressBarVisibility, Converter={StaticResource InverseBooleanConverter}}">
@@ -33,7 +32,9 @@
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0" Margin="10,0">
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Margin="10,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -44,16 +45,28 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <hc:Divider Grid.Row="0" Grid.ColumnSpan="2" Margin="0,5"
-                        Content="Search" HorizontalContentAlignment="Left" />
-            <ListBox Grid.Row="1" Grid.Column="0"
+            <hc:Divider Grid.Column="0"
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,5"
+                        Content="Search"
+                        HorizontalContentAlignment="Left" />
+            <ListBox Grid.Row="1"
+                     Grid.Column="0"
                      Margin="0,0,5,0"
                      ItemsSource="{Binding Searchers}"
                      SelectionMode="Single"
                      SelectedItem="{Binding SelectedSearcher}">
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Add" Command="{Binding AddNewSearcherCommand}" />
+                        <MenuItem Header="Add"
+                                  Command="{Binding AddNewSearcherCommand}" />
+                        <MenuItem Header="Delete"
+                                  Command="{Binding DeleteSearcherCommand}" />
+                        <MenuItem Header="Export Data for Search (.csv)"
+                                  Command="{Binding ExportSearchCsvCommand}" />
+                        <MenuItem Header="Export Data for Search (.json)"
+                                  Command="{Binding ExportSearchJsonCommand}" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
                 <ListBox.ItemTemplate>
@@ -62,7 +75,8 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <StackPanel Grid.Row="1" Grid.Column="1"
+            <StackPanel Grid.Row="1"
+                        Grid.Column="1"
                         Margin="5,0,0,0"
                         IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}">
                 <hc:Divider Margin="2"
@@ -83,6 +97,15 @@
                            HorizontalAlignment="Left">
                 </TextBlock>
             </StackPanel>
+            <hc:ButtonGroup Grid.Column="1"
+                            Grid.Row="1"
+                            Orientation="Vertical"
+                            VerticalAlignment="Bottom">
+                <Button Content="Export All to Csv"
+                        Command="{Binding ExportSearchAllCsvCommand}" />
+                <Button Content="Export All to Json"
+                        Command="{Binding ExportSearchAllJsonCommand}" />
+            </hc:ButtonGroup>
             <hc:Divider Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="0,5"
                         Content="Search Conditions" HorizontalContentAlignment="Left" />
             <ListBox Grid.Row="3" Grid.Column="0"
@@ -98,11 +121,16 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Add" Command="{Binding AddNewConditionCommand}" />
+                        <MenuItem Header="Add"
+                                  Command="{Binding AddNewConditionCommand}" />
+                        <MenuItem Header="Delete"
+                                  Command="{Binding DeleteConditionCommand}" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>
-            <StackPanel Grid.Row="3" Grid.Column="1" Margin="5,0,0,0"
+            <StackPanel Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
                         IsEnabled="{Binding SelectedCondition, Converter={StaticResource NullToBoolConverter}}">
                 <hc:Divider Margin="5,2"
                             Content="Rules" />
@@ -111,21 +139,21 @@
                            HorizontalAlignment="Left"
                            Margin="2" />
                 <ComboBox ItemsSource="{Binding Categories}"
-                          SelectedItem="{Binding SelectedCondition.Category}" />
+                          SelectedItem="{Binding SelectedCondition.Category, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
                            Text="Property"
                            HorizontalAlignment="Left"
                            Margin="2,15,2,2" />
                 <ComboBox ItemsSource="{Binding SelectedCondition.Category.Properties}"
                           IsEnabled="{Binding SelectedCondition.Category, Converter={StaticResource NullToBoolConverter}}"
-                          SelectedItem="{Binding SelectedCondition.Property}" />
+                          SelectedItem="{Binding SelectedCondition.Property, Mode=TwoWay}" />
                 <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
                            Text="Compare"
                            HorizontalAlignment="Left"
                            Margin="2,15,2,2" />
                 <ComboBox ItemsSource="{Binding Comparers}"
                           IsEnabled="{Binding SelectedCondition.Property, Converter={StaticResource NullToBoolConverter}}"
-                          SelectedItem="{Binding SelectedCondition.Comparer}" />
+                          SelectedItem="{Binding SelectedCondition.Comparer, Mode=TwoWay}" />
                 <StackPanel
                     Visibility="{Binding SelectedCondition.Comparer, Converter={StaticResource ConditionExistsToVisibilityConverter}}">
                     <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
@@ -146,8 +174,13 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <hc:Divider Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Orientation="Vertical" Margin="0" />
-        <Grid Grid.Row="0" Grid.Column="1"
+        <hc:Divider Grid.Row="0"
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    Orientation="Vertical"
+                    Margin="0" />
+        <Grid Grid.Row="0"
+              Grid.Column="1"
               IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}"
               Margin="10,0">
             <Grid.RowDefinitions>
@@ -156,8 +189,10 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <hc:Divider Grid.Row="0" Margin="0,5"
-                        Content="Exported Properties" HorizontalContentAlignment="Left" />
+            <hc:Divider Grid.Row="0"
+                        Margin="0,5"
+                        Content="Exported Properties"
+                        HorizontalContentAlignment="Left" />
             <ListBox Grid.Row="1"
                      ItemsSource="{Binding SelectedSearcher.Pairs}"
                      SelectionMode="Single"
@@ -173,11 +208,15 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Add" Command="{Binding AddNewPairCommand}" />
+                        <MenuItem Header="Add"
+                                  Command="{Binding AddNewPairCommand}" />
+                        <MenuItem Header="Delete"
+                                  Command="{Binding DeletePairCommand}" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
             </ListBox>
-            <hc:Divider Grid.Row="2" Margin="0,5"
+            <hc:Divider Grid.Row="2"
+                        Margin="0,5"
                         Content="Selected Property" HorizontalContentAlignment="Left" />
             <Grid Grid.Row="3"
                   IsEnabled="{Binding SelectedPair, Converter={StaticResource NullToBoolConverter}}"
@@ -186,7 +225,8 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Margin="5,0">
+                <StackPanel Grid.Column="0"
+                            Margin="5,0">
                     <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
                                Text="Category"
                                HorizontalAlignment="Left"
@@ -194,7 +234,8 @@
                     <ComboBox ItemsSource="{Binding Categories}"
                               SelectedItem="{Binding SelectedPair.Category}" />
                 </StackPanel>
-                <StackPanel Grid.Column="1" Margin="5,0"
+                <StackPanel Grid.Column="1"
+                            Margin="5,0"
                             IsEnabled="{Binding SelectedPair.Category, Converter={StaticResource NullToBoolConverter}}">
                     <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
                                Text="Property"
@@ -205,6 +246,7 @@
                 </StackPanel>
             </Grid>
         </Grid>
+        
         <Border
             Visibility="{Binding ProgressBarVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
             Width="450"
@@ -245,8 +287,10 @@
         <hc:ButtonGroup Grid.Row="2"
                         Grid.Column="1"
                         Margin="10,0">
-            <Button Content="Import Config" />
-            <Button Content="Export Config" />
+            <Button Content="Import Config"
+                    Command="{Binding ImportConfigCommand}" />
+            <Button Content="Export Config"
+                    Command="{Binding ExportConfigCommand}" />
         </hc:ButtonGroup>
     </Grid>
 </Window>

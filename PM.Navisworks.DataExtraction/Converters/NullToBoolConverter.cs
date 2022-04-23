@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace PM.Navisworks.DataExtraction.Utilities
+namespace PM.Navisworks.DataExtraction.Converters
 {
     public class NullToBoolConverter : IValueConverter
     {

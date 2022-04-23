@@ -1,11 +1,12 @@
 ﻿using System;
 using Autodesk.Navisworks.Api;
+using PM.Navisworks.DataExtraction.Models.DataTransfer;
 
-namespace PM.Navisworks.DataExtraction.Models
+namespace PM.Navisworks.DataExtraction.Models.Navisworks
 {
-    public class Searcher
+    public class NavisworksSearcher
     {
-        public Searcher()
+        public NavisworksSearcher()
         {
             Search = new Search();
             Search.Selection.SelectAll();
@@ -15,15 +16,17 @@ namespace PM.Navisworks.DataExtraction.Models
         
         public static Search FromDto(SearcherDto searcherDto)
         {
-            var searcher = new Searcher();
-                
+            var searcher = new NavisworksSearcher();
+            
             searcher.PruneBelow(searcherDto.PruneBelow);
+            searcher.AddCondition(new NavisworksCondition("Item")
+                .AddProperty("GUID"));
             
             foreach (var condition in searcherDto.Conditions)
             {
                 if(condition.Category == null) continue;
                 
-                var newCondition = new Condition(condition.Category.Name);
+                var newCondition = new NavisworksCondition(condition.Category.Name);
                 
                 if (condition.Property == null)
                 {
@@ -56,13 +59,13 @@ namespace PM.Navisworks.DataExtraction.Models
 
         private Search Search { get; set; }
         
-        public Searcher PruneBelow(bool prune = true)
+        public NavisworksSearcher PruneBelow(bool prune = true)
         {
             Search.PruneBelowMatch = prune;
             return this;
         }
 
-        public Searcher AddCondition(Condition localSearchCondition)
+        public NavisworksSearcher AddCondition(NavisworksCondition localSearchCondition)
         {
             var condition = localSearchCondition.GetCondition();
             Search.SearchConditions.Add(condition);

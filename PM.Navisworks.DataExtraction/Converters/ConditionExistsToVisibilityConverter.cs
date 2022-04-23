@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using PM.Navisworks.DataExtraction.Models;
+using PM.Navisworks.DataExtraction.Models.DataTransfer;
 
-namespace PM.Navisworks.DataExtraction.Utilities
+namespace PM.Navisworks.DataExtraction.Converters
 {
     public class ConditionExistsToVisibilityConverter : IValueConverter
     {

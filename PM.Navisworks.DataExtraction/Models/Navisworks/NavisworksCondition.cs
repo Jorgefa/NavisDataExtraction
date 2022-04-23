@@ -1,52 +1,53 @@
 ﻿using System;
 using Autodesk.Navisworks.Api;
+using PM.Navisworks.DataExtraction.Models.DataTransfer;
 
-namespace PM.Navisworks.DataExtraction.Models
+namespace PM.Navisworks.DataExtraction.Models.Navisworks
 {
-    public class Condition
+    public class NavisworksCondition
     {
-        public Condition(string categoryName)
+        public NavisworksCondition(string categoryName)
         {
             Category = categoryName;
         }
 
-        public Condition AddProperty(string propertyName)
+        public NavisworksCondition AddProperty(string propertyName)
         {
             Property = propertyName;
             return this;
         }
 
-        public Condition Compare(ConditionComparer comparison)
+        public NavisworksCondition Compare(ConditionComparer comparison)
         {
             Comparison = comparison;
             return this;
         }
 
-        public Condition With(bool value)
+        public NavisworksCondition With(bool value)
         {
             Value = value;
             return this;
         }
 
-        public Condition With(string value)
+        public NavisworksCondition With(string value)
         {
             Value = value;
             return this;
         }
 
-        public Condition With(double value)
+        public NavisworksCondition With(double value)
         {
             Value = value;
             return this;
         }
 
-        public Condition With(int value)
+        public NavisworksCondition With(int value)
         {
             Value = value;
             return this;
         }
 
-        public Condition With(DateTime value)
+        public NavisworksCondition With(DateTime value)
         {
             Value = value;
             return this;

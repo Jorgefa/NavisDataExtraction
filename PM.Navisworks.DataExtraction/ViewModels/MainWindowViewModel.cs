@@ -3,10 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using Autodesk.Navisworks.Api;
 using PM.Navisworks.DataExtraction.Commands;
-using PM.Navisworks.DataExtraction.Models;
+using PM.Navisworks.DataExtraction.Extensions;
+using PM.Navisworks.DataExtraction.Models.DataTransfer;
+using PM.Navisworks.DataExtraction.Models.Navisworks;
 using PM.Navisworks.DataExtraction.Utilities;
 
 namespace PM.Navisworks.DataExtraction.ViewModels
@@ -22,11 +25,21 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             _dispatcher = Dispatcher.CurrentDispatcher;
             Searchers = new ObservableCollection<SearcherDto>();
 
-            AddNewSearcherCommand = new DelegateCommand(AddNewSearcher);
+            AddNewSearcherCommand = new DelegateCommand(AddNewSearch);
             AddNewConditionCommand = new DelegateCommand(AddNewCondition);
             AddNewPairCommand = new DelegateCommand(AddNewPair);
             SelectInNavisworksCommand = new DelegateCommand(SelectInNavisworks);
             RefreshCategoriesCommand = new DelegateCommand(GetCategories);
+            ImportConfigCommand = new DelegateCommand(() =>
+                Searchers = new ObservableCollection<SearcherDto>(Configuration.Import()));
+            ExportConfigCommand = new DelegateCommand(() => Configuration.Export(Searchers));
+            DeleteSearcherCommand = new DelegateCommand(DeleteSearch);
+            DeleteConditionCommand = new DelegateCommand(DeleteCondition);
+            DeletePairCommand = new DelegateCommand(DeletePair);
+            ExportSearchCsvCommand = new DelegateCommand(ExportSearchCsv);
+            ExportSearchJsonCommand = new DelegateCommand(ExportSearchJson);
+            ExportSearchAllCsvCommand = new DelegateCommand(() => Searchers.ExportCsv(_document));
+            ExportSearchAllJsonCommand = new DelegateCommand(() => Searchers.ExportJson(_document));
 
             GetCategories();
         }
@@ -38,7 +51,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
 
             var task = new Task(() =>
             {
-                Categories = new ObservableCollection<Category>(NavisworksCollector.GetModelCategories(_document));
+                Categories = new ObservableCollection<Category>(_document.GetModelCategories());
                 _dispatcher.Invoke(() =>
                 {
                     ProgressBarVisibility = false;
@@ -56,7 +69,8 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             RaisePropertyChanged(nameof(IntegerVisibility));
             RaisePropertyChanged(nameof(DoubleVisibility));
             RaisePropertyChanged(nameof(DateTimeVisibility));
-
+            
+            if(SelectedSearcher == null || !SelectedSearcher.Conditions.Any()) return;
             foreach (var selectedSearcherCondition in SelectedSearcher?.Conditions)
             {
                 selectedSearcherCondition?.SetDisplayName(selectedSearcherCondition.Property?.ValueType);
@@ -76,7 +90,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public string ProgressBarMessage
         {
             get => _progressBarMessage;
-            set => SetProperty(ref _progressBarMessage, value);
+            private set => SetProperty(ref _progressBarMessage, value);
         }
 
         private ObservableCollection<Category> _categories;
@@ -84,7 +98,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public ObservableCollection<Category> Categories
         {
             get => _categories;
-            set => SetProperty(ref _categories, value);
+            private set => SetProperty(ref _categories, value);
         }
 
         private Category _selectedCategory;
@@ -100,7 +114,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public ObservableCollection<SearcherDto> Searchers
         {
             get => _searchers;
-            set => SetProperty(ref _searchers, value);
+            private set => SetProperty(ref _searchers, value);
         }
 
         private SearcherDto _selectedSearcher;
@@ -198,18 +212,33 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             ? Visibility.Visible
             : Visibility.Collapsed;
 
-        public DelegateCommand AddNewSearcherCommand { get; set; }
-        public DelegateCommand AddNewConditionCommand { get; set; }
-        public DelegateCommand AddNewPairCommand { get; set; }
-        public DelegateCommand SelectInNavisworksCommand { get; set; }
-        public DelegateCommand RefreshCategoriesCommand { get; set; }
+        public DelegateCommand AddNewSearcherCommand { get; }
+        public DelegateCommand AddNewConditionCommand { get; }
+        public DelegateCommand AddNewPairCommand { get; }
+        public DelegateCommand SelectInNavisworksCommand { get; }
+        public DelegateCommand RefreshCategoriesCommand { get; }
+        public DelegateCommand ImportConfigCommand { get; }
+        public DelegateCommand ExportConfigCommand { get; }
+        public DelegateCommand DeleteSearcherCommand { get; }
+        public DelegateCommand DeleteConditionCommand { get; }
+        public DelegateCommand DeletePairCommand { get; }
+        public DelegateCommand ExportSearchCsvCommand { get; }
+        public DelegateCommand ExportSearchJsonCommand { get; }
+        public DelegateCommand ExportSearchAllCsvCommand { get; }
+        public DelegateCommand ExportSearchAllJsonCommand { get; }
 
-        private void AddNewSearcher()
+        private void AddNewSearch()
         {
             Searchers.Add(new SearcherDto
             {
                 Name = "New Searcher"
             });
+        }
+
+        private void DeleteSearch()
+        {
+            if (SelectedSearcher == null) return;
+            Searchers.Remove(SelectedSearcher);
         }
 
         private void AddNewCondition()
@@ -224,6 +253,13 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             UpdateValues();
         }
 
+        private void DeleteCondition()
+        {
+            if (SelectedSearcher == null) return;
+            if (SelectedCondition == null) return;
+            SelectedSearcher?.Conditions?.Remove(SelectedCondition);
+        }
+
         private void AddNewPair()
         {
             if (SelectedSearcher == null) return;
@@ -234,21 +270,58 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             });
         }
 
+        private void DeletePair()
+        {
+            if (SelectedSearcher == null) return;
+            if (SelectedPair == null) return;
+            SelectedSearcher?.Pairs?.Remove(SelectedPair);
+        }
+
         private void SelectInNavisworks()
         {
             if (SelectedSearcher == null) return;
 
-            var search = Searcher.FromDto(SelectedSearcher);
+            var search = NavisworksSearcher.FromDto(SelectedSearcher);
 
-            ProgressBarVisibility = true;
-            ProgressBarMessage = "Loading available Navisworks Properties ....";
+            _dispatcher.Invoke(() =>
+            {
+                ProgressBarVisibility = true;
+                ProgressBarMessage = "Loading available Navisworks Properties ....";
+            });
 
             var elements = search.FindAll(_document, false);
             _document.CurrentSelection.Clear();
             _document.CurrentSelection.CopyFrom(elements);
 
-            ProgressBarVisibility = false;
-            ProgressBarMessage = string.Empty;
+            _dispatcher.Invoke(() =>
+            {
+                ProgressBarVisibility = false;
+                ProgressBarMessage = string.Empty;
+            });
+        }
+
+        private void ExportSearchCsv()
+        {
+            if (SelectedSearcher == null) return;
+            var dialog = new SaveFileDialog
+            {
+                Filter = "CSV Files (*.csv)|*.csv",
+                FileName = SelectedSearcher.Name
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+                SelectedSearcher.ExportCsv(_document, dialog.FileName);
+        }
+
+        private void ExportSearchJson()
+        {
+            if (SelectedSearcher == null) return;
+            var dialog = new SaveFileDialog
+            {
+                Filter = "Json Files (*.json)|*.json",
+                FileName = SelectedSearcher.Name
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+                SelectedSearcher.ExportJson(_document, dialog.FileName);
         }
     }
 }

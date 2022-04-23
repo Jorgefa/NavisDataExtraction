@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using PM.Navisworks.DataExtraction.Utilities;
 
-namespace PM.Navisworks.DataExtraction.Models
+namespace PM.Navisworks.DataExtraction.Models.DataTransfer
 {
     public class Category : BindableBase
     {

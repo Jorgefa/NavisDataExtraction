@@ -2,7 +2,7 @@
 using System.Text;
 using PM.Navisworks.DataExtraction.Utilities;
 
-namespace PM.Navisworks.DataExtraction.Models
+namespace PM.Navisworks.DataExtraction.Models.DataTransfer
 {
     public class ConditionDto : BindableBase
     {
