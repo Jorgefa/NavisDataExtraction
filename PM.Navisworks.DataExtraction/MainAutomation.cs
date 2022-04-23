@@ -14,8 +14,9 @@ using Application = Autodesk.Navisworks.Api.Application;
 
 namespace PM.Navisworks.DataExtraction
 {
+    [AddInPlugin(AddInLocation.None)]
     [Plugin("PM.Navisworks.DataExtraction.ExportAutomated",
-        "PMPK")]
+        "PMPK" )]
     public class MainAutomation : AddInPlugin
     {
         private static string _thisAssemblyPath;

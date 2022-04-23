@@ -11,8 +11,8 @@ namespace PM.Navisworks.DataExtraction
 {
     [Plugin("PM.Navisworks.DataExtraction.Export",
         "PMPK",
-        ToolTip = "Export Data to Json or whatever",
-        DisplayName = "New\nExport")]
+        ToolTip = "Creates a Configuration file for Automatic Data Export",
+        DisplayName = "Export\nConfiguration")]
     public class Main : AddInPlugin
     {
         private static string _thisAssemblyPath;
