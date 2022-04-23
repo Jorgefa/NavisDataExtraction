@@ -62,6 +62,9 @@
       <PackageReference Include="HandyControl" Version="3.3.0" />
       <PackageReference Include="Newtonsoft.Json" Version="6.0.8" />
     </ItemGroup>
+    <ItemGroup>
+      <Resource Include="Resources\PM.ico" />
+    </ItemGroup>
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="IF EXIST &quot;C:\Program Files\Autodesk\Navisworks Manage 2022\Plugins\$(TargetName)\&quot; rmdir /S /Q &quot;$(ProjectDir)..\..\..\..\..\Plugins\$(TargetName)\&quot;&#xA;xcopy /Y &quot;$(TargetDir)*.*&quot; &quot;C:\Program Files\Autodesk\Navisworks Manage 2022\Plugins\PM.Navisworks.DataExtraction.PMPK\&quot;" />
     </Target>

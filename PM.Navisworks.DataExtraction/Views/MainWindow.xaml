@@ -7,7 +7,8 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:converters="clr-namespace:PM.Navisworks.DataExtraction.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="900"
+        Icon="../Resources/PM.ico"
+        Title="Navisworks Export Configuration" Height="720" Width="900"
         d:DataContext="{d:DesignInstance Type=viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}">
     <Window.Resources>
         <ResourceDictionary>
