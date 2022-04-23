@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationPackage SchemaVersion="1.0" AutodeskProduct="Naviswork" Name="Navisworks Data Exporter"
+                    Description="Navisworks Data Exporter" AppVersion="1.0" ProductCode="" upgradeCode="">
+    <CompanyDetails Name="PM Group,  https://www.pmgroup-global.com/"/>
+    <Components Description="2018">
+        <RuntimeRequirements OS="Win64" Platform="NAVMAN|NAVSIM" SeriesMin="Nw15" SeriesMax="Nw15"/>
+        <ComponentEntry AppName="Navisworks Data Exporter for Autodesk® Navisworks® 2018" AppType="ManagedPlugin"
+                        ModuleName="./Contents/2018/PM.Navisworks.DataExtraction.PMPK.dll"/>
+    </Components>
+    <Components Description="2020">
+        <RuntimeRequirements OS="Win64" Platform="NAVMAN|NAVSIM" SeriesMin="Nw17" SeriesMax="Nw17"/>
+        <ComponentEntry AppName="Navisworks Data Exporter for Autodesk® Navisworks® 2020" AppType="ManagedPlugin"
+                        ModuleName="./Contents/2020/PM.Navisworks.DataExtraction.PMPK.dll"/>
+    </Components>
+    <Components Description="2021">
+        <RuntimeRequirements OS="Win64" Platform="NAVMAN|NAVSIM" SeriesMin="Nw18" SeriesMax="Nw18"/>
+        <ComponentEntry AppName="Navisworks Data Exporter for Autodesk® Navisworks® 2021" AppType="ManagedPlugin"
+                        ModuleName="./Contents/2021/PM.Navisworks.DataExtraction.PMPK.dll"/>
+    </Components>
+    <Components Description="2022">
+        <RuntimeRequirements OS="Win64" Platform="NAVMAN|NAVSIM" SeriesMin="Nw19" SeriesMax="Nw19"/>
+        <ComponentEntry AppName="Navisworks Data Exporter for Autodesk® Navisworks® 2022" AppType="ManagedPlugin"
+                        ModuleName="./Contents/2022/PM.Navisworks.DataExtraction.PMPK.dll"/>
+    </Components>
+</ApplicationPackage>
