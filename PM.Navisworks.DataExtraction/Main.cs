@@ -38,7 +38,6 @@ namespace PM.Navisworks.DataExtraction
             var file = Path.Combine(path, dll);
 
             if (!File.Exists(file)) return null;
-
             return Assembly.LoadFrom(file);
         }
     }
