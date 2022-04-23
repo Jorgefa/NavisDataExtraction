@@ -6,9 +6,11 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Autodesk.Navisworks.Api;
 using Autodesk.Navisworks.Api.Plugins;
+using CommandLine;
 using PM.Navisworks.DataExtraction.Extensions;
 using PM.Navisworks.DataExtraction.Models.DataTransfer;
 using PM.Navisworks.DataExtraction.Utilities;
+using Application = Autodesk.Navisworks.Api.Application;
 
 namespace PM.Navisworks.DataExtraction
 {
@@ -17,60 +19,57 @@ namespace PM.Navisworks.DataExtraction
     public class MainAutomation : AddInPlugin
     {
         private static string _thisAssemblyPath;
+        private static Document _document;
 
         public override int Execute(params string[] parameters)
         {
-            var activeDoc = Application.ActiveDocument;
+            _document = Application.ActiveDocument;
             _thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
             AppDomain.CurrentDomain.AssemblyResolve += ResolveAssemblies;
 
-            var settings = ParseParameters(parameters);
-            var configurationFile = settings.FirstOrDefault(r => r.Key == "configurationFile").Value;
-            if (string.IsNullOrEmpty(configurationFile))
+            try
             {
-                Console.WriteLine("Configuration file not provided");
-                return 0;
+                var parserResult = Parser.Default.ParseArguments<MainAutomationOptions>(parameters);
+                if (parserResult.Tag == ParserResultType.Parsed)
+                {
+                    var options = ((Parsed<MainAutomationOptions>)parserResult).Value;
+                    ExportData(options);
+                }
+                else
+                {
+                    return 0;
+                }
             }
-            
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return 0;
+        }
+
+        private void ExportData(MainAutomationOptions options)
+        {
             var searchers = new List<SearcherDto>();
             try
             {
-                searchers = Configuration.Import(configurationFile);
+                searchers = Configuration.Import(options.ConfigurationFile);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return 0;
+                return;
             }
+
             if (!searchers.Any())
             {
                 Console.WriteLine("No searchers found in configuration file");
-                return 0;
+                return;
             }
-
-            var exportFolder = settings.FirstOrDefault(r => r.Key == "exportFolder").Value;
-            if (string.IsNullOrEmpty(configurationFile))
-            {
-                Console.WriteLine("Export folder not provided");
-                return 0;
-            }
-            if (!Directory.Exists(exportFolder))
-            {
-                Console.WriteLine("Export folder does not exist");
-                return 0;
-            }
-            if (SystemExtensions.HasWriteAccessToFolder(exportFolder))
-            {
-                Console.WriteLine("No write access to export folder");
-                return 0;
-            }
-
-            var csvExport = settings.FirstOrDefault(r => r.Key == "csvExport").Key;
-            var jsonExport = settings.FirstOrDefault(r => r.Key == "jsonExport").Key;
 
             try
             {
-                if(csvExport != null) searchers.ExportCsv(activeDoc, exportFolder);
+                if (options.CsvExport) searchers.ExportCsv(_document, options.ExportFolder);
             }
             catch (Exception e)
             {
@@ -79,14 +78,12 @@ namespace PM.Navisworks.DataExtraction
 
             try
             {
-                if(jsonExport != null) searchers.ExportJson(activeDoc, exportFolder);
+                if (options.JsonExport) searchers.ExportJson(_document, options.ExportFolder);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            
-            return 1;
         }
 
         private Dictionary<string, string> ParseParameters(string[] parameters)
