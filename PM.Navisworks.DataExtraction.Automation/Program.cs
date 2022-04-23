@@ -79,7 +79,6 @@ namespace PM.Navisworks.DataExtraction.Automation
             {
                 application = new NavisworksApplication();
                 application.DisableProgress();
-                application.Visible = true;
                 application.OpenFile(options.NavisworksFile);
                 var parameters = options.WriteToArray();
                 var result = application.ExecuteAddInPlugin("PM.Navisworks.DataExtraction.ExportAutomated.PMPK", parameters);
