@@ -22,24 +22,25 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public MainWindowViewModel(Document document)
         {
             _document = document;
+            _document.CurrentSelection.Changed += (sender, args) => UpdateCommandVisibility();
             _dispatcher = Dispatcher.CurrentDispatcher;
             Searchers = new ObservableCollection<SearcherDto>();
 
             AddNewSearcherCommand = new DelegateCommand(AddNewSearch);
             AddNewConditionCommand = new DelegateCommand(AddNewCondition);
             AddNewPairCommand = new DelegateCommand(AddNewPair);
-            SelectInNavisworksCommand = new DelegateCommand(SelectInNavisworks);
-            RefreshCategoriesCommand = new DelegateCommand(GetCategories);
+            SelectInNavisworksCommand = new DelegateCommand(SelectInNavisworks, CanSelectNavisworks);
+            RefreshCategoriesCommand = new DelegateCommand(GetCategories, CanGetCategories);
             ImportConfigCommand = new DelegateCommand(() =>
                 Searchers = new ObservableCollection<SearcherDto>(Configuration.Import()));
-            ExportConfigCommand = new DelegateCommand(() => Configuration.Export(Searchers));
+            ExportConfigCommand = new DelegateCommand(() => Configuration.Export(Searchers), Searchers.Any);
             DeleteSearcherCommand = new DelegateCommand(DeleteSearch);
             DeleteConditionCommand = new DelegateCommand(DeleteCondition);
             DeletePairCommand = new DelegateCommand(DeletePair);
             ExportSearchCsvCommand = new DelegateCommand(ExportSearchCsv);
             ExportSearchJsonCommand = new DelegateCommand(ExportSearchJson);
-            ExportSearchAllCsvCommand = new DelegateCommand(() => Searchers.ExportCsv(_document));
-            ExportSearchAllJsonCommand = new DelegateCommand(() => Searchers.ExportJson(_document));
+            ExportSearchAllCsvCommand = new DelegateCommand(() => Searchers.ExportCsv(_document), Searchers.Any);
+            ExportSearchAllJsonCommand = new DelegateCommand(() => Searchers.ExportJson(_document), Searchers.Any);
 
             GetCategories();
         }
@@ -61,6 +62,11 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             task.Start();
         }
 
+        private bool CanGetCategories()
+        {
+            return !_document.CurrentSelection.IsEmpty;
+        }
+
         private void UpdateValues()
         {
             RaisePropertyChanged(nameof(Comparers));
@@ -69,6 +75,8 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             RaisePropertyChanged(nameof(IntegerVisibility));
             RaisePropertyChanged(nameof(DoubleVisibility));
             RaisePropertyChanged(nameof(DateTimeVisibility));
+            
+            UpdateCommandVisibility();
             
             if(SelectedSearcher == null || !SelectedSearcher.Conditions.Any()) return;
             foreach (var selectedSearcherCondition in SelectedSearcher?.Conditions)
@@ -114,7 +122,11 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public ObservableCollection<SearcherDto> Searchers
         {
             get => _searchers;
-            private set => SetProperty(ref _searchers, value);
+            private set
+            {
+                SetProperty(ref _searchers, value);
+                UpdateCommandVisibility();
+            }
         }
 
         private SearcherDto _selectedSearcher;
@@ -122,7 +134,11 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public SearcherDto SelectedSearcher
         {
             get => _selectedSearcher;
-            set => SetProperty(ref _selectedSearcher, value);
+            set
+            {
+                SetProperty(ref _selectedSearcher, value);
+                UpdateCommandVisibility();
+            }
         }
 
         private ConditionDto _selectedCondition;
@@ -212,6 +228,15 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             ? Visibility.Visible
             : Visibility.Collapsed;
 
+        private void UpdateCommandVisibility()
+        {
+            SelectInNavisworksCommand?.RaiseCanExecuteChanged();
+            RefreshCategoriesCommand?.RaiseCanExecuteChanged();
+            ExportConfigCommand?.RaiseCanExecuteChanged();
+            ExportSearchAllCsvCommand?.RaiseCanExecuteChanged();
+            ExportSearchAllJsonCommand?.RaiseCanExecuteChanged();
+        }
+        
         public DelegateCommand AddNewSearcherCommand { get; }
         public DelegateCommand AddNewConditionCommand { get; }
         public DelegateCommand AddNewPairCommand { get; }
@@ -298,6 +323,15 @@ namespace PM.Navisworks.DataExtraction.ViewModels
                 ProgressBarVisibility = false;
                 ProgressBarMessage = string.Empty;
             });
+        }
+
+        private bool CanSelectNavisworks()
+        {
+            if (SelectedSearcher == null) return false;
+            if (!SelectedSearcher.Conditions.Any()) return false;
+            if (SelectedSearcher.Conditions.Any(c => c.Category == null)) return false;
+
+            return true;
         }
 
         private void ExportSearchCsv()
