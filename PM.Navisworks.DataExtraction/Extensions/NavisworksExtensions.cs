@@ -18,8 +18,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
             search.Selection.Clear();
             search.Selection.CopyFrom(document.CurrentSelection);
 
-            var searchCondition = new SearchCondition(new NamedConstant("Item"), new NamedConstant("GUID"),
-                SearchConditionOptions.IgnoreNames, SearchConditionComparison.HasCategory, VariantData.FromNone());
+            var searchCondition = SearchCondition.HasPropertyByDisplayName("Item", "GUID");
             search.SearchConditions.Add(searchCondition);
 
             var searchResults = search.FindAll(document, true);
