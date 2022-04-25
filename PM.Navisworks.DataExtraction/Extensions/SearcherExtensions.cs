@@ -54,6 +54,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
 
             foreach (var searcher in searchers)
             {
+                //TODO: Flatten DataTable
                 var file = Path.GetFileNameWithoutExtension(document.CurrentFileName);
                 var fileName = $"{file}_{searcher.Name}.csv";
                 var filePath = Path.Combine(folder, fileName);

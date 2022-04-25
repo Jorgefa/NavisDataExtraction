@@ -68,11 +68,6 @@ namespace PM.Navisworks.DataExtraction.Automation
                 throw new Exception("Failed to bind to Navisworks runtime");
             }
             
-            var configurationFile = $"configurationFile={options.ConfigurationFile}";
-            var exportFolder = $"exportFolder={options.ConfigurationFile}";
-            var csvExport = options.CsvExport ? "csvExport" : "";
-            var jsonExport = options.JsonExport ? "jsonExport" : "";
-            
             NavisworksApplication application = null;
 
             try
