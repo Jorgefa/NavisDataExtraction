@@ -98,7 +98,8 @@ namespace PM.Navisworks.DataExtraction.Extensions
                 {
                     Category = propertyPair.Category.Name,
                     Property = propertyPair.Property.Name,
-                    Value = value
+                    Value = value,
+                    ColumnName = propertyPair.ColumnName
                 };
                 elementData.Properties.Add(dataPair);
             }

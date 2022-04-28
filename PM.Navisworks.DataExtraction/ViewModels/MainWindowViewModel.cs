@@ -138,6 +138,32 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             }
         }
 
+        private Category _selectedPairCategory;
+
+        public Category SelectedPairCategory
+        {
+            get => _selectedPairCategory;
+            set
+            {
+                SetProperty(ref _selectedPairCategory, value);
+                if (value == null) return;
+                SelectedPair.Category = value;
+            }
+        }
+
+        private Property _selectedPairProperty;
+
+        public Property SelectedPairProperty
+        {
+            get => _selectedPairProperty;
+            set
+            {
+                SetProperty(ref _selectedPairProperty, value);
+                if (value == null) return;
+                SelectedPair.Property = value;
+            }
+        }
+
         private ObservableCollection<Searcher> _searchers;
 
         public ObservableCollection<Searcher> Searchers

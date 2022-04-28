@@ -74,6 +74,8 @@ namespace PM.Navisworks.DataExtraction.Extensions
                 table.Columns.Add($"{pair.Category.Name}_{pair.Property.Name}");
             }
 
+            // TODO: check column names and create only unique columns
+
             var data = searcher.GetData(document);
             foreach (var elementData in data.ElementsData)
             {

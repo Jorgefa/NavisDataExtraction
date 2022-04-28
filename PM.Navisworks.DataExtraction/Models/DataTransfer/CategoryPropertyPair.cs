@@ -19,5 +19,13 @@ namespace PM.Navisworks.DataExtraction.Models.DataTransfer
             get => _property;
             set => SetProperty(ref _property, value);
         }
+
+        private string _columnName;
+
+        public string ColumnName
+        {
+            get => _columnName;
+            set => SetProperty(ref _columnName, value);
+        }
     }
 }
