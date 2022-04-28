@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 using PM.Navisworks.DataExtraction.Utilities;
 
 namespace PM.Navisworks.DataExtraction.Models.DataTransfer
@@ -15,6 +16,7 @@ namespace PM.Navisworks.DataExtraction.Models.DataTransfer
 
         private ObservableCollection<Property> _properties;
 
+        [JsonIgnore]
         public ObservableCollection<Property> Properties
         {
             get => _properties;

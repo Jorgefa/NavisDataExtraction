@@ -15,7 +15,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
     public static class SearcherExtensions
     {
 
-        public static FileData GetData(this SearcherDto searcher, Document document)
+        public static FileData GetData(this Searcher searcher, Document document)
         {
             if (searcher == null || document == null) return null;
             var search = NavisworksSearcher.FromDto(searcher);
@@ -24,14 +24,14 @@ namespace PM.Navisworks.DataExtraction.Extensions
             return elements.GetData(searcher, document);
         }
 
-        public static List<FileData> GetData(this IEnumerable<SearcherDto> searchers, Document document)
+        public static List<FileData> GetData(this IEnumerable<Searcher> searchers, Document document)
         {
             if (searchers == null || document == null) return new List<FileData>();
             var dtos = searchers.ToList();
             return !dtos.Any() ? new List<FileData>() : dtos.Select(r => r.GetData(document)).ToList();
         }
 
-        public static void ExportCsv(this IEnumerable<SearcherDto> searchers, Document document, string folder = "")
+        public static void ExportCsv(this IEnumerable<Searcher> searchers, Document document, string folder = "")
         {
             try
             {
@@ -62,7 +62,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
             }
         }
 
-        public static void ExportCsv(this SearcherDto searcher, Document document, string filePath)
+        public static void ExportCsv(this Searcher searcher, Document document, string filePath)
         {
             var table = new DataTable();
             table.Columns.Add("FileName");
@@ -101,7 +101,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
             }
         }
         
-        public static void ExportJson(this IEnumerable<SearcherDto> searchers, Document document, string folder = "")
+        public static void ExportJson(this IEnumerable<Searcher> searchers, Document document, string folder = "")
         {
             try
             {
@@ -131,7 +131,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
             }
         }
 
-        public static void ExportJson(this SearcherDto searcher, Document document, string filePath)
+        public static void ExportJson(this Searcher searcher, Document document, string filePath)
         {
 
             try

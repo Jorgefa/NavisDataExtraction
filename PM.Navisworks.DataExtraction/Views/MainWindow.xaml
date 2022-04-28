@@ -139,15 +139,33 @@
                            Text="Category"
                            HorizontalAlignment="Left"
                            Margin="2" />
-                <ComboBox ItemsSource="{Binding Categories}"
-                          SelectedItem="{Binding SelectedCondition.Category, Mode=TwoWay}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding SelectedCondition.Category.Name}"></TextBox>
+                    <ComboBox Grid.Column="1" 
+                              Margin="5,0,0,0"
+                              ItemsSource="{Binding Categories}"
+                              SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" />
+                </Grid>
                 <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
                            Text="Property"
                            HorizontalAlignment="Left"
                            Margin="2,15,2,2" />
-                <ComboBox ItemsSource="{Binding SelectedCondition.Category.Properties}"
-                          IsEnabled="{Binding SelectedCondition.Category, Converter={StaticResource NullToBoolConverter}}"
-                          SelectedItem="{Binding SelectedCondition.Property, Mode=TwoWay}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Text="{Binding SelectedCondition.Property.Name}"></TextBox>
+                    <ComboBox Grid.Column="1" 
+                              Margin="5,0,0,0"
+                              ItemsSource="{Binding SelectedCondition.Category.Properties}"
+                              IsEnabled="{Binding SelectedCondition.Category, Converter={StaticResource NullToBoolConverter}}"
+                              SelectedItem="{Binding SelectedProperty, Mode=TwoWay}" />
+                </Grid>
                 <TextBlock Style="{StaticResource TextBlockDefaultSecLight}"
                            Text="Compare"
                            HorizontalAlignment="Left"
@@ -248,32 +266,6 @@
             </Grid>
         </Grid>
         
-        <Border
-            Visibility="{Binding ProgressBarVisibility, Converter={StaticResource BooleanToVisibilityConverter}}"
-            Width="450"
-            Height="80"
-            CornerRadius="10"
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Grid.RowSpan="3"
-            Background="White"
-            BorderThickness="1"
-            BorderBrush="LightGray">
-            <Grid VerticalAlignment="Center">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <ProgressBar
-                    Margin="10,5"
-                    IsIndeterminate="True"
-                    VerticalAlignment="Center" />
-                <TextBlock Margin="10" Grid.Row="1" Text="{Binding ProgressBarMessage, FallbackValue=Message}"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center" />
-            </Grid>
-        </Border>
         <hc:ButtonGroup Grid.Row="2"
                         Grid.Column="0"
                         Margin="10,0">

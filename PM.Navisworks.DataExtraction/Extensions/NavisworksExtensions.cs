@@ -80,7 +80,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
             temporaryProperties.Add(prop);
         }
 
-        public static ElementData GetData(this ModelItem modelItem, SearcherDto searcher)
+        public static ElementData GetData(this ModelItem modelItem, Searcher searcher)
         {
             var elementData = new ElementData()
             {
@@ -106,7 +106,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
             return elementData;
         }
 
-        public static FileData GetData(this ModelItemCollection collection, SearcherDto searcher, Document document)
+        public static FileData GetData(this ModelItemCollection collection, Searcher searcher, Document document)
         {
             var fileInfo = new FileData()
             {

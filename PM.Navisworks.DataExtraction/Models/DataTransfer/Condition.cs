@@ -4,7 +4,7 @@ using PM.Navisworks.DataExtraction.Utilities;
 
 namespace PM.Navisworks.DataExtraction.Models.DataTransfer
 {
-    public class ConditionDto : BindableBase
+    public class Condition : BindableBase
     {
         private Category _category;
 

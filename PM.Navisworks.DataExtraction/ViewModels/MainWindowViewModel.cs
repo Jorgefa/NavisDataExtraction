@@ -11,6 +11,7 @@ using PM.Navisworks.DataExtraction.Extensions;
 using PM.Navisworks.DataExtraction.Models.DataTransfer;
 using PM.Navisworks.DataExtraction.Models.Navisworks;
 using PM.Navisworks.DataExtraction.Utilities;
+using Condition = PM.Navisworks.DataExtraction.Models.DataTransfer.Condition;
 
 namespace PM.Navisworks.DataExtraction.ViewModels
 {
@@ -24,7 +25,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             _document = document;
             _document.CurrentSelection.Changed += (sender, args) => UpdateCommandVisibility();
             _dispatcher = Dispatcher.CurrentDispatcher;
-            Searchers = new ObservableCollection<SearcherDto>();
+            Searchers = new ObservableCollection<Searcher>();
 
             AddNewSearcherCommand = new DelegateCommand(AddNewSearch);
             AddNewConditionCommand = new DelegateCommand(AddNewCondition);
@@ -32,15 +33,17 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             SelectInNavisworksCommand = new DelegateCommand(SelectInNavisworks, CanSelectNavisworks);
             RefreshCategoriesCommand = new DelegateCommand(GetCategories, CanGetCategories);
             ImportConfigCommand = new DelegateCommand(() =>
-                Searchers = new ObservableCollection<SearcherDto>(Configuration.Import()));
-            ExportConfigCommand = new DelegateCommand(() => Configuration.Export(Searchers), Searchers.Any);
+                Searchers = new ObservableCollection<Searcher>(Configuration.Import()));
+            ExportConfigCommand = new DelegateCommand(() => Configuration.Export(Searchers), () => Searchers.Any());
             DeleteSearcherCommand = new DelegateCommand(DeleteSearch);
             DeleteConditionCommand = new DelegateCommand(DeleteCondition);
             DeletePairCommand = new DelegateCommand(DeletePair);
             ExportSearchCsvCommand = new DelegateCommand(ExportSearchCsv);
             ExportSearchJsonCommand = new DelegateCommand(ExportSearchJson);
-            ExportSearchAllCsvCommand = new DelegateCommand(() => Searchers.ExportCsv(_document), Searchers.Any);
-            ExportSearchAllJsonCommand = new DelegateCommand(() => Searchers.ExportJson(_document), Searchers.Any);
+            ExportSearchAllCsvCommand =
+                new DelegateCommand(() => Searchers.ExportCsv(_document), () => Searchers.Any());
+            ExportSearchAllJsonCommand =
+                new DelegateCommand(() => Searchers.ExportJson(_document), () => Searchers.Any());
 
             GetCategories();
         }
@@ -75,10 +78,10 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             RaisePropertyChanged(nameof(IntegerVisibility));
             RaisePropertyChanged(nameof(DoubleVisibility));
             RaisePropertyChanged(nameof(DateTimeVisibility));
-            
+
             UpdateCommandVisibility();
-            
-            if(SelectedSearcher == null || !SelectedSearcher.Conditions.Any()) return;
+
+            if (SelectedSearcher == null || !SelectedSearcher.Conditions.Any()) return;
             foreach (var selectedSearcherCondition in SelectedSearcher?.Conditions)
             {
                 selectedSearcherCondition?.SetDisplayName(selectedSearcherCondition.Property?.ValueType);
@@ -114,12 +117,30 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public Category SelectedCategory
         {
             get => _selectedCategory;
-            set => SetProperty(ref _selectedCategory, value);
+            set
+            {
+                SetProperty(ref _selectedCategory, value);
+                if(value == null) return;
+                SelectedCondition.Category = value;
+            }
         }
 
-        private ObservableCollection<SearcherDto> _searchers;
+        private Property _selectedProperty;
 
-        public ObservableCollection<SearcherDto> Searchers
+        public Property SelectedProperty
+        {
+            get => _selectedProperty;
+            set
+            {
+                SetProperty(ref _selectedProperty, value);
+                if(value == null) return;
+                SelectedCondition.Property = value;
+            }
+        }
+
+        private ObservableCollection<Searcher> _searchers;
+
+        public ObservableCollection<Searcher> Searchers
         {
             get => _searchers;
             private set
@@ -129,9 +150,9 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             }
         }
 
-        private SearcherDto _selectedSearcher;
+        private Searcher _selectedSearcher;
 
-        public SearcherDto SelectedSearcher
+        public Searcher SelectedSearcher
         {
             get => _selectedSearcher;
             set
@@ -141,9 +162,9 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             }
         }
 
-        private ConditionDto _selectedCondition;
+        private Condition _selectedCondition;
 
-        public ConditionDto SelectedCondition
+        public Condition SelectedCondition
         {
             get => _selectedCondition;
             set
@@ -236,7 +257,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             ExportSearchAllCsvCommand?.RaiseCanExecuteChanged();
             ExportSearchAllJsonCommand?.RaiseCanExecuteChanged();
         }
-        
+
         public DelegateCommand AddNewSearcherCommand { get; }
         public DelegateCommand AddNewConditionCommand { get; }
         public DelegateCommand AddNewPairCommand { get; }
@@ -254,7 +275,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
 
         private void AddNewSearch()
         {
-            Searchers.Add(new SearcherDto
+            Searchers.Add(new Searcher
             {
                 Name = "New Searcher"
             });
@@ -270,7 +291,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         {
             if (SelectedSearcher == null) return;
 
-            SelectedSearcher.Conditions.Add(new ConditionDto
+            SelectedSearcher.Conditions.Add(new Condition
             {
                 Category = Categories.Any() ? Categories.First() : null
             });

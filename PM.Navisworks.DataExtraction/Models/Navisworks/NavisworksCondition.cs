@@ -65,18 +65,20 @@ namespace PM.Navisworks.DataExtraction.Models.Navisworks
                 return condition;
             }
 
-            condition = SearchCondition.HasPropertyByDisplayName(Category, Property);
 
-
-            if (Value == null || Comparison == ConditionComparer.Exists) return condition;
+            if (Value == null || Comparison == ConditionComparer.Exists)
+            {
+                condition = SearchCondition.HasPropertyByDisplayName(Category, Property);
+                return condition;
+            }
 
             var variantData = CreateVariantData();
-
-            CreateComparer(condition, variantData);
+            
+            condition = CreateSearchConditionByValue(variantData);
 
             return condition;
         }
-        
+
         private VariantData CreateVariantData()
         {
             VariantData variantData = null;
@@ -108,31 +110,38 @@ namespace PM.Navisworks.DataExtraction.Models.Navisworks
             return variantData;
         }
 
-        private void CreateComparer(SearchCondition condition, VariantData variantData)
+        private SearchCondition CreateSearchConditionByValue(VariantData variantData)
         {
             switch (Comparison)
             {
                 case ConditionComparer.Equal:
-                    condition.CompareWith((SearchConditionComparison)(int)Comparison, variantData);
-                    break;
+                    return SearchCondition.HasPropertyByDisplayName(Category, Property)
+                        .CompareWith((SearchConditionComparison)(int)Comparison, variantData);
+
                 case ConditionComparer.NotEqual:
-                    condition.CompareWith((SearchConditionComparison)(int)Comparison, variantData);
-                    break;
+                    return SearchCondition.HasPropertyByDisplayName(Category, Property)
+                        .CompareWith((SearchConditionComparison)(int)Comparison, variantData);
+
                 case ConditionComparer.StringContains:
-                    condition.CompareWith((SearchConditionComparison)(int)Comparison, variantData);
-                    break;
+                    return SearchCondition.HasPropertyByDisplayName(Category, Property)
+                        .CompareWith((SearchConditionComparison)(int)Comparison, variantData);
+
                 case ConditionComparer.GreaterThan:
-                    condition.CompareWith((SearchConditionComparison)(int)Comparison, variantData);
-                    break;
+                    return SearchCondition.HasPropertyByDisplayName(Category, Property)
+                        .CompareWith((SearchConditionComparison)(int)Comparison, variantData);
+
                 case ConditionComparer.LessThan:
-                    condition.CompareWith((SearchConditionComparison)(int)Comparison, variantData);
-                    break;
+                    return SearchCondition.HasPropertyByDisplayName(Category, Property)
+                        .CompareWith((SearchConditionComparison)(int)Comparison, variantData);
+
                 case ConditionComparer.LessThanOrEqual:
-                    condition.CompareWith((SearchConditionComparison)(int)Comparison, variantData);
-                    break;
+                    return SearchCondition.HasPropertyByDisplayName(Category, Property)
+                        .CompareWith((SearchConditionComparison)(int)Comparison, variantData);
+
                 case ConditionComparer.GreaterThanOrEqual:
-                    condition.CompareWith((SearchConditionComparison)(int)Comparison, variantData);
-                    break;
+                    return SearchCondition.HasPropertyByDisplayName(Category, Property)
+                        .CompareWith((SearchConditionComparison)(int)Comparison, variantData);
+
                 default:
                     throw new ArgumentOutOfRangeException($"Comparer provided is not supported");
             }
