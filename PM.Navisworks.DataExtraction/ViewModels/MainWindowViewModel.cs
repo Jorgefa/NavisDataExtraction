@@ -117,7 +117,25 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         public Category SelectedCategory
         {
             get => _selectedCategory;
-            set => SetProperty(ref _selectedCategory, value);
+            set
+            {
+                SetProperty(ref _selectedCategory, value);
+                if(value == null) return;
+                SelectedCondition.Category = value;
+            }
+        }
+
+        private Property _selectedProperty;
+
+        public Property SelectedProperty
+        {
+            get => _selectedProperty;
+            set
+            {
+                SetProperty(ref _selectedProperty, value);
+                if(value == null) return;
+                SelectedCondition.Property = value;
+            }
         }
 
         private ObservableCollection<Searcher> _searchers;
