@@ -3,11 +3,11 @@ using PM.Navisworks.DataExtraction.Utilities;
 
 namespace PM.Navisworks.DataExtraction.Models.DataTransfer
 {
-    public class SearcherDto : BindableBase
+    public class Searcher : BindableBase
     {
-        public SearcherDto()
+        public Searcher()
         {
-            Conditions = new ObservableCollection<ConditionDto>();
+            Conditions = new ObservableCollection<Condition>();
             Pairs = new ObservableCollection<CategoryPropertyPair>();
         }
         
@@ -27,9 +27,9 @@ namespace PM.Navisworks.DataExtraction.Models.DataTransfer
             set => SetProperty(ref _pruneBelow, value);
         }
 
-        private ObservableCollection<ConditionDto> _conditions;
+        private ObservableCollection<Condition> _conditions;
 
-        public ObservableCollection<ConditionDto> Conditions
+        public ObservableCollection<Condition> Conditions
         {
             get => _conditions;
             set => SetProperty(ref _conditions, value);

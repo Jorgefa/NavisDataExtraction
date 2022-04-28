@@ -51,7 +51,7 @@ namespace PM.Navisworks.DataExtraction
 
         private void ExportData(MainAutomationOptions options)
         {
-            var searchers = new List<SearcherDto>();
+            var searchers = new List<Searcher>();
             try
             {
                 searchers = Configuration.Import(options.ConfigurationFile);

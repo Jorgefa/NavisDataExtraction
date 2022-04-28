@@ -14,7 +14,7 @@ namespace PM.Navisworks.DataExtraction.Models.Navisworks
             Search.PruneBelowMatch = false;
         }
         
-        public static Search FromDto(SearcherDto searcherDto)
+        public static Search FromDto(Searcher searcherDto)
         {
             var searcher = new NavisworksSearcher();
             

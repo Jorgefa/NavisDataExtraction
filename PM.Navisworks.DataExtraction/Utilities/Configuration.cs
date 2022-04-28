@@ -9,7 +9,7 @@ namespace PM.Navisworks.DataExtraction.Utilities
 {
     public static class Configuration
     {
-        public static List<SearcherDto> Import(string fileName = "")
+        public static List<Searcher> Import(string fileName = "")
         {
             try
             {
@@ -23,21 +23,21 @@ namespace PM.Navisworks.DataExtraction.Utilities
                         CheckFileExists = true,
                         CheckPathExists = true
                     };
-                    if (dialog.ShowDialog() != DialogResult.OK) return new List<SearcherDto>();
+                    if (dialog.ShowDialog() != DialogResult.OK) return new List<Searcher>();
 
                     fileName = dialog.FileName;
                 }
-                var config = JsonConvert.DeserializeObject<List<SearcherDto>>(File.ReadAllText(fileName));
+                var config = JsonConvert.DeserializeObject<List<Searcher>>(File.ReadAllText(fileName));
                 return config;
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-                return new List<SearcherDto>();
+                return new List<Searcher>();
             }
         }
 
-        public static void Export(IEnumerable<SearcherDto> searchers)
+        public static void Export(IEnumerable<Searcher> searchers)
         {
             try
             {

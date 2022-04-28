@@ -11,6 +11,7 @@ using PM.Navisworks.DataExtraction.Extensions;
 using PM.Navisworks.DataExtraction.Models.DataTransfer;
 using PM.Navisworks.DataExtraction.Models.Navisworks;
 using PM.Navisworks.DataExtraction.Utilities;
+using Condition = PM.Navisworks.DataExtraction.Models.DataTransfer.Condition;
 
 namespace PM.Navisworks.DataExtraction.ViewModels
 {
@@ -24,7 +25,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             _document = document;
             _document.CurrentSelection.Changed += (sender, args) => UpdateCommandVisibility();
             _dispatcher = Dispatcher.CurrentDispatcher;
-            Searchers = new ObservableCollection<SearcherDto>();
+            Searchers = new ObservableCollection<Searcher>();
 
             AddNewSearcherCommand = new DelegateCommand(AddNewSearch);
             AddNewConditionCommand = new DelegateCommand(AddNewCondition);
@@ -32,7 +33,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             SelectInNavisworksCommand = new DelegateCommand(SelectInNavisworks, CanSelectNavisworks);
             RefreshCategoriesCommand = new DelegateCommand(GetCategories, CanGetCategories);
             ImportConfigCommand = new DelegateCommand(() =>
-                Searchers = new ObservableCollection<SearcherDto>(Configuration.Import()));
+                Searchers = new ObservableCollection<Searcher>(Configuration.Import()));
             ExportConfigCommand = new DelegateCommand(() => Configuration.Export(Searchers), Searchers.Any);
             DeleteSearcherCommand = new DelegateCommand(DeleteSearch);
             DeleteConditionCommand = new DelegateCommand(DeleteCondition);
@@ -117,9 +118,9 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             set => SetProperty(ref _selectedCategory, value);
         }
 
-        private ObservableCollection<SearcherDto> _searchers;
+        private ObservableCollection<Searcher> _searchers;
 
-        public ObservableCollection<SearcherDto> Searchers
+        public ObservableCollection<Searcher> Searchers
         {
             get => _searchers;
             private set
@@ -129,9 +130,9 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             }
         }
 
-        private SearcherDto _selectedSearcher;
+        private Searcher _selectedSearcher;
 
-        public SearcherDto SelectedSearcher
+        public Searcher SelectedSearcher
         {
             get => _selectedSearcher;
             set
@@ -141,9 +142,9 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             }
         }
 
-        private ConditionDto _selectedCondition;
+        private Condition _selectedCondition;
 
-        public ConditionDto SelectedCondition
+        public Condition SelectedCondition
         {
             get => _selectedCondition;
             set
@@ -254,7 +255,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
 
         private void AddNewSearch()
         {
-            Searchers.Add(new SearcherDto
+            Searchers.Add(new Searcher
             {
                 Name = "New Searcher"
             });
@@ -270,7 +271,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
         {
             if (SelectedSearcher == null) return;
 
-            SelectedSearcher.Conditions.Add(new ConditionDto
+            SelectedSearcher.Conditions.Add(new Condition
             {
                 Category = Categories.Any() ? Categories.First() : null
             });
