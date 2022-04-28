@@ -34,14 +34,16 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             RefreshCategoriesCommand = new DelegateCommand(GetCategories, CanGetCategories);
             ImportConfigCommand = new DelegateCommand(() =>
                 Searchers = new ObservableCollection<Searcher>(Configuration.Import()));
-            ExportConfigCommand = new DelegateCommand(() => Configuration.Export(Searchers), Searchers.Any);
+            ExportConfigCommand = new DelegateCommand(() => Configuration.Export(Searchers), () => Searchers.Any());
             DeleteSearcherCommand = new DelegateCommand(DeleteSearch);
             DeleteConditionCommand = new DelegateCommand(DeleteCondition);
             DeletePairCommand = new DelegateCommand(DeletePair);
             ExportSearchCsvCommand = new DelegateCommand(ExportSearchCsv);
             ExportSearchJsonCommand = new DelegateCommand(ExportSearchJson);
-            ExportSearchAllCsvCommand = new DelegateCommand(() => Searchers.ExportCsv(_document), Searchers.Any);
-            ExportSearchAllJsonCommand = new DelegateCommand(() => Searchers.ExportJson(_document), Searchers.Any);
+            ExportSearchAllCsvCommand =
+                new DelegateCommand(() => Searchers.ExportCsv(_document), () => Searchers.Any());
+            ExportSearchAllJsonCommand =
+                new DelegateCommand(() => Searchers.ExportJson(_document), () => Searchers.Any());
 
             GetCategories();
         }
@@ -76,10 +78,10 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             RaisePropertyChanged(nameof(IntegerVisibility));
             RaisePropertyChanged(nameof(DoubleVisibility));
             RaisePropertyChanged(nameof(DateTimeVisibility));
-            
+
             UpdateCommandVisibility();
-            
-            if(SelectedSearcher == null || !SelectedSearcher.Conditions.Any()) return;
+
+            if (SelectedSearcher == null || !SelectedSearcher.Conditions.Any()) return;
             foreach (var selectedSearcherCondition in SelectedSearcher?.Conditions)
             {
                 selectedSearcherCondition?.SetDisplayName(selectedSearcherCondition.Property?.ValueType);
@@ -237,7 +239,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             ExportSearchAllCsvCommand?.RaiseCanExecuteChanged();
             ExportSearchAllJsonCommand?.RaiseCanExecuteChanged();
         }
-        
+
         public DelegateCommand AddNewSearcherCommand { get; }
         public DelegateCommand AddNewConditionCommand { get; }
         public DelegateCommand AddNewPairCommand { get; }
