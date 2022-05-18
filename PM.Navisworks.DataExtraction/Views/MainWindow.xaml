@@ -68,8 +68,10 @@
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="{Binding AddNewSearcherCommand}" Header="Add" />
+                        <MenuItem Command="{Binding DuplicateSearcherCommand}" Header="Duplicate" />
                         <MenuItem Command="{Binding DeleteSearcherCommand}" Header="Delete" />
                         <MenuItem Command="{Binding ExportSearchCsvCommand}" Header="Export Data for Search (.csv)" />
+                        <MenuItem Command="{Binding ExportSearchCsvMappedCommand}" Header="Export Data Mapped for Search (.csv)" />
                         <MenuItem Command="{Binding ExportSearchJsonCommand}" Header="Export Data for Search (.json)" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
@@ -111,6 +113,8 @@
                 Orientation="Vertical">
                 <Button Command="{Binding ExportSearchAllCsvCommand}" Content="Export All to Csv" />
                 <Button Command="{Binding ExportSearchAllJsonCommand}" Content="Export All to Json" />
+                <Button Command="{Binding ExportSearchAllCsvMappedCombinedCommand}" Content="Export All Mapped and Combined to Csv" />
+
             </hc:ButtonGroup>
             <hc:Divider
                 Grid.Row="2"
@@ -135,6 +139,7 @@
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="{Binding AddNewConditionCommand}" Header="Add" />
+                        <MenuItem Command="{Binding DuplicateConditionCommand}" Header="Duplicate" />
                         <MenuItem Command="{Binding DeleteConditionCommand}" Header="Delete" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
@@ -236,8 +241,10 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
+                            <Run Text="{Binding ColumnName}" />
+                            <Run Text=" | " />
                             <Run Text="{Binding Category.Name}" />
-                            <Run Text=" " />
+                            <Run Text=" | " />
                             <Run Text="{Binding Property.Name}" />
                         </TextBlock>
                     </DataTemplate>
@@ -245,6 +252,7 @@
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="{Binding AddNewPairCommand}" Header="Add" />
+                        <MenuItem Command="{Binding DuplicatePairCommand}" Header="Duplicate" />
                         <MenuItem Command="{Binding DeletePairCommand}" Header="Delete" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
