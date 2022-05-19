@@ -50,6 +50,12 @@
       <Page Include="Views\MainWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
+      <Reference Include="Autodesk.Navisworks.ComApi">
+        <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.ComApi.dll</HintPath>
+      </Reference>
+      <Reference Include="Autodesk.Navisworks.Interop.ComApi">
+        <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+      </Reference>
       <Reference Include="PresentationCore" />
       <Reference Include="PresentationFramework" />
       <Reference Include="System.Windows" />

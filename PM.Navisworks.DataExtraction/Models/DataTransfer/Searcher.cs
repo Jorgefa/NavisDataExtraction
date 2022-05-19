@@ -9,6 +9,7 @@ namespace PM.Navisworks.DataExtraction.Models.DataTransfer
         {
             Conditions = new ObservableCollection<Condition>();
             Pairs = new ObservableCollection<CategoryPropertyPair>();
+            DefaultData = new DefaultDataOptions { Coordinates = false, ModelSource = false };
         }
         
         private string _name;
@@ -27,12 +28,28 @@ namespace PM.Navisworks.DataExtraction.Models.DataTransfer
             set => SetProperty(ref _pruneBelow, value);
         }
 
+        private bool _dataMapped;
+
+        public bool DataMapped
+        {
+            get => _dataMapped;
+            set => SetProperty(ref _dataMapped, value);
+        }
+
         private ObservableCollection<Condition> _conditions;
 
         public ObservableCollection<Condition> Conditions
         {
             get => _conditions;
             set => SetProperty(ref _conditions, value);
+        }
+
+        private DefaultDataOptions _defaultData;
+
+        public DefaultDataOptions DefaultData
+        {
+            get => _defaultData;
+            set => SetProperty(ref _defaultData, value);
         }
 
         private ObservableCollection<CategoryPropertyPair> _pairs;

@@ -7,6 +7,8 @@ namespace PM.Navisworks.DataExtraction.Models.Data
     {
         public string ElementName { get; set; }
         public Guid ElementGuid { get; set; }
+        public string ElementModelSource { get; set; }
+        public double[] ElementCoordinates { get; set; }
         public List<DataPair> Properties { get; set; }
     }
 }

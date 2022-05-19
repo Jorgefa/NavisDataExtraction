@@ -42,14 +42,16 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             DeleteConditionCommand = new DelegateCommand(DeleteCondition);
             DeletePairCommand = new DelegateCommand(DeletePair);
             ExportSearchCsvCommand = new DelegateCommand(ExportSearchCsv);
-            ExportSearchCsvMappedCommand = new DelegateCommand(ExportSearchCsvMapped);
             ExportSearchJsonCommand = new DelegateCommand(ExportSearchJson);
             ExportSearchAllCsvCommand =
                 new DelegateCommand(() => Searchers.ExportCsv(_document), () => Searchers.Any());
-            ExportSearchAllCsvMappedCombinedCommand =
-                new DelegateCommand(() => Searchers.ExportCsvMappedCombined(_document) , () => Searchers.Any());
+            ExportSearchAllCsvCombinedCommand =
+                new DelegateCommand(() => Searchers.ExportCsvCombined(_document), () => Searchers.Any());
             ExportSearchAllJsonCommand =
                 new DelegateCommand(() => Searchers.ExportJson(_document), () => Searchers.Any());
+            AddAllDataToNavisworkCommand =
+                new DelegateCommand(() => Searchers.AddDataToNaviswork(_document), () => Searchers.Any());
+            AddDataToNavisworkCommand = new DelegateCommand(AddDataToNaviswork);
 
             GetCategories();
         }
@@ -288,30 +290,32 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             ExportConfigCommand?.RaiseCanExecuteChanged();
             ExportSearchAllCsvCommand?.RaiseCanExecuteChanged();
             ExportSearchAllJsonCommand?.RaiseCanExecuteChanged();
-            ExportSearchAllCsvMappedCombinedCommand?.RaiseCanExecuteChanged();
+            ExportSearchAllCsvCombinedCommand?.RaiseCanExecuteChanged();
+            AddAllDataToNavisworkCommand?.RaiseCanExecuteChanged();
         }
 
         public DelegateCommand AddNewSearcherCommand { get; }
         public DelegateCommand DuplicateSearcherCommand { get; }
+        public DelegateCommand DeleteSearcherCommand { get; }
         public DelegateCommand AddNewConditionCommand { get; }
         public DelegateCommand DuplicateConditionCommand { get; }
-
+        public DelegateCommand DeleteConditionCommand { get; }
         public DelegateCommand AddNewPairCommand { get; }
         public DelegateCommand DuplicatePairCommand { get; }
+        public DelegateCommand DeletePairCommand { get; }
 
         public DelegateCommand SelectInNavisworksCommand { get; }
         public DelegateCommand RefreshCategoriesCommand { get; }
         public DelegateCommand ImportConfigCommand { get; }
         public DelegateCommand ExportConfigCommand { get; }
-        public DelegateCommand DeleteSearcherCommand { get; }
-        public DelegateCommand DeleteConditionCommand { get; }
-        public DelegateCommand DeletePairCommand { get; }
+
         public DelegateCommand ExportSearchCsvCommand { get; }
-        public DelegateCommand ExportSearchCsvMappedCommand { get; }
         public DelegateCommand ExportSearchJsonCommand { get; }
         public DelegateCommand ExportSearchAllCsvCommand { get; }
-        public DelegateCommand ExportSearchAllCsvMappedCombinedCommand { get; }
+        public DelegateCommand ExportSearchAllCsvCombinedCommand { get; }
         public DelegateCommand ExportSearchAllJsonCommand { get; }
+        public DelegateCommand AddAllDataToNavisworkCommand { get; }
+        public DelegateCommand AddDataToNavisworkCommand { get; }
 
         private void AddNewSearcher()
         {
@@ -332,7 +336,6 @@ namespace PM.Navisworks.DataExtraction.ViewModels
                 Pairs = SelectedSearcher.Pairs,
                 PruneBelow = SelectedSearcher.PruneBelow
             });
-            
         }
 
         private void DeleteSearch()
@@ -371,7 +374,6 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             });
             SelectedCondition = SelectedSearcher.Conditions.Last();
             UpdateValues();
-
         }
 
         private void DeleteCondition()
@@ -389,6 +391,8 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             {
                 Category = Categories.Any() ? Categories.First() : null
             });
+            SelectedPair = SelectedSearcher.Pairs.Last();
+            UpdateValues();
         }
 
         private void DuplicatePair()
@@ -403,6 +407,8 @@ namespace PM.Navisworks.DataExtraction.ViewModels
                 Category = SelectedPair.Category,
                 Property = SelectedPair.Property
             });
+            SelectedPair = SelectedSearcher.Pairs.Last();
+            UpdateValues();
         }
 
         private void DeletePair()
@@ -456,18 +462,6 @@ namespace PM.Navisworks.DataExtraction.ViewModels
                 SelectedSearcher.ExportCsv(_document, dialog.FileName);
         }
 
-        private void ExportSearchCsvMapped()
-        {
-            if (SelectedSearcher == null) return;
-            var dialog = new SaveFileDialog
-            {
-                Filter = "CSV Files (*.csv)|*.csv",
-                FileName = SelectedSearcher.Name
-            };
-            if (dialog.ShowDialog() == DialogResult.OK)
-                SelectedSearcher.ExportCsvMapped(_document, dialog.FileName);
-        }
-
         private void ExportSearchJson()
         {
             if (SelectedSearcher == null) return;
@@ -478,6 +472,12 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             };
             if (dialog.ShowDialog() == DialogResult.OK)
                 SelectedSearcher.ExportJson(_document, dialog.FileName);
+        }
+
+        private void AddDataToNaviswork()
+        {
+            if (SelectedSearcher == null) return;
+            SelectedSearcher.AddDataToNaviswork(_document);
         }
     }
 }

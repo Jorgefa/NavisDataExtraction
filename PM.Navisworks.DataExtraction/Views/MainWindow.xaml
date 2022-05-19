@@ -71,8 +71,9 @@
                         <MenuItem Command="{Binding DuplicateSearcherCommand}" Header="Duplicate" />
                         <MenuItem Command="{Binding DeleteSearcherCommand}" Header="Delete" />
                         <MenuItem Command="{Binding ExportSearchCsvCommand}" Header="Export Data for Search (.csv)" />
-                        <MenuItem Command="{Binding ExportSearchCsvMappedCommand}" Header="Export Data Mapped for Search (.csv)" />
                         <MenuItem Command="{Binding ExportSearchJsonCommand}" Header="Export Data for Search (.json)" />
+                        <MenuItem Command="{Binding AddDataToNavisworkCommand}" Header="Add Searcher Data to Navisworks" />
+
                     </ContextMenu>
                 </ListBox.ContextMenu>
                 <ListBox.ItemTemplate>
@@ -86,7 +87,7 @@
                 Grid.Column="1"
                 Margin="5,0,0,0"
                 IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}">
-                <hc:Divider Margin="2" Content="Properties" />
+                <hc:Divider Margin="2" Content="Search Properties" />
                 <TextBlock
                     HorizontalAlignment="Left"
                     Style="{StaticResource TextBlockDefaultSecLight}"
@@ -98,23 +99,46 @@
                 <CheckBox
                     Margin="0,2,0,5"
                     Content="Prune Below"
-                    IsChecked="{Binding SelectedSearcher.PruneBelow}" />
-                <TextBlock
-                    HorizontalAlignment="Left"
-                    FontSize="10"
-                    Style="{StaticResource TextBlockDefaultThiLight}"
-                    Text="When value is true, search ignores descendants of any matching model items."
-                    TextWrapping="Wrap" />
+                    IsChecked="{Binding SelectedSearcher.PruneBelow}"
+                    ToolTip="When value is true, search ignores descendants of any matching model items."
+                    ToolTipService.BetweenShowDelay="2000"
+                    ToolTipService.InitialShowDelay="500"
+                    ToolTipService.ShowDuration="6000" />
+                <CheckBox
+                    Margin="0,2,0,5"
+                    Content="Map column names"
+                    IsChecked="{Binding SelectedSearcher.DataMapped}"
+                    ToolTip="When value is true mapped name are used instead Navisworks category+property names."
+                    ToolTipService.BetweenShowDelay="2000"
+                    ToolTipService.InitialShowDelay="500"
+                    ToolTipService.ShowDuration="6000" />
+                <hc:Divider Margin="2" Content="Additional properties to extract" />
+                <CheckBox
+                    Margin="0,2,0,5"
+                    Content="ModelSource"
+                    IsChecked="{Binding SelectedSearcher.DefaultData.ModelSource}"
+                    ToolTip="Adding Model Source Name to data extraction."
+                    ToolTipService.BetweenShowDelay="2000"
+                    ToolTipService.InitialShowDelay="500"
+                    ToolTipService.ShowDuration="6000" />
+                <CheckBox
+                    Margin="0,2,0,5"
+                    Content="Coordinates [X,Y,Z]"
+                    IsChecked="{Binding SelectedSearcher.DefaultData.Coordinates}"
+                    ToolTip="Adding X, Y and Z coordinates to data extraction."
+                    ToolTipService.BetweenShowDelay="2000"
+                    ToolTipService.InitialShowDelay="500"
+                    ToolTipService.ShowDuration="6000" />
             </StackPanel>
             <hc:ButtonGroup
                 Grid.Row="1"
                 Grid.Column="1"
                 VerticalAlignment="Bottom"
                 Orientation="Vertical">
-                <Button Command="{Binding ExportSearchAllCsvCommand}" Content="Export All to Csv" />
-                <Button Command="{Binding ExportSearchAllJsonCommand}" Content="Export All to Json" />
-                <Button Command="{Binding ExportSearchAllCsvMappedCombinedCommand}" Content="Export All Mapped and Combined to Csv" />
-
+                <Button Command="{Binding ExportSearchAllCsvCommand}" Content="Export all individual to Csv" />
+                <Button Command="{Binding ExportSearchAllJsonCommand}" Content="Export all to individual Json" />
+                <Button Command="{Binding ExportSearchAllCsvCombinedCommand}" Content="Export all combined to Csv" />
+                <Button Command="{Binding AddDataToNavisworkCommand}" Content="Add all searchers data to Navisworks" />
             </hc:ButtonGroup>
             <hc:Divider
                 Grid.Row="2"
@@ -279,7 +303,11 @@
                         Margin="2"
                         HorizontalAlignment="Left"
                         Style="{StaticResource TextBlockDefaultSecLight}"
-                        Text="Mapped name" />
+                        Text="Mapped name"
+                        ToolTip="Use this property to change the name of the parameter when extracting or adding data to new Navisworks data tab."
+                        ToolTipService.BetweenShowDelay="2000"
+                        ToolTipService.InitialShowDelay="500"
+                        ToolTipService.ShowDuration="6000" />
                     <TextBox Text="{Binding SelectedPair.ColumnName}" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Margin="5,0">
