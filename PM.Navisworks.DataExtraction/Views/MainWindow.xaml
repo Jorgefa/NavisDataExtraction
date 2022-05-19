@@ -57,7 +57,7 @@
                 Grid.ColumnSpan="2"
                 Margin="0,5"
                 HorizontalContentAlignment="Left"
-                Content="Search" />
+                Content="Searchers" />
             <ListBox
                 Grid.Row="1"
                 Grid.Column="0"
@@ -82,12 +82,23 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <hc:ButtonGroup
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="0,0,5,0"
+                VerticalAlignment="Bottom"
+                Orientation="Vertical">
+                <Button Command="{Binding ExportSearchAllCsvCommand}" Content="Export all individual to Csv" />
+                <Button Command="{Binding ExportSearchAllJsonCommand}" Content="Export all to individual Json" />
+                <Button Command="{Binding ExportSearchAllCsvCombinedCommand}" Content="Export all combined to Csv" />
+                <Button Command="{Binding AddDataToNavisworkCommand}" Content="Add all searchers data to Navisworks" />
+            </hc:ButtonGroup>
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="5,0,0,0"
                 IsEnabled="{Binding SelectedSearcher, Converter={StaticResource NullToBoolConverter}}">
-                <hc:Divider Margin="2" Content="Search Properties" />
+                <hc:Divider Margin="2" Content="Searcher options" />
                 <TextBlock
                     HorizontalAlignment="Left"
                     Style="{StaticResource TextBlockDefaultSecLight}"
@@ -130,23 +141,13 @@
                     ToolTipService.InitialShowDelay="500"
                     ToolTipService.ShowDuration="6000" />
             </StackPanel>
-            <hc:ButtonGroup
-                Grid.Row="1"
-                Grid.Column="1"
-                VerticalAlignment="Bottom"
-                Orientation="Vertical">
-                <Button Command="{Binding ExportSearchAllCsvCommand}" Content="Export all individual to Csv" />
-                <Button Command="{Binding ExportSearchAllJsonCommand}" Content="Export all to individual Json" />
-                <Button Command="{Binding ExportSearchAllCsvCombinedCommand}" Content="Export all combined to Csv" />
-                <Button Command="{Binding AddDataToNavisworkCommand}" Content="Add all searchers data to Navisworks" />
-            </hc:ButtonGroup>
             <hc:Divider
                 Grid.Row="2"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="0,5"
                 HorizontalContentAlignment="Left"
-                Content="Search Conditions" />
+                Content="Searcher conditions" />
             <ListBox
                 Grid.Row="3"
                 Grid.Column="0"
@@ -173,7 +174,7 @@
                 Grid.Column="1"
                 Margin="5,0,0,0"
                 IsEnabled="{Binding SelectedCondition, Converter={StaticResource NullToBoolConverter}}">
-                <hc:Divider Margin="5,2" Content="Rules" />
+                <hc:Divider Margin="5,2" Content="Searcher condition options" />
                 <TextBlock
                     Margin="2"
                     HorizontalAlignment="Left"
@@ -256,7 +257,7 @@
                 Grid.Row="0"
                 Margin="0,5"
                 HorizontalContentAlignment="Left"
-                Content="Exported Properties" />
+                Content="Searcher properties" />
             <ListBox
                 Grid.Row="1"
                 ItemsSource="{Binding SelectedSearcher.Pairs}"
@@ -285,7 +286,7 @@
                 Grid.Row="2"
                 Margin="0,5"
                 HorizontalContentAlignment="Left"
-                Content="Selected Property" />
+                Content="Searcher property options" />
             <Grid
                 Grid.Row="3"
                 Margin="0,5"
