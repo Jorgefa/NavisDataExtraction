@@ -15,12 +15,11 @@ namespace PM.Navisworks.DataExtraction.Setup
         const string PackageName = "PM.Navisworks.DataExtraction";
         const string ProjectDescription = "Navisworks Data Exporter";
 
-        //Change This when Building from different PC
         private const string ProjectLocation =
-            @"D:\02-GITHUB\NavisDataExtration\NavisDataExtraction\PM.Navisworks.DataExtraction";
+            @"..\PM.Navisworks.DataExtraction";
 
         private const string AutomationProjectLocation =
-            @"D:\02-GITHUB\NavisDataExtration\NavisDataExtraction\PM.Navisworks.DataExtraction.Automation";
+            @"..\PM.Navisworks.DataExtraction.Automation";
 
         public static void Main(string[] args)
         {

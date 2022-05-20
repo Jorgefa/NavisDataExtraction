@@ -27,35 +27,61 @@
             <HintPath>..\ApiDlls\2018_dll\Autodesk.Navisworks.Api.dll</HintPath>
             <Private>False</Private>
         </Reference>
+		<Reference Include="Autodesk.Navisworks.ComApi">
+			<HintPath>..\ApiDlls\2018_dll\Autodesk.Navisworks.ComApi.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Autodesk.Navisworks.Interop.ComApi">
+			<HintPath>..\ApiDlls\2018_dll\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'Debug_2020' Or '$(Configuration)' == 'Release_2020'">
         <Reference Include="Autodesk.Navisworks.Api, Version=17.0.1336.83, Culture=neutral, PublicKeyToken=d85e58fa5af9b484">
             <HintPath>..\ApiDlls\2020_dll\Autodesk.Navisworks.Api.dll</HintPath>
             <Private>False</Private>
         </Reference>
+		<Reference Include="Autodesk.Navisworks.ComApi">
+			<HintPath>..\ApiDlls\2020_dll\Autodesk.Navisworks.ComApi.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Autodesk.Navisworks.Interop.ComApi">
+			<HintPath>..\ApiDlls\2020_dll\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'Debug_2021' Or '$(Configuration)' == 'Release_2021'">
         <Reference Include="Autodesk.Navisworks.Api, Version=18.0.1347.51, Culture=neutral, PublicKeyToken=d85e58fa5af9b484">
             <HintPath>..\ApiDlls\2021_dll\Autodesk.Navisworks.Api.dll</HintPath>
             <Private>False</Private>
         </Reference>
+		<Reference Include="Autodesk.Navisworks.ComApi">
+			<HintPath>..\ApiDlls\2021_dll\Autodesk.Navisworks.ComApi.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Autodesk.Navisworks.Interop.ComApi">
+			<HintPath>..\ApiDlls\2021_dll\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'Debug_2022' Or '$(Configuration)' == 'Release_2022'">
         <Reference Include="Autodesk.Navisworks.Api, Version=19.0.1374.1, Culture=neutral, PublicKeyToken=d85e58fa5af9b484">
             <HintPath>..\ApiDlls\2022_dll\Autodesk.Navisworks.Api.dll</HintPath>
             <Private>False</Private>
         </Reference>
+		<Reference Include="Autodesk.Navisworks.ComApi">
+			<HintPath>..\ApiDlls\2022_dll\Autodesk.Navisworks.ComApi.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="Autodesk.Navisworks.Interop.ComApi">
+			<HintPath>..\ApiDlls\2022_dll\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
     </ItemGroup>
     <ItemGroup>
       <Page Include="Views\MainWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="Autodesk.Navisworks.ComApi">
-        <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.ComApi.dll</HintPath>
-      </Reference>
-      <Reference Include="Autodesk.Navisworks.Interop.ComApi">
-        <HintPath>C:\Program Files\Autodesk\Navisworks Manage 2022\Autodesk.Navisworks.Interop.ComApi.dll</HintPath>
-      </Reference>
       <Reference Include="PresentationCore" />
       <Reference Include="PresentationFramework" />
       <Reference Include="System.Windows" />
