@@ -50,7 +50,7 @@ namespace PM.Navisworks.DataExtraction.Automation
                 return;
             }
             
-            if (!options.CsvExport || !options.JsonExport)
+            if (!options.CsvExport || !options.JsonExport || !options.CsvCombinedExport)
             {
                 Console.WriteLine($"No export format specified.");
                 return;
@@ -125,6 +125,8 @@ namespace PM.Navisworks.DataExtraction.Automation
         
         [Option("csv", Required = false, HelpText = "Whether to export to .csv files")]
         public bool CsvExport { get; set; }
+        [Option("combined", Required = false, HelpText = "Whether to export to single .csv file")]
+        public bool CsvCombinedExport { get; set; }
         [Option("json", Required = false, HelpText = "Whether to export to .json files")]
         public bool JsonExport { get; set; }
 
@@ -139,7 +141,8 @@ namespace PM.Navisworks.DataExtraction.Automation
             options.Add("-f");
             options.Add(ExportFolder);
             if(CsvExport) options.Add("--csv");
-            if(JsonExport) options.Add("--json");
+            if (CsvCombinedExport) options.Add("--combined");
+            if (JsonExport) options.Add("--json");
             
             return options.ToArray();
         }

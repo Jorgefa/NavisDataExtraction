@@ -16,6 +16,9 @@ namespace PM.Navisworks.DataExtraction
         [Option("csv", Required = false, HelpText = "Whether to export to .csv files")]
         public bool CsvExport { get; set; }
 
+        [Option("combined", Required = false, HelpText = "Whether to export to single .csv file")]
+        public bool CsvCombinedExport { get; set; }
+
         [Option("json", Required = false, HelpText = "Whether to export to .json files")]
         public bool JsonExport { get; set; }
     }

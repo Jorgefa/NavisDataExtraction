@@ -79,6 +79,16 @@ namespace PM.Navisworks.DataExtraction
 
             try
             {
+                var exportName = $"{Path.GetFileNameWithoutExtension(options.NavisworksFile)}.csv";
+                if (options.CsvCombinedExport) searchers.ExportCsvCombined(_document, Path.Combine(options.ExportFolder, exportName));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            try
+            {
                 if (options.JsonExport) searchers.ExportJson(_document, options.ExportFolder);
             }
             catch (Exception e)
