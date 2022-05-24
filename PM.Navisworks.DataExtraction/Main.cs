@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Autodesk.Navisworks.Api;
+using Autodesk.Navisworks.Api.Plugins;
+using PM.Navisworks.DataExtraction.Views;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.Integration;
-using Autodesk.Navisworks.Api;
-using Autodesk.Navisworks.Api.Plugins;
-using PM.Navisworks.DataExtraction.Views;
 
 namespace PM.Navisworks.DataExtraction
 {
@@ -16,6 +16,7 @@ namespace PM.Navisworks.DataExtraction
     public class Main : AddInPlugin
     {
         private static string _thisAssemblyPath;
+        private static MainWindow _window;
 
         public override int Execute(params string[] parameters)
         {
@@ -23,11 +24,24 @@ namespace PM.Navisworks.DataExtraction
             _thisAssemblyPath = Assembly.GetExecutingAssembly().Location;
             AppDomain.CurrentDomain.AssemblyResolve += ResolveAssemblies;
 
-            var window = new MainWindow(activeDoc);
-            ElementHost.EnableModelessKeyboardInterop(window);
-            window.Show();
-            
+            if (_window != null)
+            {
+                _window.Activate();
+            }
+            else
+            {
+                _window = new MainWindow(activeDoc);
+                ElementHost.EnableModelessKeyboardInterop(_window);
+                _window.Closed += WindowClosed;
+                _window.Show();
+            }
+
             return 0;
+        }
+
+        private void WindowClosed(object sender, EventArgs e)
+        {
+            _window = null;
         }
 
         private Assembly ResolveAssemblies(object sender, ResolveEventArgs args)

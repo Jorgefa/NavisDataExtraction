@@ -6,7 +6,7 @@
 </auto-generated>
 -->
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="2a95eaee-b7a7-47fc-bdcf-b1874d276483" Name="Navisworks Data Exporter" Language="1033" Codepage="Windows-1252" Version="0.3.27.616" UpgradeCode="2a95eaee-b7a7-47fc-bdcf-b1874df6b21a" Manufacturer="jorge.alonso.x">
+  <Product Id="2a95eaee-b7a7-47fc-bdcf-b1874d27a4d3" Name="Navisworks Data Exporter" Language="1033" Codepage="Windows-1252" Version="0.3.31.696" UpgradeCode="2a95eaee-b7a7-47fc-bdcf-b1874df6b21a" Manufacturer="jorge.alonso.x">
     <Package InstallerVersion="200" Compressed="yes" Description="Navisworks Data Exporter" Platform="x64" SummaryCodepage="Windows-1252" InstallScope="perUser" Languages="1033" />
     <Media Id="1" Cabinet="Navisworks20Data20Exporter.cab" EmbedCab="yes" />
 
@@ -494,7 +494,7 @@
 
         <Component Id="Registry.1" Guid="2a95eaee-b7a7-47fc-bdcf-b1874a138099" Win64="no">
           <RegistryKey Root="HKCU" Key="Software\PM Group\Navisworks Data Exporter">
-            <RegistryValue Id="Version" Type="string" KeyPath="no" Value="0.3.27.616" Name="Version" />
+            <RegistryValue Id="Version" Type="string" KeyPath="no" Value="0.3.31.696" Name="Version" />
           </RegistryKey>
 
           <CreateFolder />
