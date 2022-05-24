@@ -1,6 +1,7 @@
 ﻿using Autodesk.Navisworks.Api;
 using Autodesk.Navisworks.Api.ComApi;
 using Autodesk.Navisworks.Api.Interop.ComApi;
+using NavisDataExtraction.Utils.Progress;
 using PM.Navisworks.DataExtraction.Models.Data;
 using PM.Navisworks.DataExtraction.Models.DataTransfer;
 using System;
@@ -278,10 +279,26 @@ namespace PM.Navisworks.DataExtraction.Extensions
             var total = collection.Count();
             var current = 0;
 
-            foreach (var modelItem in collection)
+            try
             {
-                modelItem.AddDataToNavis(searcher, document, cDocument, catDisplayName, keepPreviousData);
-                current++;
+                ProgressUtilDefined.Start();
+
+
+                foreach (var modelItem in collection)
+                {
+                    ProgressUtilDefined.Update($"{searcher.Name} - {modelItem.DisplayName}", current, total);
+
+                    modelItem.AddDataToNavis(searcher, document, cDocument, catDisplayName, keepPreviousData);
+                    current++;
+                }
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+            finally
+            {
+                ProgressUtilDefined.Finish();
             }
         }
     }

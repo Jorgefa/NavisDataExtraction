@@ -41,12 +41,12 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             DeleteSearcherCommand = new DelegateCommand(DeleteSearch);
             DeleteConditionCommand = new DelegateCommand(DeleteCondition);
             DeletePairCommand = new DelegateCommand(DeletePair);
-            ExportSearchCsvCommand = new DelegateCommand(ExportSearchCsv);
+            ExportSearchCsvCommand = new DelegateCommand(ExportSearcherCsv);
+
             ExportSearchJsonCommand = new DelegateCommand(ExportSearchJson);
             ExportSearchAllCsvCommand =
                 new DelegateCommand(() => Searchers.ExportCsv(_document), () => Searchers.Any());
-            ExportSearchAllCsvCombinedCommand =
-                new DelegateCommand(() => Searchers.ExportCsvCombined(_document), () => Searchers.Any());
+            ExportSearchAllCsvCombinedCommand = new DelegateCommand(ExportSearchersCombinedCsv, () => Searchers.Any());
             ExportSearchAllJsonCommand =
                 new DelegateCommand(() => Searchers.ExportJson(_document), () => Searchers.Any());
             AddAllDataToNavisworkCommand =
@@ -450,7 +450,7 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             return true;
         }
 
-        private void ExportSearchCsv()
+        private void ExportSearcherCsv()
         {
             if (SelectedSearcher == null) return;
             var dialog = new SaveFileDialog
@@ -460,6 +460,17 @@ namespace PM.Navisworks.DataExtraction.ViewModels
             };
             if (dialog.ShowDialog() == DialogResult.OK)
                 SelectedSearcher.ExportCsv(_document, dialog.FileName);
+        }
+
+        private void ExportSearchersCombinedCsv()
+        {
+            var dialog = new SaveFileDialog
+            {
+                Filter = "CSV Files (*.csv)|*.csv",
+                FileName = ""
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+                Searchers.ExportCsvCombined(_document, dialog.FileName);
         }
 
         private void ExportSearchJson()

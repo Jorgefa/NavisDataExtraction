@@ -1,4 +1,5 @@
 ﻿using Autodesk.Navisworks.Api;
+using NavisDataExtraction.Utils.Progress;
 using Newtonsoft.Json;
 using PM.Navisworks.DataExtraction.Models.Data;
 using PM.Navisworks.DataExtraction.Models.DataTransfer;
@@ -18,7 +19,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
         {
             if (searcher == null || document == null) return null;
             var search = NavisworksSearcher.FromDto(searcher);
-            var elements = search.FindAll(document, false);
+            var elements = search.FindAll(document, true);
 
             return elements.GetData(searcher, document);
         }
@@ -61,7 +62,7 @@ namespace PM.Navisworks.DataExtraction.Extensions
             }
         }
 
-        public static DataTable GetDataTable (this Searcher searcher, Document document)
+        public static DataTable GetDataTable(this Searcher searcher, Document document)
         {
             var table = new DataTable();
             table.Columns.Add("FileName");
@@ -98,8 +99,16 @@ namespace PM.Navisworks.DataExtraction.Extensions
             }
 
             var data = searcher.GetData(document);
+
+            var current = 0;
+            var total = data.ElementsData.Count();
+
+            ProgressUtilDefined.Start();
+
             foreach (var elementData in data.ElementsData)
             {
+                ProgressUtilDefined.Update($"{searcher.Name} - {elementData.ElementName}", current, total);
+
                 var row = table.NewRow();
                 row["FileName"] = document.CurrentFileName;
                 row["SearcherName"] = searcher.Name;
@@ -130,9 +139,120 @@ namespace PM.Navisworks.DataExtraction.Extensions
                     }
                 }
 
-
                 table.Rows.Add(row);
+                current++;
             }
+
+            ProgressUtilDefined.Finish();
+
+            MessageBox.Show($"{current} elements exported.");
+
+            return table;
+        }
+
+        public static DataTable GetDataTable(this IEnumerable<Searcher> searchers, Document document)
+        {
+            var table = new DataTable();
+            table.Columns.Add("FileName");
+            table.Columns.Add("SearcherName");
+            table.Columns.Add("ElementName");
+            table.Columns.Add("ElementGuid");
+            if (searchers.Select(x => x.DefaultData.ModelSource).Contains(true))
+            {
+                table.Columns.Add("ModelSource");
+            };
+
+            if (searchers.Select(x => x.DefaultData.Coordinates).Contains(true))
+            {
+                table.Columns.Add("CC-X");
+                table.Columns.Add("CC-Y");
+                table.Columns.Add("CC-Z");
+            };
+
+            // TODO specify column's data types
+
+            foreach (var searcher in searchers)
+            {
+                if (searcher.DataMapped)
+                {
+                    foreach (var pair in searcher.Pairs)
+                    {
+                        if (!table.Columns.Contains(pair.ColumnName))
+                        {
+                            table.Columns.Add(pair.ColumnName);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var pair in searcher.Pairs)
+                    {
+                        if (!table.Columns.Contains($"{pair.Category.Name}_{pair.Property.Name}"))
+                        {
+                            table.Columns.Add($"{pair.Category.Name}_{pair.Property.Name}");
+                        }
+                    };
+                }
+            }
+
+            var current = 0;
+            var currentTotal = 0;
+            var total = 0;
+
+            ProgressUtilDefined.Start();
+
+            foreach (var searcher in searchers)
+            {
+                var data = searcher.GetData(document);
+
+                current = 0;
+                currentTotal = data.ElementsData.Count();
+                total += currentTotal;
+
+
+                foreach (var elementData in data.ElementsData)
+                {
+                    ProgressUtilDefined.Update($"{searcher.Name} - {elementData.ElementName}", current, currentTotal);
+
+                    var row = table.NewRow();
+                    row["FileName"] = document.CurrentFileName;
+                    row["SearcherName"] = searcher.Name;
+                    row["ElementName"] = elementData.ElementName;
+                    row["ElementGuid"] = elementData.ElementGuid;
+                    if (searcher.DefaultData.ModelSource)
+                    {
+                        row["ModelSource"] = elementData.ElementModelSource;
+                    }
+                    if (searcher.DefaultData.Coordinates)
+                    {
+                        row["CC-X"] = elementData.ElementCoordinates[0];
+                        row["CC-Y"] = elementData.ElementCoordinates[1];
+                        row["CC-Z"] = elementData.ElementCoordinates[2];
+                    }
+                    if (searcher.DataMapped)
+                    {
+                        foreach (var property in elementData.Properties)
+                        {
+                            row[property.ColumnName] = property.Value;
+                        }
+                    }
+                    else
+                    {
+                        foreach (var property in elementData.Properties)
+                        {
+                            row[$"{property.Category}_{property.Property}"] = property.Value;
+                        }
+                    }
+
+                    table.Rows.Add(row);
+                    current++;
+                }
+
+            }
+
+            ProgressUtilDefined.Finish();
+
+            MessageBox.Show($"{total} elements have been exported within {searchers.Count().ToString()} searchers.");
 
             return table;
         }
@@ -154,11 +274,15 @@ namespace PM.Navisworks.DataExtraction.Extensions
 
         public static void ExportCsvCombined(this IEnumerable<Searcher> searchers, Document document, string filePath = "")
         {
-            var table = new DataTable();
-            foreach (var searcher in searchers)
+            var table = searchers.GetDataTable(document);
+            try
             {
-                var newTable = searcher.GetDataTable(document);
-                table.Merge(newTable);
+                table.ToCsv(filePath);
+            }
+            catch (Exception e)
+            {
+                //TODO: Handle Errors on Save
+                // ignored
             }
         }
 
@@ -208,7 +332,6 @@ namespace PM.Navisworks.DataExtraction.Extensions
 
         public static void AddDataToNaviswork(this Searcher searcher, Document document)
         {
-
             if (searcher == null || document == null) return;
 
             var elementsCount = 0;
@@ -217,12 +340,11 @@ namespace PM.Navisworks.DataExtraction.Extensions
             var modelItems = search.FindAll(document, false);
 
             modelItems.AddDataToNavis(searcher);
-
             elementsCount += modelItems.Count;
 
             MessageBox.Show($"{elementsCount} elements have been update.");
-
         }
+
         public static void AddDataToNaviswork(this IEnumerable<Searcher> searchers, Document document)
         {
             if (searchers == null || searchers.Count() == 0 || document == null) return;
@@ -241,6 +363,5 @@ namespace PM.Navisworks.DataExtraction.Extensions
 
             MessageBox.Show($"{elementsCount} elements have been update.");
         }
-
     }
 }

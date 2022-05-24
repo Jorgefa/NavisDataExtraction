@@ -79,6 +79,16 @@
 		</Reference>
     </ItemGroup>
     <ItemGroup>
+      <None Remove="Utilities\ProgressBar\ProgressDefined.xaml" />
+      <None Remove="Utilities\ProgressBar\ProgressUndefined.xaml" />
+    </ItemGroup>
+    <ItemGroup>
+      <Page Include="Utilities\ProgressBar\ProgressDefined.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
+      <Page Include="Utilities\ProgressBar\ProgressUndefined.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
       <Page Include="Views\MainWindow.xaml" />
     </ItemGroup>
     <ItemGroup>
